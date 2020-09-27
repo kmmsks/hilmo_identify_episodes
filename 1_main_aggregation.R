@@ -89,7 +89,7 @@ compression <- 100
 
   # Run aggregation
 
-source(file.path(dir[["main"]], 'R', '110_run_inpatient_aggregation_1996_and_after.R'), local = TRUE)
+source(here('R', '110_run_inpatient_aggregation_1996_and_after.R'))
 
 # Output:
   # data_processed -> 1_inpatient_periods -> add_days_[add_days] -> inpatient_[years_range].fst"

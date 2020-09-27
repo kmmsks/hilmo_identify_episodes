@@ -1,7 +1,7 @@
 library(data.table)
 library(here)
 
-fake_size = 1000
+fake_size = 10000
 fake_start <- '1996-01-01'
 fake_end <- '1999-12-31'
 
@@ -46,5 +46,5 @@ dir.create(here('data_raw_fake'))
 fake_data[, vuosi2 := vuosi] # just to include vuosi in the .SD
 fake_data[, fwrite(.SD, here('data_raw_fake', paste0(vuosi2, '.csv'))), by = vuosi2]
 
-rm(list=ls())
+rm(fake_end, fake_size, fake_start, ilaji2)
 gc()
