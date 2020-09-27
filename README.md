@@ -7,7 +7,7 @@ In order to identify actual hospital admissions, discharges and discharge diagno
 
 This is because during a single hospitalization, a new register entry must be supplied every time a hospital transfer or change in form one spiciality to another within the hospital occures. A register entry is also supplied from outpatient and emergency visit, which may take place at the beginning or during the hopsitalization.
 
-In previous research, up to 25 % of the psychiatric inpatient care related register entries have been related to transfers during an actual hospitalizations ([CEPHOS-LINK project, p. 35](https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186))
+In previous research, up to 25 % of the psychiatric inpatient care related register entries have been related to transfers during an actual hospitalizations ([CEPHOS-LINK project)](https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186)), p. 35.
 
 Hospitalization may start from emergency clinic, and during inpatient care, transfers within and between hospitals and outpatient appintments may take place. Hilmo enries of these appointments are registered with possibly preliminary diagnoses. Hence, it is important to identify the actual discharges, in order to identify the discharge diagnoses.
 
