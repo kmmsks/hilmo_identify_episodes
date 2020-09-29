@@ -49,7 +49,6 @@ min_year <- 2010 # no earlier than 1996
 # (not relevant for inpatient care only):
 
 outpatient_start_year <- 2007
-outpatient_start_date <-  as.integer(as.IDate(paste0(outpatient_start_year, '-01-01')))
 
 # THL says data is relevant after 2006, here 2007 is the beginning of any analysis
 
@@ -73,11 +72,6 @@ PALA_inpatient <- c(1)
 PALA_outpatient <- 'PALA==83 | PALA>90'
 
 
-# Number of  data parts to be processed, 1996 and later -----------------------------------------------------------------
-  # 1 to n parts possible, persons' all entries should be in the same part
-
-n_parts <- length(list.files(dir[["data_parts_in"]]))
-
 # write_fst compression  ------------------------------------------------------------------------------------------------
   # 0 for speed, 100 for reducing file sizes, default 50. 
 
@@ -85,6 +79,14 @@ compression <- 100
 
 
 # // settings ready
+
+# intermediate variables, no need to change ------------------------------------------------------------------------------
+
+# Number of  data parts to be processed, 1996 and later 
+# 1 to n parts possible, persons' all entries should be in the same part
+n_parts <- length(list.files(dir[["data_parts_in"]]))
+
+outpatient_start_date <-  as.integer(as.IDate(paste0(outpatient_start_year, '-01-01')))
 
 
 

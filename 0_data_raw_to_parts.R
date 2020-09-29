@@ -17,11 +17,15 @@ library(fst)
 # In this example, the data is divided to five sub parts.
 # Save the parts.
 
+# Set location of the raw data ------------------------------------------------------------------------------------------
+
+raw_data_location <- here('data_raw_fake')
+
 # Read the data ----------------------------------------------------------------------------------------------------------
 
-files_list <- list.files(here('data_raw_fake'))
+files_list <- list.files(raw_data_location, full.names = TRUE)
 
-lst <- lapply(here('data_raw_fake', files_list), fread)
+lst <- lapply(files_list, fread)
 dat <- rbindlist(lst)
 
 rm(files_list,lst)

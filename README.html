@@ -367,83 +367,164 @@ summary {
 
 <div id="hilmo_identify_episodes" class="section level1">
 <h1>hilmo_identify_episodes</h1>
-<p>R script to identify hospital admissions, discharges and discharge diagnoses from the Finnish <a href="https://thl.fi/en/web/thlfi-en/statistics/information-on-statistics/register-descriptions/care-register-for-health-care">Care Register for Health Care</a> (“Hilmo” register). This script identifies all episodes, and episodes related to psychiatric care, but can easily be generalized to other specializes</p>
+<p>R script to identify hospital admissions, discharges and discharge diagnoses from the Finnish <a href="https://thl.fi/en/web/thlfi-en/statistics/information-on-statistics/register-descriptions/care-register-for-health-care">Care Register for Health Care</a> (“Hilmo” register). This script identifies all episodes, and episodes related to psychiatric care. IT can be generalized to other specializes as well.</p>
 <p>Version 0.1 (2020-09-28)</p>
-<p>Author Kimmo Suokas, <a href="mailto:kimmo.suokas@tuni.fi" class="email">kimmo.suokas@tuni.fi</a></p>
+<p>Author: Kimmo Suokas, <a href="mailto:kimmo.suokas@tuni.fi" class="email">kimmo.suokas@tuni.fi</a></p>
 <div id="background" class="section level2">
 <h2>Background</h2>
-<p>In order to identify actual hospital admissions, discharges and discharge diagnose from the Finnish Care register for health care, multiple register entries may need be combined, as one hospitalization may consist of multiple entries.</p>
-<p>This is because during a single hospitalization, a new register entry must be supplied every time a hospital transfer or change in form one specialty to another within the hospital occurs. A register entry is also supplied from outpatient and emergency visit, which may take place at the beginning or during the hospitalization.</p>
-<p>In previous research, up to 25 % of the psychiatric inpatient care related register entries have been related to transfers during an actual hospitalizations (<a href="https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186">CEPHOS-LINK)</a>, project, p. 35).</p>
-<p>Hospitalization may start from emergency clinic, and during inpatient care, transfers within and between hospitals and outpatient appointments may take place. Hilmo entries of these appointments are registered with possibly preliminary diagnoses. Hence, it is important to identify the actual discharges, in order to identify the discharge diagnoses.</p>
-<p>In papers using the Hilmo register, it is usual to mention that hospital periods, admissions or discharges were identified. However, usually no criteria, let alone scripts, for this procedure is presented. As far as I know, there is no generally know or accepted methods for treatment period recognition available.</p>
-<p>However, recognizing real readmissions from transfer from unit to another is not straightforward. Different sets of criteria have been used: - Others require a hospital treatment to start and end on different calender days (f. ex. the <a href="https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186">CEPHOS-LINK</a> project )), others don’t - others state that a new treatment period may start the next day after previous one(<a href="https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186">CEPHOS-LINK</a>), others require a full calender day outside of hospital in between two treatment periods (f. ex. <a href="http://urn.fi/URN:NBN:fi-fe201204193720">REDD project</a>). This criteria is used to stronger differentiate transfers between hospitals and real rehospitalizations.</p>
+<p>In order to identify actual hospital admissions, discharges, and discharge diagnose from the Finnish Care register for health care, multiple register entries may need be combined, as one hospitalization may consist of multiple register entries.</p>
+<p>This is because during a single hospitalization, a new register entry must be supplied every time a hospital transfer, or trasfer form one specialty to another within the hospital occurs. A register entry is also supplied from outpatient and emergency visit, which may take place at the beginning or during the hospitalization.</p>
+<p>In previous research, up to 25 % of the psychiatric inpatient care related register entries have been related to transfers during an actual hospitalizations (<a href="https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186">CEPHOS-LINK)</a> project, p. 35).</p>
+<p>Hospitalization may start from emergency clinic, and during inpatient care, transfers within and between hospitals and outpatient appointments may take place. Hilmo entries of these appointments are registered with possibly preliminary dignoses of that time. Hence, it is important to first identify the actual discharges and then identify the discharge diagnoses.</p>
+<p>In previous papers using the Hilmo register, it is usually mentioned that hospital periods, admissions or discharges were identified. However, usually no criteria, let alone scripts, for this procedure is provided. As far as I know, there is no generally know or accepted methods for identifying treatment episodes available.</p>
+<p>Recognizing real readmissions from transfer from unit to another is not straightforward. Different sets of criteria have previusly been used: - Others require a hospital treatment to start and end on different calender days (f. ex. the <a href="https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186">CEPHOS-LINK</a> project )), others do not. - Others state that a new treatment period may start the next day after previous one (f. ex. <a href="https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186">CEPHOS-LINK</a>), others require a full calender day outside of hospital in between two treatment periods (f. ex. <a href="http://urn.fi/URN:NBN:fi-fe201204193720">REDD project</a>). This criteria is used to stronger differentiate transfers between hospitals and real rehospitalizations.</p>
 </div>
 <div id="script-purpose" class="section level2">
 <h2>Script Purpose:</h2>
 <ol style="list-style-type: decimal">
-<li><p>To propose a method for aggregating Hilmo entries in order to identify actual admissions, discharges and discharge diagnoses from the register with different criteria. This is necessary in order to find out</p>
+<li><p>To propose a method for aggregating Hilmo entries in order to identify actual admissions, discharges, and discharge diagnoses from the register with different criteria. This is necessary in order to find out:</p>
 <ul>
 <li>dates of admission and discharge, i.e. the period actually spent in the hospital,</li>
 <li>dates of admission to and discharge from psychiatric care, if a single hospitalization includes care in more than one specialty,</li>
 <li>actual discharge diagnoses at the end of the hospitalization, or the last diagnosis from certain specialty, in this case psychiatry, and the service provider from where the discharge takes place.</li>
 </ul></li>
-<li><p>To tell apart register entries related to outpatient episodes that take place during an inpatient care. There may be need to consider these outpatient entries as a part of the inpatient care, not as separate episodes.</p></li>
-<li><p>To provide this script accessible for critical evaluation and further open use (despite the actual register data is not openly available). The aim is to let future (at least clinically oriented) researchers to focus on their actual research, not technicalities.</p></li>
+<li><p>To tell apart register entries related to outpatient episodes that take place during an inpatient care. There may be a need to consider these outpatient entries as a part of the inpatient care, not as separate episodes.</p></li>
+<li><p>To provide this script accessible for critical evaluation and further utilization (despite the actual register data is not openly available). The aim is to let future (at least clinically oriented) researchers to focus on their actual research, not technicalities.</p></li>
 </ol>
 </div>
 <div id="data-input" class="section level2">
 <h2>1. Data Input:</h2>
-<ul>
-<li>csv format. set location of the data in 1_main_aggregation.R</li>
-<li>This project comes with fake data to see the scripts in action. The fake data does not necessary follow the real world patterns in any way!
-<ul>
-<li><strong>Run create_fake_data.R first to generate fake test data</strong></li>
-</ul></li>
-</ul>
+<p>Set the location of the raw data in <strong>0_data_raw_to_parts.R</strong>. The data folder must contain only the data files.</p>
+<p>csv format for data input is currently used.</p>
+<p>This project comes with fake data to see the scripts in action. Notice, the fake data does not necessary follow the real world patterns in any way! - <strong>Run create_fake_data.R first to generate fake test data</strong></p>
 </div>
 <div id="prepare-data-for-the-aggregation" class="section level2">
 <h2>2. Prepare Data for the Aggregation:</h2>
-<ul>
-<li><p><strong>Preparations are done in 0_data_raw_to_parts.R’</strong></p></li>
-<li><p>What you need to achieve, is to have minimum of the following columns in your data:</p>
-<ul>
-<li><p>‘shnro’: character. person id. The name shnro is used by the Statistic Finland, it refers to a person, not ID number, which may change (in relative rare occasions).</p></li>
-<li><p>‘vuosi’: numeric. Year of the entry</p></li>
-<li><p>The following variables, details in the Hilmo manual. Note possible changes in the classifications between years. Desired data types:</p>
-<ul>
-<li>‘ILAJI’ : numeric</li>
-<li>‘PALTU’ : numeric</li>
-<li>‘PALA’ : numeric</li>
-<li>‘EA’ : character</li>
-<li>‘TUPVA’ : as.integer(as.IDate(TUPVA, format = [FORMAT]))</li>
-<li>‘LPVM’ : as.integer(as.IDate(LPVM, format = [FORMAT]))</li>
-</ul></li>
-<li><p>Diagnoses:</p>
-<ul>
-<li>One register entry may contain multiple diagnoses. Names of the diagnosis variables may vary between years and datasets.</li>
-<li>Combine diagnoses to one character variable called ‘dg’</li>
-</ul></li>
-</ul></li>
-<li><p>If your data is in one file of reasonable size, all you need to do is to check you have above mentioned columns in the data and name it ‘1.csv’</p></li>
-<li><p>If your data is in form THL calls the database form, you need to combine the data from different files based on entry id. Variables are in different files and each year is in its own file. Use library(bit64) for long id numbers.</p>
-<ul>
-<li>(Example not currently shown here)</li>
-</ul></li>
-<li><p>If you have the full register, you may need to process the data in smaller parts (chunks), due to performance reasons. In this case, this method require all entries of a single person to locate in one part (instead of having the data split by year).</p></li>
-<li><p>To determine the optimal part size is out of scope here. See what is small enough on your machine. This example uses five parts.</p></li>
-</ul>
+<p><strong>Preparations are done in 0_data_raw_to_parts.R</strong></p>
+<p>If your data is in form THL calls the database form, you need to combine the data from different files based on entry id. Variables are in different files and each year is in its own file. Use library(bit64) for long id numbers. - (Example not currently shown here)</p>
+<p>What needs to achieved, is to have minimum of the following columns in your data:</p>
+<table style="width:100%;">
+<colgroup>
+<col width="27%"></col>
+<col width="33%"></col>
+<col width="39%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">Data type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>shnro</code></td>
+<td align="left">character</td>
+<td align="left">person id. The name shnro is used by the Statistic Finland, it refers to a person, not ID number, which may change (in relative rare occasions).</td>
+</tr>
+<tr class="even">
+<td align="left"><code>vuosi</code></td>
+<td align="left">integer</td>
+<td align="left">Year of the entry</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>ILAJI</code></td>
+<td align="left">integer</td>
+<td align="left">See Hilmo manuals for details. Note possible changes in the classifications between years.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>PALTU</code></td>
+<td align="left">integer</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>PALA</code></td>
+<td align="left">integer</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left"><code>EA</code></td>
+<td align="left">character</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>TUPVA</code></td>
+<td align="left">integer</td>
+<td align="left">set: as.integer(as.IDate(TUPVA, format = [FORMAT]))</td>
+</tr>
+<tr class="even">
+<td align="left"><code>LPVM</code></td>
+<td align="left">integer</td>
+<td align="left">set: as.integer(as.IDate(LPVM, format = [FORMAT]))</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>dg</code></td>
+<td align="left">character</td>
+<td align="left">see beelow</td>
+</tr>
+</tbody>
+</table>
+<p>Diagnoses: - One register entry may contain multiple diagnoses. - Names of the diagnosis variables may vary between years and datasets. - Create variable <code>dg</code>, where all diagnoses related to one entry are pasted. + f. ex. <code>dat[, dg := paste(DG1, DG2, sep = &#39;_&#39;)]</code></p>
+<div id="data-size-operating-with-chunks" class="section level3">
+<h3>Data Size, Operating with Chunks</h3>
+<p>If your data is in one file of reasonable size, all you need to do is to check you have above mentioned columns in the data and name the data as ‘1.csv’</p>
+<p>If you have full register, you may need to process the data in smaller parts (chunks), due to performance. In this case, this method require all entries of a single person to locate in one part (instead of having the data split in parts by year and variables).</p>
+<p>To determine the optimal part size is out of scope here. See what is small enough on your machine. In this example, five parts are used to demonstrate the action.</p>
+</div>
 </div>
 <div id="processing-of-the-data" class="section level2">
 <h2>3. Processing of the Data</h2>
+<p><strong>Control setting for desired episode identification rules in 1_main_aggregation.R</strong></p>
+<table>
+<colgroup>
+<col width="45%"></col>
+<col width="55%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>dir</code></td>
+<td align="left">Input file locations for preprocessed data. In this example, data_temp/parts_raw</td>
+</tr>
+<tr class="even">
+<td align="left"><code>max_year</code></td>
+<td align="left">Time range of the data, the latest year included</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>min_year</code></td>
+<td align="left">The first year included. Earliest 1996. Previous years have their own methods.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>outpatient_start_year</code></td>
+<td align="left">According to THL, outpatient data is relevant starting from 2006</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>add_days</code></td>
+<td align="left">Days between periods, see below</td>
+</tr>
+<tr class="even">
+<td align="left"><code>PALA_inpatient</code> <br> <code>PALA_outpatient</code></td>
+<td align="left">Register entry types defining treatments types of interest, see Hilmo manuals for details</td>
+</tr>
+</tbody>
+</table>
+<div id="days-between-periods-add_days" class="section level3">
+<h3>Days between periods <code>add_days</code></h3>
+<p>Minimum of full calender days required between two hospital treatment periods:</p>
 <ul>
-<li><strong>Control setting for desired episode identification rules in 1_main_aggregation.R</strong></li>
+<li>0 : a new period may start the next day after the previous one</li>
+<li>1 : there must be one full calender day between two treatment periods. If less, Hilmo entries are considered to belong to a single episode (due to unit transfer etc.)</li>
 </ul>
+</div>
 </div>
 <div id="data-output" class="section level2">
 <h2>Data Output</h2>
-<ul>
-<li>Full aggregated data is saved in the folders
+<p>Full aggregated data is saved in the folders:</p>
 <ul>
 <li>data_processed -&gt; 1_inpatient_episodes
 <ul>
@@ -451,64 +532,187 @@ summary {
 <li>-&gt; preparation_description: description of incorrect entries, PALA distribution, etc.</li>
 </ul></li>
 <li>data_processed -&gt; 2_in_and_outpatient_episodes -&gt; add_days_[add_days]: the data and description of included episodes</li>
-</ul></li>
-<li>This test script creates the following object:
+</ul>
+<p>This test script creates the following object:</p>
 <ul>
 <li><strong>dat_episodes</strong>: processed data with inpatient and outpatient episodes included</li>
 <li><strong>dat_inpatient</strong>: inaptient episodes only</li>
 <li><strong>description_episode</strong> and <strong>description_inpatient</strong>: see the formatted xlsx files in folder data_processed</li>
-</ul></li>
 </ul>
 </div>
+<div id="new-variables-in-the-processed-data" class="section level2">
+<h2>New variables in the Processed Data</h2>
+<div id="inpatient-data" class="section level3">
+<h3>Inpatient data:</h3>
+<table>
+<colgroup>
+<col width="31%"></col>
+<col width="37%"></col>
+<col width="31%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">Data type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>jakso</code></td>
+<td align="left">integer</td>
+<td align="left">Running number of person’s inpatient periods.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>psy</code></td>
+<td align="left">logical</td>
+<td align="left">Episode contains psychiatric care.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>overnight_all</code></td>
+<td align="left">logical</td>
+<td align="left">Episode starts and ends on different calender days.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>overnight_psy</code></td>
+<td align="left">logical</td>
+<td align="left">Episode’s psychiatric treatment starts and ends on different calender days.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>tulopvm_psy</code></td>
+<td align="left">date</td>
+<td align="left">Date of admission to psychiatric inpatient care.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>lahtopvm_psy</code></td>
+<td align="left">date</td>
+<td align="left">Date of discharge from psychiatric inpatient care, if multiple transfers between specialties, the last one.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>ea_list</code></td>
+<td align="left">character</td>
+<td align="left">List of specialties included in the episode.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>paltu</code></td>
+<td align="left">character</td>
+<td align="left">The service provider’s code of the unit of the discharge.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>paltu_psy</code></td>
+<td align="left">character</td>
+<td align="left">The service provider’s code of the psychiatric unit of the last psychiatric discharge.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>n_rows_inpat</code></td>
+<td align="left">integer</td>
+<td align="left">Number of rows aggregated to this inpatient episode.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>dg_inpat</code></td>
+<td align="left">character</td>
+<td align="left">All diagnoses registered on the date of discharge.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>dg_inpat_psy</code></td>
+<td align="left">character</td>
+<td align="left">All diagnoses registered from psychiatry on the date of discharge from psychiatric unit.</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="new-variables-in-the-processed-data" class="section level1">
-<h1>New variables in the Processed Data</h1>
+<div id="all-episodes-in-addition" class="section level3">
+<h3>All episodes, in addition:</h3>
+<table>
+<colgroup>
+<col width="31%"></col>
+<col width="37%"></col>
+<col width="31%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">Data type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>n_episode</code></td>
+<td align="left">Integer</td>
+<td align="left">Running number of person’s episodes.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>tulopvm_psy_inpat</code></td>
+<td align="left">Date</td>
+<td align="left">As tulopvm_psy</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>lahtopvm_psy_inpat</code></td>
+<td align="left">Date</td>
+<td align="left">As lahtopvm_psy</td>
+</tr>
+<tr class="even">
+<td align="left"><code>inpatient</code></td>
+<td align="left">Logical</td>
+<td align="left">Any inpatient care included in the episode.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>inpatient_psy</code></td>
+<td align="left">Logical</td>
+<td align="left">Psychiatric inpatient care included in the episode.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>n_rows_episode</code></td>
+<td align="left">Integer</td>
+<td align="left">Number of rows aggregated to this inpatient episode.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>outpat_same_day</code></td>
+<td align="left">Logical</td>
+<td align="left">More than one outpatient visit on the same day.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>dg_outpat</code></td>
+<td align="left">charcteg</td>
+<td align="left">Outpatient diagnoses during the episode.See below</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>dg_inpat_psy_outpat_psy</code></td>
+<td align="left">character</td>
+<td align="left">Psychiatric outpatient diagnoses during psychiatric inpatient episode. Usually to be excluded.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>dg_psy_inpat</code></td>
+<td align="left">character</td>
+<td align="left">If inpatient period contains psychiatric outpatient care, but not inpatient care, psychiatric outpatient diagnoses are here</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>dg</code></td>
+<td align="left">character</td>
+<td align="left">Combination of relevant discharge diagnoses, discharge diagnoses from psychiatric inpatient care preferred. See below.</td>
+</tr>
+</tbody>
+</table>
+<div id="variable-dg_outpat" class="section level4">
+<h4>Variable <code>dg_outpat</code></h4>
+<p>Includes psychiatric outpatient diagnoses, if the episode contains no psychiatric inpatient care.</p>
+<p>Otherwise, outpatient diagnoses during inpatient care are included.</p>
+<p>This diagnoses should be excluded when only discharge diagnoses are collected.</p>
+<p><br></p>
+</div>
+<div id="variable-dg" class="section level4">
+<h4>Variable <code>dg</code></h4>
+<p>Combination of relevant discharge diagnoses, discharge diagnoses from psychiatric inpatient care preferred:</p>
 <ul>
-<li>Inpatient data:
-<ul>
-<li><p>jakso: int. Running number of person’s inpatient periods.</p></li>
-<li><p>psy: logical. Episode contains psychiatric care.</p></li>
-<li><p>overnight_all: logical. Episode starts and ends on different calender days.</p></li>
-<li><p>overnight_psy: logical. Episode’s psychiatric treatment starts and ends on different calender days.</p></li>
-<li><p>tulopvm_psy: date. Date of admission to psychiatric inpatient care.</p></li>
-<li><p>lahtopvm_psy: date. Date of discharge from psychiatric inpatient care, if multiple transfers between specialties, the last one.</p></li>
-<li><p>ea_list: character. List of specialties included in the episode.</p></li>
-<li><p>paltu: character. The service provider’s code of the unit of the discharge.</p></li>
-<li><p>paltu_psy: character. The service provider’s code of the psychiatric unit of the last psychiatric discharge.</p></li>
-<li><p>n_rows_inpat: int. Number of rows aggregated to this inpatient episode.</p></li>
-<li><p>dg_inpat: character. All diagnoses registered on the date of discharge.</p></li>
-<li><p>dg_inpat_psy: character. All diagnoses registered from psychiatry on the date of discharge from psychiatric unit.</p></li>
-</ul></li>
-<li>All episodes, in addition:
-<ul>
-<li><p>n_episode: int. Running number of person’s episodes.</p></li>
-<li><p>tulopvm_psy_inpat. As tulopvm_psy<br />
-</p></li>
-<li><p>lahtopvm_psy_inpat. As lahtopvm_psy<br />
-</p></li>
-<li><p>inpatient. Logical. Any inpatient care included in the episode.</p></li>
-<li><p>inpatient_psy. Logical. Psychiatric inpatient care included in the episode.</p></li>
-<li><p>n_rows_episode: int. Number of rows aggregated to this inpatient episode.</p></li>
-<li><p>outpat_same_day: Logical. More than one outpatient visit on the same day.</p></li>
-<li><p>dg_outpat: char. Outpatient diagnoses during the episode.</p>
-<ul>
-<li>includes psychiatric outpatient diagnoses, if the episode contains no psychiatric inpatient care.</li>
-<li>otherwise, outpatient diagnoses during inpatient care are included.</li>
-<li>this diagnoses should be excluded when only discharge diagnoses are collected.</li>
-</ul></li>
-<li><p>dg_inpat_psy_outpat_psy: character. Psychiatric outpatient diagnoses during psychiatric inpatient episode.</p>
-<ul>
-<li>Usually to be excluded.</li>
-</ul></li>
-<li><p>dg_psy_inpat: char. If inpatient period contains psychiatric outpatient care, but not inpatient care, psychiatric outpatient diagnoses are here</p></li>
-<li><p>dg. char. Combination of relevant discharge diagnoses, discharge diagnoses from psychiatric inpatient care preferred:</p>
-<ul>
-<li>when inpatient== TRUE &amp; inpatient_psy == FALSE, dg_inpat column included,</li>
-<li>when inpatient== TRUE &amp; inpatient_psy == TRUE, dg_inpat_psy column included,</li>
-<li>when inpatient== FALSE, dg_outpat included.</li>
-</ul></li>
-</ul></li>
+<li>when <code>inpatient== TRUE &amp; inpatient_psy == FALSE</code>, variable <code>dg_inpat</code> included,</li>
+<li>when <code>inpatient== TRUE &amp; inpatient_psy == TRUE</code>, variable <code>dg_inpat_psy</code> included,</li>
+<li>when <code>inpatient== FALSE</code>, variable <code>dg_outpat</code> included.</li>
 </ul>
+<p><br><br><br></p>
+</div>
+</div>
+</div>
 </div>
 
 
