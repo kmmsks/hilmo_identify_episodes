@@ -22,6 +22,16 @@ library(here)
 
 # Aggregation rules -----------------------------------------------------------------------------------------------------
 
+# Data locations -------------------------------------------------------------------------------------------------------
+# may locate within or outside the project folder
+
+dir <- list(
+  data_parts_in = here('data_temp', 'parts_raw'), 
+  old_registers = here(),
+  avohilmo_in   = here()
+)
+
+
 # Time range of the data with current data (form 1996 and lateer) -------------------------------------------------------
 
 # Inpatient data:
@@ -58,15 +68,6 @@ add_days <- 1
 PALA_inpatient <- c(1)
 
 PALA_outpatient <- 'PALA==83 | PALA>90'
-
-
-# Directory paths to the data -------------------------------------------------------------------------------------------
-# may locate within or outside the project folder
-
-dir <- list(data_parts_in = here('data_temp', 'parts_raw'),
-            old_registers = here(),
-            avohilmo_in = here()
-            )
 
 
 # Number of  data parts to be processed, 1996 and later -----------------------------------------------------------------

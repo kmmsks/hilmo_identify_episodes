@@ -68,11 +68,14 @@ dat[, idn := .GRP, by = shnro]
 
 n_parts <- 5
 
-dat[, part := cut(idn,
-                  breaks = quantile(idn, probs = 0: n_parts/n_parts),
-                  labels = 1:n_parts, right = FALSE,
-                  include.lowest = TRUE
-                  )]
+
+dat[, part := cut(
+  idn,
+  breaks = quantile(idn, probs = 0:n_parts / n_parts),
+  labels = 1:n_parts,
+  right = FALSE,
+  include.lowest = TRUE
+)]
 
 # save data parts --------------------------------------------------------------------------------------------------------
 
