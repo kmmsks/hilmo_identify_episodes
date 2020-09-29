@@ -1,17 +1,17 @@
 #
 #
-# Aggregation of Hilmo entries // Hilmojen ketjutus
+# Identify Hilmo episodes // Hilmojen ketjutus
 #
-
+#
 # Script purpose:
-# To identify hospital admissions, discharges and discharge diagnoese from the 
+# To identify hospital admissions, discharges and discharge diagnoses from the 
 # Finnish Care Register for Health Care ("Hilmo" register)
 #
 # In this main script, control the setting for the aggregations
 #
-# Author: Kimmo Suokas
-#
 # Version 0.1 beta 
+# Author: Kimmo Suokas
+
 
 # Load packages ---------------------------------------------------------------------------------------------------------
 
@@ -22,7 +22,7 @@ library(here)
 
 # Aggregation rules -----------------------------------------------------------------------------------------------------
 
-# Data locations -------------------------------------------------------------------------------------------------------
+# Data locations --------------------------------------------------------------------------------------------------------
 # may locate within or outside the project folder
 
 dir <- list(
@@ -32,7 +32,8 @@ dir <- list(
 )
 
 
-# Time range of the data with current data (form 1996 and lateer) -------------------------------------------------------
+# Time range of the data with current data form (form 1996 and 2018) ----------------------------------------------------
+# Note some major changes in the data definitions (at least in PALA) in 2019
 
 # Inpatient data:
 # fake data 2010 -2014
@@ -95,58 +96,38 @@ compression <- 100
 source(here('R', '110_run_inpatient_1996_and_after.R'))
 
 # Output:
-  # data_processed -> 1_inpatient_episodes -> add_days_[add_days] -> inpatient_[years_range].fst"
+  # data_processed -> 1_inpatient_episodes -> add_days_[add_days] -> data_inpatient_[years_range].fst"
     # full aggregated data
-  # data_processed -> 1_inpatient_episodes -> add_days_1 -> parts_years_1996_2017 -> [1 - n_parts].fst
+  # data_processed -> 1_inpatient_episodes -> add_days_1 -> parts_years_[years_range] -> [1 - n_parts].fst
       # aggregated data in parts (for outpatient aggregation)
   # data_temp -> prepared_parts -> add_days_[add_days]_years_[years_range] -> [1 - n_parts].fst"
-      # prepared, but unaggregated data (for outpatient aggregation)
-rm(dat_inpatient)
-gc()
-
-
+      # prepared, but not aggregated data (needed for outpatient aggregation)
+  ## data_processed -> 1_inpatient_episodes -> preparation_description 
+      # -> preparation_description__add_days_[add_days]_[years_range].xlsx
+      # description of invalid rows etc.
 
 # INPATIENT AND OUTPATIENT EPISODES --------------------------------------------------------------------------------------
 
 # Run aggregation
 
-source(file.path(dir[["main"]], 'R', '130_run_outpatient_aggregation.R'))
+source(here('R', '130_run_in_and_outpatient.R'))
 
-rm(dat_episodes, episodes_description)
-gc()
+# Input: data_processed and data temp, according to settings of current session.
 
 # Output: 
-  # data_processed/2_in_and_outpatient_episodes/
-  # description.xlsx
-
-# Diagnosis fields
-  # os.hoito T/F tapahtumassa osastohoitoa T/F
-  # psy T/F tapahtumassa psykiatriaa
-  # psy_os T/F tapahtumassa psy osastohoitoa
-
-  #pkl_same_day T/F. T jos saman paivana yli 1 pkl-kaynti
-
-  # dg_os: osaston viimeisin dg 
-  # dg_psy_os: psy osastojakson viimeisin psykiatrialla annettu dg tai 
-        #muun alan sairaalahoidon aikana psy-pkl dg
-
-  # dg_os_psy_pkl_psy jos psy osastohoidon aikana psy pkl-kaynteja, niiden dg:t tassa 
-    # yleensa jatetaan huomiotta
-    # muuden alojen pkl-dg:t ovat dg_pkl
-
-  # dg_pkl polikliiniset diagnoosit jaksolla
-    # myos psykiatrian pkl-tapahtumien dg:t ovat dg.pkl:ssa, jos tapahtumassa ei ole osastohoitoa
-    # osastohoidon aikana olleet pkl-kaynnit ovat tassa mukana
-      # kun halutaan vain kotiutusdiagnoosit, nama jatetaan os_hoito == TRUE -riveilta huomiotta
+  # data_processed -> 2_in_and_outpatient_episodes -> -> add_days_[add_days] -> data_episodes_[years_range].fst
+  # and description_episodes_[years_range].xlsx
 
 
 # OLD POISTO- and HILMO- REGISTERS (inpatient only), 1996 - 1993 ---------------------------------------------------------
 
-# Input: 
+
+# Input:
 # input from dir[['old_registers']]
 
+# Not run, example data not currently provided
 
-source(file.path(dir[["main"]], 'R', '120_run_inpatient_aggregation_old_registers.R'))
+#source(here('R', '120_run_inpatient_aggregation_old_registers.R'))
 
 # Output
 # Same directories as in years 1996 and after

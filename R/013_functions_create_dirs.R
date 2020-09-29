@@ -1,5 +1,11 @@
-
-# create directory tree for processed data
+#
+#
+# Identify Hilmo episodes // Hilmojen ketjutus
+#
+# Author: Kimmo Suokas
+#
+#
+# create directory tree for processed data-----------------------------------------------------
 
 create_dirs_inpatient <- function(){
   dir.create(here('data_processed'))

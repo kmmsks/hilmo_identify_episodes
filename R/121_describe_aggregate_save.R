@@ -1,23 +1,10 @@
 #
 #
-# Project: Aggregation of OLD Hilmo entries // Vanhojen Hilmojen ketjutus
-#
-#
-# Script purpose: 
-#   * This set of scrips runs the aggregation with diferent criteria, defined in the main.R script
-# 
-# Data input:
-#
-# Output:
-#   * dat_inpatient.fst: aggregated data
-#   * preaparation_description.xlsx: description of excluded rows, PALA distibution, etc.
-#
-# Details:
+# Identify Hilmo episodes // Hilmojen ketjutus
 #
 # Author: Kimmo Suokas
 #
 #
-
 # remove invalid entries and report their amounts -----------------------------
 
 # year limits

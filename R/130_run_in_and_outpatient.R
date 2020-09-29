@@ -1,5 +1,16 @@
+#
+#
+# Identify Hilmo episodes // Hilmojen ketjutus
+#
+# Author: Kimmo Suokas
+#
+#
+# Source files -----------------------------------------------------------------
+#
+source(here('R', '013_functions_create_dirs.R'))
 
-# input locations, folders created in script 110
+
+# input locations, folders created in script 110 --------------------------------
 
 dir[['d0_prepared_parts']] <-
   file.path(here(
@@ -80,61 +91,89 @@ aggregate_specialized_care_episodes <- function(part) {
   setorderv(d3, c('shnro', 'tulopvm', 'lahtopvm', 'jakso'))
   
   ## katselua jakso alkaa pkl-kaynnilla
-  na <- nrow(d3[shnro == shift(shnro) & jakso > 0 & shift(jakso) == 0 & tulopvm == shift(tulopvm)])
+  na <-
+    nrow(d3[shnro == shift(shnro) &
+              jakso > 0 & shift(jakso) == 0 & tulopvm == shift(tulopvm)])
   # psy osastojakso alkaa psy pkl-kaynnilla
-  naP <- nrow(d3[shnro == shift(shnro) & jakso > 0 & 
-                   shift(jakso) == 0 & tulopvm == shift(tulopvm) & shift(psy) == T & psy == T])
+  naP <- nrow(d3[shnro == shift(shnro) & jakso > 0 &
+                   shift(jakso) == 0 &
+                   tulopvm == shift(tulopvm) & shift(psy) == T & psy == T])
   
   #pkl-kaynti admissiota edeltavana paivana
   nb <- nrow(d3[shnro == shift(shnro) & jakso > 0 & shift(jakso) == 0 & tulopvm == shift(tulopvm) + 1])
   #psy pkl-kaynti psy admissiota edeltavana paivana
-  nbP <- nrow(d3[shnro == shift(shnro) & jakso > 0 & shift(jakso) == 0 & tulopvm == shift(tulopvm) + 1 & 
-                   shift(psy) == T & psy == T])
+  nbP <-
+    nrow(d3[shnro == shift(shnro) &
+              jakso > 0 & shift(jakso) == 0 & tulopvm == shift(tulopvm) + 1 &
+              shift(psy) == T & psy == T])
   
   # mika tahansa pkl-kaynti psy osastojakson edella
-  ncP <- nrow(d3[psy == T & shnro == shift(shnro) & jakso > 0 & shift(jakso) == 0 & tulopvm == shift(tulopvm) + 1])
+  ncP <-
+    nrow(d3[psy == T &
+              shnro == shift(shnro) &
+              jakso > 0 & shift(jakso) == 0 & tulopvm == shift(tulopvm) + 1])
   
   #jakson sisalla pkl-kaynti
-  nd <- nrow(d3[shnro == shift(shnro, type = 'lead') & jakso > 0 & shift(jakso, type = 'lead') == 0 & 
-                  shift(tulopvm, type = 'lead') < lahtopvm])
+  nd <-
+    nrow(d3[shnro == shift(shnro, type = 'lead') &
+              jakso > 0 & shift(jakso, type = 'lead') == 0 &
+              shift(tulopvm, type = 'lead') < lahtopvm])
   # psy jakson sisalla psy pkl kaynti
-  ndP <- nrow(d3[shnro == shift(shnro, type = 'lead') & jakso > 0 & shift(jakso, type = 'lead') == 0 & 
-                   shift(tulopvm, type = 'lead') < lahtopvm & psy == T & shift(psy) == T])
+  ndP <-
+    nrow(d3[shnro == shift(shnro, type = 'lead') &
+              jakso > 0 & shift(jakso, type = 'lead') == 0 &
+              shift(tulopvm, type = 'lead') < lahtopvm &
+              psy == T & shift(psy) == T])
   
   
   #jakson paatospaivana pkl-kanyti
-  ne <- nrow(d3[shnro == shift(shnro, type = 'lead') & jakso > 0 & shift(jakso, type = 'lead') == 0 & 
-                  shift(tulopvm, type = 'lead') == lahtopvm])
+  ne <-
+    nrow(d3[shnro == shift(shnro, type = 'lead') &
+              jakso > 0 & shift(jakso, type = 'lead') == 0 &
+              shift(tulopvm, type = 'lead') == lahtopvm])
   #psy jakson paatospaivana psy pkl-kanyti
-  neP <- nrow(d3[shnro == shift(shnro, type = 'lead') & jakso > 0 & shift(jakso, type = 'lead') == 0 & 
-                   shift(tulopvm, type = 'lead') == lahtopvm & psy == T & shift(psy) == T])
+  neP <-
+    nrow(d3[shnro == shift(shnro, type = 'lead') &
+              jakso > 0 & shift(jakso, type = 'lead') == 0 &
+              shift(tulopvm, type = 'lead') == lahtopvm &
+              psy == T & shift(psy) == T])
   
   
-  descr_all_episodes <- data.table(episode = c('inpatient period starts with outpatient appointment', 
-                                                'outpatient appointment the previous day of the start of an inpatient period',
-                                                'NA',
-                                                'outpatient appointment within an inpatient period', 
-                                                'outpatient appointment on the last day of an inpatient period',
-                                                'number of hospital treatment periods (d2_nrow)'),
-                                     n = list(na, 
-                                              nb,
-                                              NA,
-                                              nd,
-                                              ne,
-                                              d2_nrow))[, sample := 'all']
+  descr_all_episodes <-
+    data.table(
+      episode = c(
+        'inpatient period starts with outpatient appointment',
+        'outpatient appointment the previous day of the start of an inpatient period',
+        'NA',
+        'outpatient appointment within an inpatient period',
+        'outpatient appointment on the last day of an inpatient period',
+        'number of hospital treatment periods (d2_nrow)'
+      ),
+      n = list(na,
+               nb,
+               NA,
+               nd,
+               ne,
+               d2_nrow)
+    )[, sample := 'all']
   
-  descr_psy_episodes <- data.table(episode = c('psychiatric inpatient period starts with psychiatric outpatient appointment', 
-                                                'psychiatric outpatient appointment the previous day of the start of a psychiatric inpatient period', 
-                                                'what ever outpatient appointment the previous day of the start of a psychiatric inpatient period',   
-                                                'psychiatric outpatient appointment within a psychiatric inpatient period', 
-                                                'psychiatric opoutpatient appointment on the last day of a psychiatric inpatient period', 
-                                                'number of psychiatric hospital treatment periods (d2_psyT_nrow)'),
-                                      n = list(naP, 
-                                              nbP,
-                                              ncP,
-                                              ndP, 
-                                              neP, 
-                                              d2_psyT_nrow))[, sample := 'psy']
+  descr_psy_episodes <-
+    data.table(
+      episode = c(
+        'psychiatric inpatient period starts with psychiatric outpatient appointment',
+        'psychiatric outpatient appointment the previous day of the start of a psychiatric inpatient period',
+        'what ever outpatient appointment the previous day of the start of a psychiatric inpatient period',
+        'psychiatric outpatient appointment within a psychiatric inpatient period',
+        'psychiatric opoutpatient appointment on the last day of a psychiatric inpatient period',
+        'number of psychiatric hospital treatment periods (d2_psyT_nrow)'
+      ),
+      n = list(naP,
+               nbP,
+               ncP,
+               ndP,
+               neP,
+               d2_psyT_nrow)
+    )[, sample := 'psy']
   
   descr_episodes <- rbindlist(list(descr_all_episodes, descr_psy_episodes))
   
@@ -165,103 +204,142 @@ aggregate_specialized_care_episodes <- function(part) {
   # - osastohoito psykiatrialla ja liskaksi pkl-kaynti psykiatrialla (paljonko?) dg.psy.pkl eriksee, muut dg_outpat listataan erikseen
   # - joihin liittyy osastohoito ei psykiatrialla, mutta sen aikana psyk pkl-kaynti, otetaan dg.psy.pkl erikseen
   
-  # n_rivi on na jos vain yksi rivi. korvataan arvolla 1.
-  d3[is.na(n_rivi), n_rivi := 1]
+  # n_rows_inpat on na jos vain yksi rivi. korvataan arvolla 1.
+  d3[is.na(n_rows_inpat), n_rows_inpat := 1]
   
   setorder(d3, shnro, tulopvm, -lahtopvm)
   
   # yksi pkl-kaynti episodessa, ei tehda mitaan
-  a <- d3[, if(.N == 1 & sum(jakso) == 0) .(tulopvm = min(tulopvm), lahtopvm = max(lahtopvm), 
-                                          n_rows_episode = sum(n_rivi), 
-                                          psy = sum(psy, na.rm = T) > 0,
-                                          tulopvm_psy = NA, lahtopvm_psy = NA, 
-                                          dg_inpat = NA, dg_inpat_psy = NA,
-                                          dg_outpat = paste0(na.omit(unique(dg_outpat)), collapse = '_'),
-                                          paltu = paste0(na.omit(unique(paltu)), collapse = '_'), paltu_psy = NA,
-                                          ea_list = paste0(na.omit(unique(ea_list)), collapse = '_')
-  ), by = .(shnro, episode)]
+  a <-
+    d3[, if (.N == 1 & sum(jakso) == 0)
+      .(
+        tulopvm        = min(tulopvm),
+        lahtopvm       = max(lahtopvm),
+        n_rows_episode = sum(n_rows_inpat),
+        psy            = sum(psy, na.rm = T) > 0,
+        tulopvm_psy    = NA,
+        lahtopvm_psy   = NA,
+        dg_inpat       = NA,
+        dg_inpat_psy   = NA,
+        dg_outpat      = paste0(na.omit(unique(dg_outpat)), collapse = '_'),
+        paltu          = paste0(na.omit(unique(paltu)), collapse = '_'),
+        paltu_psy      = NA,
+        ea_list        = paste0(na.omit(unique(ea_list)), collapse = '_')
+      ), by = .(shnro, episode)]
   
   # # yli yksi pkl-kayntia samana paiva, ei tehda mitaan, jotta psyk pkl-kaynnit ja muut voidaan erottaa, mutta merkitaan jatkoa varten
-  b <- d3[, if(.N > 1 & sum(jakso) == 0) .(tulopvm, lahtopvm, psy, tulopvm_psy, lahtopvm_psy, 
-                                           dg_inpat, dg_inpat_psy, dg_outpat, paltu, paltu_psy, ea_list), by = .(shnro, episode)]
+  b <- 
+    d3[, if(.N > 1 & sum(jakso) == 0) 
+      .(tulopvm, lahtopvm, psy, tulopvm_psy, lahtopvm_psy, 
+        dg_inpat, dg_inpat_psy, dg_outpat, paltu, paltu_psy, ea_list), by = .(shnro, episode)]
   
-  a[,`:=`(inpatient_psy = FALSE, inpatient = FALSE, dg_inpat_psy_outpat_psy = NA, pkl_same_day = FALSE)]  # type pkl
-  b[,`:=`(inpatient_psy = FALSE, inpatient = FALSE, dg_inpat_psy_outpat_psy = NA, n_rows_episode = 1, pkl_same_day = TRUE)]  # type pkl
+  a[,`:=`(inpatient_psy = FALSE, inpatient = FALSE, dg_inpat_psy_outpat_psy = NA, outpat_same_day = FALSE)]  # type pkl
+  b[,`:=`(inpatient_psy = FALSE, inpatient = FALSE, dg_inpat_psy_outpat_psy = NA, n_rows_episode = 1, outpat_same_day = TRUE)]  # type pkl
   
   # osastohoito ei psykiatriaa, yksi rivi, ei tehda mitaan
-  c <- d3[, if(.N == 1 & sum(jakso) > 0 & sum(psy) == 0) .(tulopvm = min(tulopvm), lahtopvm = max(lahtopvm), 
-                                                         n_rows_episode = sum(n_rivi),
-                                                         tulopvm_psy = NA, lahtopvm_psy = NA, 
-                                                         dg_inpat = paste0(na.omit(unique(dg_inpat)), collapse = '_'), 
-                                                         dg_inpat_psy = NA, dg_outpat=NA,
-                                                         paltu = paste0(na.omit(unique(paltu)), collapse = '_'), 
-                                                         paltu_psy = NA,
-                                                         ea_list = paste0(na.omit(unique(ea_list)), collapse = '_')
-  ), by = .(shnro, episode)]
-  c[,`:=`(inpatient_psy = FALSE, inpatient = TRUE, psy = FALSE, dg_inpat_psy_outpat_psy = NA, pkl_same_day = FALSE)]
+  c <-
+    d3[, if (.N == 1 & sum(jakso) > 0 & sum(psy) == 0)
+      .(
+        tulopvm        = min(tulopvm),
+        lahtopvm       = max(lahtopvm),
+        n_rows_episode = sum(n_rows_inpat),
+        tulopvm_psy    = NA,
+        lahtopvm_psy   = NA,
+        dg_inpat       = paste0(na.omit(unique(dg_inpat)), collapse = '_'),
+        dg_inpat_psy   = NA,
+        dg_outpat      = NA,
+        paltu          = paste0(na.omit(unique(paltu)), collapse = '_'),
+        paltu_psy      = NA,
+        ea_list        = paste0(na.omit(unique(ea_list)), collapse = '_')
+      ), by = .(shnro, episode)]
+
+    c[,`:=`(inpatient_psy = FALSE, inpatient = TRUE, psy = FALSE, dg_inpat_psy_outpat_psy = NA, outpat_same_day = FALSE)]
   
   # osastohoito psykiatrialla, yksi rivi, ei tehda mitaan
-  cc <- d3[, if(.N == 1 & sum(jakso) > 0 & sum(psy) > 0) .(tulopvm = min(tulopvm), lahtopvm = max(lahtopvm), 
-                                                           n_rows_episode = sum(n_rivi),
-                                                           tulopvm_psy = min(tulopvm_psy), 
-                                                           lahtopvm_psy = max(lahtopvm_psy), 
-                                                           dg_inpat = na.omit(unique(dg_inpat)), 
-                                                           dg_inpat_psy = na.omit(unique(dg_inpat_psy)),
-                                                           dg_outpat = NA,
-                                                           paltu = na.omit(unique(paltu)), 
-                                                           paltu_psy = na.omit(unique(paltu_psy)) ,
-                                                           ea_list = paste0(na.omit(unique(ea_list)), collapse = '_')
-  ), by = .(shnro, episode)]
-  cc[,`:=`(inpatient_psy = TRUE, inpatient = TRUE, psy = TRUE, dg_inpat_psy_outpat_psy = NA,pkl_same_day = FALSE)]
+    cc <-
+      d3[, if (.N == 1 &  sum(jakso) > 0 & sum(psy) > 0)
+        .(
+          tulopvm        = min(tulopvm),
+          lahtopvm       = max(lahtopvm),
+          n_rows_episode = sum(n_rows_inpat),
+          tulopvm_psy    = min(tulopvm_psy),
+          lahtopvm_psy   = max(lahtopvm_psy),
+          dg_inpat       = na.omit(unique(dg_inpat)),
+          dg_inpat_psy   = na.omit(unique(dg_inpat_psy)),
+          dg_outpat      = NA,
+          paltu          = na.omit(unique(paltu)),
+          paltu_psy      = na.omit(unique(paltu_psy)) ,
+          ea_list        = paste0(na.omit(unique(ea_list)), collapse = '_')
+        ), by = .(shnro, episode)]
+    
+  cc[,`:=`(inpatient_psy = TRUE, inpatient = TRUE, psy = TRUE, dg_inpat_psy_outpat_psy = NA,outpat_same_day = FALSE)]
   
   
   
   #sairaalahoito ja pkl kaynteja, ei psykiatriaa, listataan kaikki
-  d <- d3[, if(.N > 1 & sum(jakso) > 0 & sum(psy) == 0) .(tulopvm = min(tulopvm), lahtopvm = max(lahtopvm), 
-                                                          n_rows_episode=sum(n_rivi),
-                                                          tulopvm_psy = NA, lahtopvm_psy = NA,
-                                                          dg_inpat = paste0(na.omit(unique(dg_inpat)), collapse = '_'), 
-                                                          dg_inpat_psy = NA,
-                                                          dg_outpat = paste0(na.omit(unique(dg_outpat)), collapse = '_'),
-                                                          paltu = paste0(na.omit(unique(paltu)), collapse = '_'), 
-                                                          paltu_psy = NA,
-                                                          ea_list = paste0(na.omit(unique(ea_list)), collapse = '_')
-  ), by = .(shnro, episode)]
-  d[,`:=`(inpatient_psy = FALSE, inpatient = TRUE, psy = FALSE, dg_inpat_psy_outpat_psy = NA, pkl_same_day = FALSE)]
+  d <-
+    d3[, if (.N > 1 & sum(jakso) > 0 & sum(psy) == 0)
+      .(
+        tulopvm          = min(tulopvm),
+        lahtopvm         = max(lahtopvm),
+        n_rows_episode   = sum(n_rows_inpat),
+        tulopvm_psy      = NA,
+        lahtopvm_psy     = NA,
+        dg_inpat         = paste0(na.omit(unique(dg_inpat)), collapse = '_'),
+        dg_inpat_psy     = NA,
+        dg_outpat        = paste0(na.omit(unique(dg_outpat)), collapse = '_'),
+        paltu            = paste0(na.omit(unique(paltu)), collapse = '_'),
+        paltu_psy        = NA,
+        ea_list          = paste0(na.omit(unique(ea_list)), collapse = '_')
+      ), by = .(shnro, episode)]
+
+  d[,`:=`(inpatient_psy = FALSE, inpatient = TRUE, psy = FALSE, dg_inpat_psy_outpat_psy = NA, outpat_same_day = FALSE)]
   
   # tassa episodes, joissa osastohoito psykiatrialla ja pkl-kaynteja
   e1 <- d3[, if(.N > 1 & sum(jakso) > 0 & sum(psy) > 0 & any(jakso > 0 & psy == T)) .SD, by = .(shnro, episode)]
   
-  e  <- e1[, .(tulopvm = max(tulopvm), lahtopvm = max(lahtopvm), n_rows_episode = sum(n_rivi, na.rm = T),
-               tulopvm_psy = min(tulopvm_psy, na.rm = T), lahtopvm_psy = max(lahtopvm_psy, na.rm = T), 
-               dg_inpat = paste0(na.omit(unique(dg_inpat)), collapse = '_'), 
-               dg_inpat_psy = paste0(na.omit(unique(dg_inpat_psy)), collapse = '_'),
-               paltu = paste0(na.omit(unique(paltu)), collapse = '_'), 
-               paltu_psy = paste0(na.omit(unique(paltu_psy)), collapse = '_'),
-               ea_list = paste0(na.omit(unique(ea_list)), collapse = '_')), 
-           by = .(shnro, episode)]
+  e  <-
+    e1[, .(
+      tulopvm            = min(tulopvm),
+      lahtopvm           = max(lahtopvm),
+      n_rows_episode     = sum(n_rows_inpat, na.rm = T),
+      tulopvm_psy        = min(tulopvm_psy, na.rm = T),
+      lahtopvm_psy       = max(lahtopvm_psy, na.rm = T),
+      dg_inpat           = paste0(na.omit(unique(dg_inpat)), collapse = '_'),
+      dg_inpat_psy       = paste0(na.omit(unique(dg_inpat_psy)), collapse = '_'),
+      paltu              = paste0(na.omit(unique(paltu)), collapse = '_'),
+      paltu_psy          = paste0(na.omit(unique(paltu_psy)), collapse = '_'),
+      ea_list            = paste0(na.omit(unique(ea_list)), collapse = '_')
+    ),
+    by = .(shnro, episode)]
   
-  e <- merge(e, 
-             e1[psy == T, .(dg_inpat_psy_outpat_psy = paste0(na.omit(unique(dg_outpat)), collapse = '_')), by = .(shnro, episode)], 
-             on = .(shnro, episode), 
+  e <- merge(e,
+             e1[psy == T, .(dg_inpat_psy_outpat_psy = paste0(na.omit(unique(dg_outpat)), collapse = '_')), by = .(shnro, episode)],
+             on = .(shnro, episode),
              all.x = TRUE)
   
-  e <- merge(e, 
-             e1[psy == F, .(dg_outpat = paste0(na.omit(unique(dg_outpat)), collapse = '_')), by = .(shnro, episode)], 
-             on = .(shnro, episode), 
+  e <- merge(e,
+             e1[psy == F, .(dg_outpat = paste0(na.omit(unique(dg_outpat)), collapse = '_')), by = .(shnro, episode)],
+             on = .(shnro, episode),
              all.x = TRUE)
   
-  e[,`:=`(inpatient_psy = TRUE, inpatient = TRUE, psy = TRUE, pkl_same_day = FALSE)] # type: osasto psyk
+  e[,`:=`(inpatient_psy = TRUE, inpatient = TRUE, psy = TRUE, outpat_same_day = FALSE)] # type: osasto psyk
   
   # tassa tahatumat, joissa on sairaalahoito, mutta psykiatrialla vain pkl-kaynti
   f1 <- d3[,if(.N > 1 & sum(jakso) > 0 & sum(psy) > 0 & !any(jakso > 0 & psy == T)) .SD, by = .(shnro, episode)]
-  f  <- f1[, .(tulopvm = min(tulopvm), lahtopvm = max(lahtopvm), n_rows_episode = sum(n_rivi, na.rm = T),
-               tulopvm_psy = NA, lahtopvm_psy = NA, 
-               dg_inpat = paste0(na.omit(unique(dg_inpat)), collapse = '_'),
-               paltu = paste0(na.omit(unique(paltu)), collapse = '_'), 
-               paltu_psy = NA,
-               ea_list = paste0(na.omit(unique(ea_list)), collapse = '_')),
-           by = .(shnro, episode)]
+  f  <-
+    f1[, .(
+      tulopvm           = min(tulopvm),
+      lahtopvm          = max(lahtopvm),
+      n_rows_episode    = sum(n_rows_inpat, na.rm = T),
+      tulopvm_psy       = NA,
+      lahtopvm_psy      = NA,
+      dg_inpat          = paste0(na.omit(unique(dg_inpat)), collapse = '_'),
+      paltu             = paste0(na.omit(unique(paltu)), collapse = '_'),
+      paltu_psy         = NA,
+      ea_list           = paste0(na.omit(unique(ea_list)), collapse = '_')
+    ),
+    by = .(shnro, episode)]
   
   # vain psykiatrian pkl-dg:t
   
@@ -275,7 +353,7 @@ aggregate_specialized_care_episodes <- function(part) {
              on = .(shnro, episode), 
              all.x = TRUE)
   
-  f[,`:=`(inpatient_psy = FALSE, inpatient = TRUE, psy = TRUE, dg_inpat_psy_outpat_psy = NA, pkl_same_day = FALSE)] # type: osasto muu; pkl psyk
+  f[,`:=`(inpatient_psy = FALSE, inpatient = TRUE, psy = TRUE, dg_inpat_psy_outpat_psy = NA, outpat_same_day = FALSE)] # type: osasto muu; pkl psyk
   
   dat <- rbindlist(list(a, b, c, cc, d, e, f), use.names = TRUE)
   
@@ -351,7 +429,7 @@ write_fst(dat_episodes, paste0('data_episodes_', outpatient_start_year, '_', max
 
 description_episodes[sample == 'all', percent := n / tail(n, 1) * 100]
 description_episodes[sample == 'psy', percent := n / tail(n, 1) * 100]
-episodes_description <- rbindlist(list(episodes_description, data.table(episode= paste0('add_days ', add_days), sample = NA, n=NA, percent = NA)))
+description_episodes <- rbindlist(list(description_episodes, data.table(episode= paste0('add_days ', add_days), sample = NA, n=NA, percent = NA)))
 
 # write descriptions
 write_xlsx(
@@ -359,3 +437,6 @@ write_xlsx(
   path = paste0('description_episodes_', outpatient_start_year, '_', max_year, '.xlsx')
   )
 
+setwd(here())
+
+# // end

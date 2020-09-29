@@ -21,7 +21,7 @@ aggregate_inpatient_periods <- function(d1, years_1996_andafter = TRUE) {
   ## d2: kaikki jaksot aggregoituna
   #
   
-  d2 <- d1[,.(tulopvm = unique(j_tulopvm), lahtopvm = unique(j_lahtopvm), psy = any(psy > 0), n_rivi = .N), 
+  d2 <- d1[,.(tulopvm = unique(j_tulopvm), lahtopvm = unique(j_lahtopvm), psy = any(psy > 0), n_rows_inpat = .N), 
            by = .(shnro, jakso)]
   
   #jakson alku ja loppu psykiatrialla

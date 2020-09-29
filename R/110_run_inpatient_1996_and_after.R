@@ -1,36 +1,17 @@
 #
 #
-# Project: Aggregation of Hilmo entries // Hilmojen ketjutus
-#
-#
-# Script purpose: 
-#   - Aggregation of inpatient periods
-# 
-# Data input:
-#   - Data input is in parts, where all Hilmo entries from a single person must locate in the same part.
-#   -- contrary to the original data form.
-#   -- run 0_data_raw_to_parts.R before this script
-#
-# Output:
-#   - data_processed/add_days_[add_days]/dat_inpatient_[years_range].fst: aggregated data
-#   - parts, needed later for outpatient data aggregation 
-#   - preaparation_description.xlsx: description of excluded rows, PALA distibution, etc.
-#
-# Details:
-#    1. prepare_describe_parts() function cleans the data
-#    2. aggregate_inpatient_periods() function does the actual aggregation      
-#    3. process outputs and save
+# Identify Hilmo episodes // Hilmojen ketjutus
 #
 # Author: Kimmo Suokas
 #
 #
-# Aggregation of inpatient periods  -------------------------------------------------------------------------------------
+# Aggregation of inpatient periods  ---------------------------------------------
 
-# Sourece files -----------------------------------------------------------------
+# Source files -----------------------------------------------------------------
 #
 source(here('R', '011_functions_prepare_parts.R'))
 source(here('R', '012_functions_aggregate_inpatient_periods.R'))
-source(here('R', '013_create_dirs.R'))
+source(here('R', '013_functions_create_dirs.R'))
 
 
 # Aggregate raw Hilmo data to inpatient treatment periods based on aggregation rules above
@@ -73,10 +54,26 @@ run_aggregate_inpatient <- function(part) {
   # THE ACTUAL AGGREGATION
   d2 <- aggregate_inpatient_periods(d1)
   
-  
   # lahtopvm max value is max year + 1000, representing treatments that continued after the end of
   # the study period. Hence, real value is NA.
   d2[lahtopvm == max(lahtopvm), lahtopvm := NA]
+  
+  # process
+  
+  # Create variable year (again), based on lahtopvm ---------------------------------
+  d2[, vuosi := as.integer(format(as.IDate(lahtopvm), '%Y'))]
+  
+  # if treatment continues at the end of the data, lahtopvm is NA, year is max year
+  d2[is.na(lahtopvm), vuosi := as.integer(max_year)]
+  
+  # mark episodes that contain any inpatient period lasting over a night 
+  d2[, overnight_all := FALSE]
+  d2[lahtopvm > tulopvm, overnight_all := TRUE]
+  
+  # mark episodes that contain psychiatric inpatient period lasting over a night 
+  d2[, overnight_psy := FALSE]
+  d2[lahtopvm_psy > tulopvm_psy, overnight_psy := TRUE]
+  
   
   # output
   list(
@@ -111,6 +108,10 @@ dat_inpatient[is.na(lahtopvm), vuosi := as.integer(max_year)]
 for(i in seq_along(sapply(parts_out, '[', 'aggregated_part'))) {
   sapply(parts_out, '[', 'aggregated_part')[[i]][is.na(lahtopvm), vuosi := as.integer(max_year)]
 }
+
+
+
+
 
 # create directories for prepared and fully processed data---------------------------------------------------------------
 

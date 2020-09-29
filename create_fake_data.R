@@ -1,11 +1,17 @@
-
-
-# Create fake data to see the scripts in action. This data does not try to mimic real world register in any way! 
+#
+#
+# Identify Hilmo episodes // Hilmojen ketjutus
+#
+# Author: Kimmo Suokas
+#
+#
+# Create fake data to see the scripts in action. 
+#The fake data does not necassarey follow the real world patterns in any way!
 
 library(data.table)
 library(here)
 
-fake_size = 10000
+fake_size = 20000
 fake_start <- '2010-01-01'
 fake_end <- '2014-12-31'
 
@@ -27,6 +33,8 @@ d <- data.table(shnro = paste0(sample(1000:(1000 + fake_size / 5), fake_size, re
                   )]
 
 d[PALA > 90, TUPVA := LPVM] # outpatient events have the same start_date and end_date
+
+d[EA %like% c(70, 74,75), DG1 := paste0('F', sample(10:999, size = .N, replace = T))]
 
 ilaji2 <- tail(d[PALTU == 1], fake_size / 10)[, `:=`(ILAJI = 2,
                                                      LPVM  = NA)]

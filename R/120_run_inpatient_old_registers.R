@@ -1,27 +1,14 @@
 #
 #
-# Project: Aggregation of OLD Hilmo entries // Vanhojen Hilmojen ketjutus
-#
-#
-# Script purpose: 
-#   * This set of scrips runs the aggregation with diferent criteria, defined in the main.R script
-# 
-# Data input:
-#
-# Output:
-#   * dat_inpatient.fst: aggregated data
-#   * preaparation_description.xlsx: description of excluded rows, PALA distibution, etc.
-#
-# Details:
+# Identify Hilmo episodes // Hilmojen ketjutus
 #
 # Author: Kimmo Suokas
-#
 #
 
 # Dataset need some harmonization
 
 # source aggrgate-function
-source(file.path(dir[["main"]], 'R', '012_functions_aggregate_inpatient_periods.R'))
+source(here('R', '012_functions_aggregate_inpatient_periods.R'))
 
 
 # years 1975 -1986
@@ -49,7 +36,7 @@ d0[, EA := paste(ST, EA, sep = '.')]
 
 
 # run the aggregation (includes saving)
-source(file.path(dir[["main"]], 'R', '121_describe_aggregate_save.R'))
+source(here('R', '121_describe_aggregate_save.R'))
 
 
 # years 1987 -1993
@@ -72,7 +59,7 @@ d0[,psy := FALSE]
 d0[EA %in% c(70, 74, 75), psy := TRUE]
 
 # run the aggregation (includes saving)
-source(file.path(dir[["main"]], 'R', '121_describe_aggregate_save.R'))
+source(here('R', '121_describe_aggregate_save.R'))
 
 
 # years 1994 -1995
@@ -97,6 +84,6 @@ d0[,psy := FALSE]
 d0[ EA %in% c('70', '70F', '70X', '70Z', '75', '75X'), psy := TRUE]
 
 # run the aggregation (includes saving)
-source(file.path(dir[["main"]], 'R', '121_describe_aggregate_save.R'))
+source(here('R', '121_describe_aggregate_save.R'))
 
 rm(old_start_year, old_end_year)
