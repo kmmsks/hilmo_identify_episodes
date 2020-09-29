@@ -33,14 +33,14 @@ aggregate_inpatient_periods <- function(d1, years_1996_andafter = TRUE) {
   #jakson viimeisin dg
   d2 <- merge(d2, 
               d1[d1[,.I[LPVM == max(LPVM)], by=.(shnro, jakso)]$V1, dg,  by = .(shnro, jakso)
-                 ][, .(dg_os = paste0(na.omit(unique(dg)), collapse = '_')), by = .(shnro, jakso)], 
+                 ][, .(dg_inpat = paste0(na.omit(unique(dg)), collapse = '_')), by = .(shnro, jakso)], 
               on = .(shnro, jakso), 
               all.x = TRUE)
   
   #jakson viimeisin dg psykiatrialta
   d2 <- merge(d2, 
               d1[d1[psy == T,.I[LPVM == max(LPVM)], by = .(shnro, jakso)]$V1, dg,  by = .(shnro, jakso)
-                 ][, .(dg_os_psy = paste0(na.omit(unique(dg)), collapse = '_')), by = .(shnro, jakso)], 
+                 ][, .(dg_inpat_psy = paste0(na.omit(unique(dg)), collapse = '_')), by = .(shnro, jakso)], 
               on = .(shnro, jakso), 
               all.x=TRUE)
   

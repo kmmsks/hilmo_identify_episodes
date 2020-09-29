@@ -84,8 +84,7 @@ dir.create(here('data_temp', 'parts_raw'))
 
 dat[, write_fst(.SD, here('data_temp', 'parts_raw', paste0(part, '.fst')), compress = 100), by = part]
 
-# clear environment
-rm(list=ls())
-gc()
+rm(dat, n_parts)
+#gc()
 
 # end
