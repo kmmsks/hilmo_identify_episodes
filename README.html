@@ -368,7 +368,7 @@ summary {
 <div id="hilmo_identify_episodes" class="section level1">
 <h1>hilmo_identify_episodes</h1>
 <p>R script to identify hospital admissions, discharges and discharge diagnoses from the Finnish <a href="https://thl.fi/en/web/thlfi-en/statistics/information-on-statistics/register-descriptions/care-register-for-health-care">Care Register for Health Care</a> (“Hilmo” register). This script identifies all episodes, and episodes related to psychiatric care, but can easily be generalized to other specializes</p>
-<p>version 0.1 (2020-09-28)</p>
+<p>Version 0.1 (2020-09-28)</p>
 <p>Author Kimmo Suokas, <a href="mailto:kimmo.suokas@tuni.fi" class="email">kimmo.suokas@tuni.fi</a></p>
 <div id="background" class="section level2">
 <h2>Background</h2>
@@ -393,16 +393,19 @@ summary {
 </ol>
 </div>
 <div id="data-input" class="section level2">
-<h2>Data Input:</h2>
+<h2>1. Data Input:</h2>
 <ul>
 <li>csv format. set location of the data in 1_main_aggregation.R</li>
-<li>This project comes with fake data to see the scripts in action. The fake data does not necessary follow the real world patterns in any way!</li>
+<li>This project comes with fake data to see the scripts in action. The fake data does not necessary follow the real world patterns in any way!
+<ul>
+<li><strong>Run create_fake_data.R first to generate fake test data</strong></li>
+</ul></li>
 </ul>
 </div>
 <div id="prepare-data-for-the-aggregation" class="section level2">
-<h2>Prepare Data for the Aggregation:</h2>
+<h2>2. Prepare Data for the Aggregation:</h2>
 <ul>
-<li><p>This is done in 0_data_raw_to_parts.R</p></li>
+<li><p><strong>Preparations are done in 0_data_raw_to_parts.R’</strong></p></li>
 <li><p>What you need to achieve, is to have minimum of the following columns in your data:</p>
 <ul>
 <li><p>‘shnro’: character. person id. The name shnro is used by the Statistic Finland, it refers to a person, not ID number, which may change (in relative rare occasions).</p></li>
@@ -432,9 +435,9 @@ summary {
 </ul>
 </div>
 <div id="processing-of-the-data" class="section level2">
-<h2>Processing of the Data</h2>
+<h2>3. Processing of the Data</h2>
 <ul>
-<li>Control setting for desired episode identification rules in 1_main_aggregation.R</li>
+<li><strong>Control setting for desired episode identification rules in 1_main_aggregation.R</strong></li>
 </ul>
 </div>
 <div id="data-output" class="section level2">
@@ -448,6 +451,12 @@ summary {
 <li>-&gt; preparation_description: description of incorrect entries, PALA distribution, etc.</li>
 </ul></li>
 <li>data_processed -&gt; 2_in_and_outpatient_episodes -&gt; add_days_[add_days]: the data and description of included episodes</li>
+</ul></li>
+<li>This test script creates the following object:
+<ul>
+<li><strong>dat_episodes</strong>: processed data with inpatient and outpatient episodes included</li>
+<li><strong>dat_inpatient</strong>: inaptient episodes only</li>
+<li><strong>description_episode</strong> and <strong>description_inpatient</strong>: see the formatted xlsx files in folder data_processed</li>
 </ul></li>
 </ul>
 </div>
@@ -494,9 +503,9 @@ summary {
 <li><p>dg_psy_inpat: char. If inpatient period contains psychiatric outpatient care, but not inpatient care, psychiatric outpatient diagnoses are here</p></li>
 <li><p>dg. char. Combination of relevant discharge diagnoses, discharge diagnoses from psychiatric inpatient care preferred:</p>
 <ul>
-<li>[inpatient== TRUE &amp; inpatient_psy == FALSE, dg := dg_inpat]</li>
-<li>[inpatient== TRUE &amp; inpatient_psy == TRUE, dg := dg_inpat_psy]</li>
-<li>[inpatient== FALSE, dg := dg_outpat]</li>
+<li>when inpatient== TRUE &amp; inpatient_psy == FALSE, dg_inpat column included,</li>
+<li>when inpatient== TRUE &amp; inpatient_psy == TRUE, dg_inpat_psy column included,</li>
+<li>when inpatient== FALSE, dg_outpat included.</li>
 </ul></li>
 </ul></li>
 </ul>

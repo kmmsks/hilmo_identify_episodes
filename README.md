@@ -35,12 +35,13 @@ Different sets of criteria have been used:
 3. To provide this script accessible for critical evaluation and further open use (despite the actual register data is not openly available). The aim is to let future (at least clinically oriented) researchers to focus on their actual research, not technicalities. 
 
 
-## Data Input:
+## 1. Data Input:
 - csv format. set location of the data in 1_main_aggregation.R
-- This project comes with fake data to see the scripts in action. The fake data does not necessary follow the real world patterns in any way! 
+- This project comes with fake data to see the scripts in action. The fake data does not necessary follow the real world patterns in any way!
+   + **Run create_fake_data.R first to generate fake test data**
 
-## Prepare Data for the Aggregation:
-- This is done in 0_data_raw_to_parts.R
+## 2. Prepare Data for the Aggregation:
+- **Preparations are done in 0_data_raw_to_parts.R'**
 - What you need to achieve, is to have minimum of the following columns in your data:
    + 'shnro': character. person id. The name shnro is used by the Statistic Finland, it refers to a person, not ID number, which may change (in relative rare occasions).
    + 'vuosi': numeric. Year of the entry
@@ -68,8 +69,8 @@ Different sets of criteria have been used:
 - To determine the optimal part size is out of scope here. See what is small enough on your machine. This example uses five parts.
 
 
-## Processing of the Data
-- Control setting for desired episode identification rules in 1_main_aggregation.R
+## 3. Processing of the Data
+- **Control setting for desired episode identification rules in 1_main_aggregation.R**
 
 ## Data Output
 - Full aggregated data is saved in the folders 
@@ -77,6 +78,10 @@ Different sets of criteria have been used:
       + -> add_days_[add_days]: the data
       + -> preparation_description: description of incorrect entries, PALA distribution, etc.
    + data_processed -> 2_in_and_outpatient_episodes -> add_days_[add_days]: the data and description of included episodes
+- This test script creates the following object:
+   + **dat_episodes**: processed data with inpatient and outpatient episodes included
+   + **dat_inpatient**: inaptient episodes only
+   + **description_episode** and **description_inpatient**: see the formatted xlsx files in folder data_processed
 
 
 # New variables in the Processed Data
