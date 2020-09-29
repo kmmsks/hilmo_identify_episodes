@@ -20,13 +20,12 @@ d <- data.table(shnro = paste0(sample(1000:(1000 + fake_size / 5), fake_size, re
          DG2   = paste0(sample(LETTERS[1:6], size = fake_size, replace = TRUE), sample(10:999, size = fake_size, replace = T))
          )[, `:=`(vuosi = format(as.IDate(LPVM), '%Y'),
                   TUPVA = LPVM - sample(1:1000, 1)
-                  )
-           ]
+                  )]
 
 d[PALA > 90, TUPVA := LPVM] # outpatient events have the same start_date and end_date
 
-ilaji2 <- tail(d[PALTU == 1], fake_size/10)[, `:=`(ILAJI = 2,
-                                  LPVM  = NA)]
+ilaji2 <- tail(d[PALTU == 1], fake_size / 10)[, `:=`(ILAJI = 2,
+                                                     LPVM  = NA)]
 
 fake_data <- rbindlist(list(d, ilaji2))
 
@@ -44,6 +43,7 @@ setorder(fake_data, shnro, LPVM)
 dir.create(here('data_raw_fake'))
 
 fake_data[, vuosi2 := vuosi] # just to include vuosi in the .SD
+
 fake_data[, fwrite(.SD, here('data_raw_fake', paste0(vuosi2, '.csv'))), by = vuosi2]
 
 rm(fake_end, fake_size, fake_start, ilaji2)
