@@ -4,6 +4,7 @@
 #
 # Author: Kimmo Suokas
 #
+# In and outpatient episodes, combine.
 #
 # Source files -----------------------------------------------------------------
 #

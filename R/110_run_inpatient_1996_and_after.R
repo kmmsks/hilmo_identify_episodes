@@ -14,15 +14,15 @@ source(here('R', '012_functions_aggregate_inpatient_periods.R'))
 source(here('R', '013_functions_create_dirs.R'))
 
 
-# Aggregate raw Hilmo data to inpatient treatment periods based on aggregation rules above
+# Aggregate raw Hilmo data to inpatient treatment episode based on aggregation rules in 1_main_aggregation.R
 #
-# @param d0: data part
-# @returns: list containing data prepared for the aggregation, the aggregated data part and 
-#           description of preparation process (number of incorrecet entries in the raw data part) 
+# param part: data table part to process
+# returns: list containing data prepared for the aggregation, the aggregated data part and 
+#           description of preparation process (number of incorrecet entries in the raw data part etc) 
 #
-# @details:
-#   * 1. prepareDescripeParts: remove and report incorrect entries, select relevant entries, define psychiatry
-#        Returns list: [1] data, [2]-[4] reprots
+# details:
+#   * 1. prepare_descripe_parts(d0): remove and report incorrect entries, select relevant entries, define psychiatry
+#        Returns list: [1] data, [2]-[4] reports
 #   * 2. source the actual aggregation,
 #        input: d0, returns: d2, the aggregated data 
 #
@@ -75,7 +75,7 @@ run_aggregate_inpatient <- function(part) {
   d2[lahtopvm_psy > tulopvm_psy, overnight_psy := TRUE]
   
   
-  # output
+  # return
   list(
     prepared_part                    = d0,
     aggregated_part                  = d2,

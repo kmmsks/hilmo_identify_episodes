@@ -1,9 +1,9 @@
 # hilmo_identify_episodes
 
 R script to identify hospital admissions, discharges and discharge diagnoses from the Finnish [Care Register for Health Care](https://thl.fi/en/web/thlfi-en/statistics/information-on-statistics/register-descriptions/care-register-for-health-care) ("Hilmo" register). 
-This script identifies all episodes, and episodes related to psychiatric care. IT can be generalized to other specializes as well.
+This script identifies all episodes, and episodes related to psychiatric care. It can be generalized to other specializes as well.
 
-Version 0.1 (2020-09-28)
+Version: 0.0.0.9000 (2020-09-28)
 
 Author: Kimmo Suokas, kimmo.suokas@tuni.fi
 
@@ -87,6 +87,7 @@ Variable | Description
 ```outpatient_start_year```| According to THL, outpatient data is relevant starting from 2006
 ```add_days``` |Days between periods, see below
 ```PALA_inpatient``` <br> ```PALA_outpatient``` | Register entry types defining treatments types of interest, see Hilmo manuals for details
+```specialties_of_interest``` |  Define speciality (psychiatry in this case). See erikoisala (EA) in Hilmo manuals. Notice changes in the coding between years.
 
 ### Days between periods ```add_days``` 
 Minimum of full calender days required between two hospital treatment periods:

@@ -58,12 +58,11 @@ d2 <- aggregate_inpatient_periods(d0, years_1996_andafter = FALSE)
 
 # save processed data -----------------------------------------------------------------
 
-setwd(file.path(dir[["main"]], 
-                               'data_processed', 
-                               '1_inpatient_periods', 
-                               paste('add_days', add_days, sep = '_')
-                               )
-      )
+setwd(file.path(here(
+  'data_processed',
+  '1_inpatient_periods',
+  paste('add_days', add_days, sep = '_')
+)))
 
 write_fst(d2, paste0('data_inpatient_', old_start_year, '_', old_end_year, '.fst'), compress = compression)
 
@@ -71,10 +70,11 @@ write_fst(d2, paste0('data_inpatient_', old_start_year, '_', old_end_year, '.fst
 
 
 # descriptions out: 
-n_vals[, `:=`(start_year = old_start_year,
-              end_year = old_end_year,
-              n_aggregated_periods = nrow(d2)
-              )]
+n_vals[, `:=`(
+  start_year = old_start_year,
+  end_year = old_end_year,
+  n_aggregated_periods = nrow(d2)
+)]
 
 setwd(file.path(dir[['main']], 'data_processed', '1_inpatient_periods',  'preparation_description'))
 
@@ -83,6 +83,8 @@ write_xlsx(transpose(n_vals, keep.names = 'value')[, .(value, n = V1)],
 )
 
 rm(d0, d2, n_vals)
-gc(
-  
-)
+gc()
+setwd(here())  
+
+# // end
+

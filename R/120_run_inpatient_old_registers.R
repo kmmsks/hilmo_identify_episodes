@@ -5,13 +5,20 @@
 # Author: Kimmo Suokas
 #
 
-# Dataset need some harmonization
+# Registers 1969-1993 have different data forms than 1996 and after. 
+# Datasets need harmonization
 
-# source aggrgate-function
+# In this file, go through settings for each time period with different data forms.
+# After that, gun 121_describe_aggregate_save.R 
+
+# Output in the same folder as years 1996 and after
+
+# Source files -----------------------------------------------------------------
+#
 source(here('R', '012_functions_aggregate_inpatient_periods.R'))
 
 
-# years 1975 -1986
+# years 1975 -1986 -------------------------------------------------------------
 old_start_year <- 1975
 old_end_year   <- 1986
 
@@ -62,7 +69,7 @@ d0[EA %in% c(70, 74, 75), psy := TRUE]
 source(here('R', '121_describe_aggregate_save.R'))
 
 
-# years 1994 -1995
+# years 1994 -1995 --------------------------------------------------------------
 old_start_year <- 1994
 old_end_year   <- 1995
 
@@ -87,3 +94,6 @@ d0[ EA %in% c('70', '70F', '70X', '70Z', '75', '75X'), psy := TRUE]
 source(here('R', '121_describe_aggregate_save.R'))
 
 rm(old_start_year, old_end_year)
+
+# // end
+

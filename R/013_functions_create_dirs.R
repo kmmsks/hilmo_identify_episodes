@@ -4,7 +4,8 @@
 #
 # Author: Kimmo Suokas
 #
-#
+## Function definition
+
 # create directory tree for processed data-----------------------------------------------------
 
 create_dirs_inpatient <- function(){

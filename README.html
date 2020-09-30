@@ -368,7 +368,7 @@ summary {
 <div id="hilmo_identify_episodes" class="section level1">
 <h1>hilmo_identify_episodes</h1>
 <p>R script to identify hospital admissions, discharges and discharge diagnoses from the Finnish <a href="https://thl.fi/en/web/thlfi-en/statistics/information-on-statistics/register-descriptions/care-register-for-health-care">Care Register for Health Care</a> (“Hilmo” register). This script identifies all episodes, and episodes related to psychiatric care. IT can be generalized to other specializes as well.</p>
-<p>Version 0.1 (2020-09-28)</p>
+<p>Version 0.0.0.9000 (2020-09-28)</p>
 <p>Author: Kimmo Suokas, <a href="mailto:kimmo.suokas@tuni.fi" class="email">kimmo.suokas@tuni.fi</a></p>
 <div id="background" class="section level2">
 <h2>Background</h2>
@@ -510,6 +510,10 @@ summary {
 <tr class="even">
 <td align="left"><code>PALA_inpatient</code> <br> <code>PALA_outpatient</code></td>
 <td align="left">Register entry types defining treatments types of interest, see Hilmo manuals for details</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>specialties_of_interest</code></td>
+<td align="left">Define speciality (psychiatry in this case). See erikoisala (EA) in Hilmo manuals. Notice changes in the coding between years.</td>
 </tr>
 </tbody>
 </table>

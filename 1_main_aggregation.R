@@ -71,6 +71,10 @@ PALA_inpatient <- c(1)
 
 PALA_outpatient <- 'PALA==83 | PALA>90'
 
+# Define specialties of interest (psychiatry) ---------------------------------------------------------------------------
+# See erikoisala EA, in Hilmo manuals. Notice changes in the coding between years.
+
+specialties_of_interest <-  '70|70F|70X|70Z|74|75|75X'  # psychiatry
 
 # write_fst compression  ------------------------------------------------------------------------------------------------
   # 0 for speed, 100 for reducing file sizes, default 50. 
@@ -129,7 +133,8 @@ source(here('R', '130_run_in_and_outpatient.R'))
 
 # Not run, example data not currently provided
 
-#source(here('R', '120_run_inpatient_aggregation_old_registers.R'))
+#source(here('R', '120_run_inpatient_aggregation_old_registers.R')) # Go through settings in this file in detail.
+
 
 # Output
 # Same directories as in years 1996 and after
