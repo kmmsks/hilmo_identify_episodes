@@ -40,22 +40,17 @@ aggregate_specialized_care_episodes <- function(part) {
   d2 <- read_fst(paste0(part, '.fst'), as.data.table = TRUE)
   
   
-  #  osastohoitojen ja pkl-kayntien yhdistaminen, 2006 alkaen AvoHilmo vertailtavissa (THL sanoo)
-  
-  
-  # nyt tarkasteluun alkuvuodesta alkaen (2007 ensin) otetaan sairaalajaksot, 
-  # pkl-kaynnit vuotta aiemmasta mukaan,
-  # jotta alussa ei tule virhetta
-  
-  # valitaan alkuvuosi ja vain halutut PALA:t
+
+  # collect outpatient entries staring one year earlier
   d0 <- d0[vuosi >= (outpatient_start_year - 1) & eval(parse(text = PALA_outpatient))]
-  # pkl-kaynti 66 rivilla kestaa yli kokonaisen vuorokauden. voiko pitaa paikkaansa? 
+
+  # outpatient visits in 66 rows last overnight. Can it be true?
+  # Here only start date is concidered.
   
-  
-  # katsotaan vain PKL-alkupaivaa
   d0[, `:=`(tulopvm = TUPVA, lahtopvm = TUPVA)]
   d0[,`:=`(TUPVA = NULL, LPVM = NULL)]
-  
+
+  # harmonize naems  
   setnames(d0, c('EA', 'dg', 'PALTU'), c('ea_list', 'dg_outpat', 'paltu'))
   
   #names(d0)
@@ -64,13 +59,12 @@ aggregate_specialized_care_episodes <- function(part) {
   d0[, jakso := 0]
   
   
-  # valitaan  tarkastelujakson alkupaiva
-  # eli d2 sisaltaa osastojaksot, otetaan 1.1. tarkastelun alkuv. alkaen osastojaksot
+  # collect inpatient episodes
   outpatient_start_date <-  as.integer(as.IDate(paste0(outpatient_start_year, '-01-01'))) # esim. 2007-01-01
   
   d2 <- d2[tulopvm >= outpatient_start_date]
   
-  # osastojaksojen maarat
+  # number of inpatient periods
   d2_nrow <- nrow(d2)
   d2_psyT_nrow <- nrow(d2[psy == T])
   
@@ -81,7 +75,7 @@ aggregate_specialized_care_episodes <- function(part) {
   d2[is.na(lahtopvm), lahtopvm := as.integer(as.IDate(paste(max(vuosi)+1000, '12-31', sep = '-')))]
   
   
-  ## d3 sisaltaa valmiit sairaalajaksot ja kaikki pkl-kaynnit
+  ## d3 contains aggregated inpatient episodes and all outpatient entries
   d3 <- rbindlist(list(d0, d2), fill = T)
   rm(d0, d2)
 
@@ -91,48 +85,50 @@ aggregate_specialized_care_episodes <- function(part) {
   # describe episodes ---------------------------------------------------------------------------
   setorderv(d3, c('shnro', 'tulopvm', 'lahtopvm', 'jakso'))
   
-  ## katselua jakso alkaa pkl-kaynnilla
+  ## inpatient period starts with outpatient visit
   na <-
     nrow(d3[shnro == shift(shnro) &
               jakso > 0 & shift(jakso) == 0 & tulopvm == shift(tulopvm)])
-  # psy osastojakso alkaa psy pkl-kaynnilla
+  ## psychiatric inpatient period starts with psychiatric outpatient visit
+
   naP <- nrow(d3[shnro == shift(shnro) & jakso > 0 &
                    shift(jakso) == 0 &
                    tulopvm == shift(tulopvm) & shift(psy) == T & psy == T])
   
-  #pkl-kaynti admissiota edeltavana paivana
+  #outpatient visit the day before inpatient admission
   nb <- nrow(d3[shnro == shift(shnro) & jakso > 0 & shift(jakso) == 0 & tulopvm == shift(tulopvm) + 1])
-  #psy pkl-kaynti psy admissiota edeltavana paivana
+  # psychiatric outpatient visit the day before psychiatric inpatient admission
+
   nbP <-
     nrow(d3[shnro == shift(shnro) &
               jakso > 0 & shift(jakso) == 0 & tulopvm == shift(tulopvm) + 1 &
               shift(psy) == T & psy == T])
   
-  # mika tahansa pkl-kaynti psy osastojakson edella
+  # what ever outpatient visit the day before psychiatric inpatient admission
   ncP <-
     nrow(d3[psy == T &
               shnro == shift(shnro) &
               jakso > 0 & shift(jakso) == 0 & tulopvm == shift(tulopvm) + 1])
   
-  #jakson sisalla pkl-kaynti
+  # outpaitent visit within an inpatient period
   nd <-
     nrow(d3[shnro == shift(shnro, type = 'lead') &
               jakso > 0 & shift(jakso, type = 'lead') == 0 &
               shift(tulopvm, type = 'lead') < lahtopvm])
-  # psy jakson sisalla psy pkl kaynti
+  # psychiatric outpatient visit within a psychiatric inpatient period
   ndP <-
     nrow(d3[shnro == shift(shnro, type = 'lead') &
               jakso > 0 & shift(jakso, type = 'lead') == 0 &
               shift(tulopvm, type = 'lead') < lahtopvm &
               psy == T & shift(psy) == T])
   
-  
-  #jakson paatospaivana pkl-kanyti
+  # outpatient visit the day ef discharge
   ne <-
     nrow(d3[shnro == shift(shnro, type = 'lead') &
               jakso > 0 & shift(jakso, type = 'lead') == 0 &
               shift(tulopvm, type = 'lead') == lahtopvm])
-  #psy jakson paatospaivana psy pkl-kanyti
+  # psychiatric outpatient visit the day of psychiatric discharge
+
   neP <-
     nrow(d3[shnro == shift(shnro, type = 'lead') &
               jakso > 0 & shift(jakso, type = 'lead') == 0 &
