@@ -192,21 +192,14 @@ aggregate_specialized_care_episodes <- function(part) {
   
   #episodes are now regocnized. 
   
-  # Next, regocnize episodes with:
-  # - 1 pkl-kaynti ei tehda mitaan
-  # - useampia pkl-kaynteja, ei tehda mitaan
-  # - osastohoito, ei psykiatriaa, yksi rivi jaksossa, ei tehda mitaa
-  # - osastohoito ja pkl-kaynteja, ei psykiatriaa, listataan yhdelle riville#
-  
-  # - osastohoito psykiatrialla ja liskaksi pkl-kaynti psykiatrialla (paljonko?) dg.psy.pkl eriksee, muut dg_outpat listataan erikseen
-  # - joihin liittyy osastohoito ei psykiatrialla, mutta sen aikana psyk pkl-kaynti, otetaan dg.psy.pkl erikseen
-  
-  # n_rows_inpat on na jos vain yksi rivi. korvataan arvolla 1.
+  # Next, combine episodes:
+
+  # n_rows_inpat is na if only one row in the episode. replace with value 1.
   d3[is.na(n_rows_inpat), n_rows_inpat := 1]
   
   setorder(d3, shnro, tulopvm, -lahtopvm)
   
-  # yksi pkl-kaynti episodessa, ei tehda mitaan
+  # one outpatient visit on one day, do nothing
   a <-
     d3[, if (.N == 1 & sum(jakso) == 0)
       .(
@@ -224,16 +217,16 @@ aggregate_specialized_care_episodes <- function(part) {
         ea_list        = paste0(na.omit(unique(ea_list)), collapse = '_')
       ), by = .(shnro, episode)]
   
-  # # yli yksi pkl-kayntia samana paiva, ei tehda mitaan, jotta psyk pkl-kaynnit ja muut voidaan erottaa, mutta merkitaan jatkoa varten
+  # # more than one outpatient visit on one day, do nothing but mark these rows, so these rows can be combined if needed later
   b <- 
     d3[, if(.N > 1 & sum(jakso) == 0) 
       .(tulopvm, lahtopvm, psy, tulopvm_psy, lahtopvm_psy, 
         dg_inpat, dg_inpat_psy, dg_outpat, paltu, paltu_psy, ea_list), by = .(shnro, episode)]
   
   a[,`:=`(inpatient_psy = FALSE, inpatient = FALSE, dg_inpat_psy_outpat_psy = NA, outpat_same_day = FALSE)]  # type pkl
-  b[,`:=`(inpatient_psy = FALSE, inpatient = FALSE, dg_inpat_psy_outpat_psy = NA, n_rows_episode = 1, outpat_same_day = TRUE)]  # type pkl
+  b[,`:=`(inpatient_psy = FALSE, inpatient = FALSE, dg_inpat_psy_outpat_psy = NA, n_rows_episode = 1, outpat_same_day = TRUE)]
   
-  # osastohoito ei psykiatriaa, yksi rivi, ei tehda mitaan
+  # inpatient care, no psychiatry, one row in the episode, do nothing
   c <-
     d3[, if (.N == 1 & sum(jakso) > 0 & sum(psy) == 0)
       .(
@@ -252,7 +245,7 @@ aggregate_specialized_care_episodes <- function(part) {
 
     c[,`:=`(inpatient_psy = FALSE, inpatient = TRUE, psy = FALSE, dg_inpat_psy_outpat_psy = NA, outpat_same_day = FALSE)]
   
-  # osastohoito psykiatrialla, yksi rivi, ei tehda mitaan
+  #  psychiatric inpatient care, one row in the episode, do nothing
     cc <-
       d3[, if (.N == 1 &  sum(jakso) > 0 & sum(psy) > 0)
         .(
@@ -273,7 +266,7 @@ aggregate_specialized_care_episodes <- function(part) {
   
   
   
-  #sairaalahoito ja pkl kaynteja, ei psykiatriaa, listataan kaikki
+  # inpatient care and outpatient visits durning it, no psychiatry, collapse all data
   d <-
     d3[, if (.N > 1 & sum(jakso) > 0 & sum(psy) == 0)
       .(
@@ -292,7 +285,8 @@ aggregate_specialized_care_episodes <- function(part) {
 
   d[,`:=`(inpatient_psy = FALSE, inpatient = TRUE, psy = FALSE, dg_inpat_psy_outpat_psy = NA, outpat_same_day = FALSE)]
   
-  # tassa episodes, joissa osastohoito psykiatrialla ja pkl-kaynteja
+  # psychiatric inpatient care and outpatient visits during it. Outpatient diagnoses are collected to seprate variables
+  #
   e1 <- d3[, if(.N > 1 & sum(jakso) > 0 & sum(psy) > 0 & any(jakso > 0 & psy == T)) .SD, by = .(shnro, episode)]
   
   e  <-
@@ -320,9 +314,9 @@ aggregate_specialized_care_episodes <- function(part) {
              on = .(shnro, episode),
              all.x = TRUE)
   
-  e[,`:=`(inpatient_psy = TRUE, inpatient = TRUE, psy = TRUE, outpat_same_day = FALSE)] # type: osasto psyk
+  e[,`:=`(inpatient_psy = TRUE, inpatient = TRUE, psy = TRUE, outpat_same_day = FALSE)]
   
-  # tassa tahatumat, joissa on sairaalahoito, mutta psykiatrialla vain pkl-kaynti
+  # inpatient care, but only outpatient visits in psychiatry. 
   f1 <- d3[,if(.N > 1 & sum(jakso) > 0 & sum(psy) > 0 & !any(jakso > 0 & psy == T)) .SD, by = .(shnro, episode)]
   f  <-
     f1[, .(
@@ -338,13 +332,12 @@ aggregate_specialized_care_episodes <- function(part) {
     ),
     by = .(shnro, episode)]
   
-  # vain psykiatrian pkl-dg:t
-  
+  # psychiatric diagnoses:
   f <- merge(f, 
              f1[psy == T, .(dg_inpat_psy=paste0(na.omit(unique(dg_outpat)), collapse = ('_'))), by=.(shnro, episode)],  
              on = .(shnro, episode), 
              all.x = TRUE)
-  # muut pkl dg:t
+  # other outpatient diagnoses
   f <- merge(f, 
              f1[psy == F, .(dg_outpat=paste0(na.omit(unique(dg_outpat)), collapse = ('_'))), by=.(shnro, episode)],  
              on = .(shnro, episode), 
@@ -352,6 +345,7 @@ aggregate_specialized_care_episodes <- function(part) {
   
   f[,`:=`(inpatient_psy = FALSE, inpatient = TRUE, psy = TRUE, dg_inpat_psy_outpat_psy = NA, outpat_same_day = FALSE)] # type: osasto muu; pkl psyk
   
+  # combine everything
   dat <- rbindlist(list(a, b, c, cc, d, e, f), use.names = TRUE)
   
   # lahtopvm max value is max year + 1000, representing treatments that continued after the end of
@@ -362,7 +356,8 @@ aggregate_specialized_care_episodes <- function(part) {
   # harmonize names
   setnames(dat, old=c("tulopvm_psy", "lahtopvm_psy", "paltu_psy", "episode"), 
            new = c("tulopvm_psy_inpat", "lahtopvm_psy_inpat",  "paltu_psy_inpat", "n_episode"))
-  # psy pkl dg:t ovat dg_outpat:ssa. dg.psy_os.pkl jos osastohoidon aikana psy pkl-kaynti
+  
+  # psychiatric outpatient diagnoses are in dg_outpat, or in dg:inpat_psy if psychiatric outpatient visit during other inpatient episode
   
   
   # processed episodes data

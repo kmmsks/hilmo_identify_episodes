@@ -34,7 +34,7 @@ aggregate_inpatient_periods <- function(d1, years_1996_andafter = TRUE) {
   d2 <- d1[,.(tulopvm = unique(j_tulopvm), lahtopvm = unique(j_lahtopvm), psy = any(psy > 0), n_rows_inpat = .N), 
            by = .(shnro, jakso)]
   
-  # episode's start and end in psycchiatry
+  # episode's start and end in psychiatry
   d2 <- merge(d2, 
               d1[psy == TRUE, .(tulopvm_psy = min(TUPVA), lahtopvm_psy = max(LPVM)), by = .(shnro, jakso)], 
               on = .(shnro, jakso), 
