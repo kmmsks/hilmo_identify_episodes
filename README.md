@@ -19,7 +19,7 @@ Hospitalization may start from emergency clinic, and during inpatient care, tran
 In previous papers using the Hilmo register, it is usually mentioned that hospital periods, admissions or discharges were identified. However, usually no criteria, let alone scripts, for this procedure is provided. As far as I know, there is no generally know or accepted methods for identifying treatment episodes available.
 
 Recognizing real readmissions from transfer from unit to another is not straightforward. Different sets of criteria have previusly been used:
-- Others require a hospital treatment to start and end on different calender days (f. ex. the [CEPHOS-LINK](https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186) project )), others do not.
+- Others require a hospital treatment to start and end on different calender days (f. ex. the [CEPHOS-LINK](https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186) project), others do not.
 - Others state that a new treatment period may start the next day after previous one (f. ex. [CEPHOS-LINK](https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186)), others require a full calender day outside of hospital in between two treatment periods (f. ex. [REDD project](http://urn.fi/URN:NBN:fi-fe201204193720)). This criteria is used to stronger differentiate transfers between hospitals and real rehospitalizations.
 
 
@@ -54,13 +54,13 @@ Variable | Data type | Description
 :--------|:----------|:------------
 ```shnro``` | character | person id. The name shnro is used by the Statistic Finland, it refers to a person, not ID number, which may change (in relative rare occasions).
 ```vuosi``` | integer   | Year of the entry
-```ILAJI``` | integer | See Hilmo manuals for details. Note possible changes in the classifications between years. 
-```PALTU``` | integer |
-```PALA```  | integer |
-```EA```    | character |
-```TUPVA``` | integer | set: as.integer(as.IDate(TUPVA, format = [FORMAT]))
-```LPVM```  | integer | set: as.integer(as.IDate(LPVM, format = [FORMAT]))
-```dg```    | character | see beelow
+```ILAJI``` | integer   | See Hilmo manuals for details. Note possible changes in the classifications between years. 
+```PALTU``` | integer   | (as above)
+```PALA```  | integer   | (as above)
+```EA```    | character | (as above)
+```TUPVA``` | integer   | set: as.integer(as.IDate(TUPVA, format = [FORMAT]))
+```LPVM```  | integer   | set: as.integer(as.IDate(LPVM, format = [FORMAT]))
+```dg```    | character | see below
 
 Diagnoses: 
 - One register entry may contain multiple diagnoses. 
@@ -115,26 +115,24 @@ This test script creates the following object:
 
 Variable | Data type | Description
 :--------|:----------|:--------
-```jakso```        | integer | Running number of person's inpatient periods.
-```psy```          | logical| Episode contains psychiatric care.
-```overnight_all```| logical| Episode starts and ends on different calender days.
-```overnight_psy```| logical| Episode's psychiatric treatment starts and ends on different calender days.
-```tulopvm_psy```  | date| Date of admission to psychiatric inpatient care.
-```lahtopvm_psy``` | date| Date of discharge from psychiatric inpatient care, if multiple transfers between specialties, the last one.
-```ea_list```      | character| List of specialties included in the episode.
-```paltu```        | character| The service provider's code of the unit of the discharge.
-```paltu_psy```    | character| The service provider's code of the psychiatric unit of the last psychiatric discharge.
-```n_rows_inpat``` | integer  | Number of rows aggregated to this inpatient episode.
-```dg_inpat```     | character| All diagnoses registered on the date of discharge.
-```dg_inpat_psy``` | character| All diagnoses registered from psychiatry on the date of discharge from psychiatric unit.
+```episode_inpatient```| integer | Running number of person's inpatient periods.
+```psy```               | logical| Episode contains psychiatric care.
+```overnight_all```     | logical| Episode starts and ends on different calender days.
+```overnight_psy```     | logical| Episode's psychiatric treatment starts and ends on different calender days.
+```tulopvm_psy_inpat```    | date| Date of admission to psychiatric inpatient care.
+```lahtopvm_psy_inpat```   | date| Date of discharge from psychiatric inpatient care, if multiple transfers between specialties, the last one.
+```ea_list```         | character| List of specialties included in the episode.
+```paltu```           | character| The service provider's code of the unit of the discharge.
+```paltu_psy```       | character| The service provider's code of the psychiatric unit of the last psychiatric discharge.
+```n_rows_inpat```    | integer  | Number of rows aggregated to this inpatient episode.
+```dg_inpat```        | character| All diagnoses registered on the date of discharge.
+```dg_inpat_psy```    | character| All diagnoses registered from psychiatry on the date of discharge from psychiatric unit.
 
 ### All episodes, in addition:
 
 Variable | Data type | Description
 :--------|:----------|:--------
-```n_episode```         |Integer | Running number of person's episodes.
-```tulopvm_psy_inpat``` |Date | As tulopvm_psy       
-```lahtopvm_psy_inpat```|Date | As lahtopvm_psy       
+```episode```           |Integer | Running number of person's episodes.
 ```inpatient```         |Logical| Any inpatient care included in the episode.
 ```inpatient_psy```     |Logical| Psychiatric inpatient care included in the episode.
 ```n_rows_episode```    |Integer | Number of rows aggregated to this inpatient episode.

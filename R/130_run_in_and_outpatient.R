@@ -56,7 +56,7 @@ aggregate_specialized_care_episodes <- function(part) {
   #names(d0)
   d0 <- d0[, .(shnro, paltu, ea_list, dg_outpat, psy, tulopvm, lahtopvm, PALA)]
   
-  d0[, jakso := 0]
+  d0[, episode_inpatient := 0]
   
   
   # collect inpatient episodes
@@ -83,55 +83,55 @@ aggregate_specialized_care_episodes <- function(part) {
   
     
   # describe episodes ---------------------------------------------------------------------------
-  setorderv(d3, c('shnro', 'tulopvm', 'lahtopvm', 'jakso'))
+  setorderv(d3, c('shnro', 'tulopvm', 'lahtopvm', 'episode_inpatient'))
   
   ## inpatient period starts with outpatient visit
   na <-
     nrow(d3[shnro == shift(shnro) &
-              jakso > 0 & shift(jakso) == 0 & tulopvm == shift(tulopvm)])
+              episode_inpatient > 0 & shift(episode_inpatient) == 0 & tulopvm == shift(tulopvm)])
   ## psychiatric inpatient period starts with psychiatric outpatient visit
 
-  naP <- nrow(d3[shnro == shift(shnro) & jakso > 0 &
-                   shift(jakso) == 0 &
+  naP <- nrow(d3[shnro == shift(shnro) & episode_inpatient > 0 &
+                   shift(episode_inpatient) == 0 &
                    tulopvm == shift(tulopvm) & shift(psy) == T & psy == T])
   
   #outpatient visit the day before inpatient admission
-  nb <- nrow(d3[shnro == shift(shnro) & jakso > 0 & shift(jakso) == 0 & tulopvm == shift(tulopvm) + 1])
+  nb <- nrow(d3[shnro == shift(shnro) & episode_inpatient > 0 & shift(episode_inpatient) == 0 & tulopvm == shift(tulopvm) + 1])
   # psychiatric outpatient visit the day before psychiatric inpatient admission
 
   nbP <-
     nrow(d3[shnro == shift(shnro) &
-              jakso > 0 & shift(jakso) == 0 & tulopvm == shift(tulopvm) + 1 &
+              episode_inpatient > 0 & shift(episode_inpatient) == 0 & tulopvm == shift(tulopvm) + 1 &
               shift(psy) == T & psy == T])
   
   # what ever outpatient visit the day before psychiatric inpatient admission
   ncP <-
     nrow(d3[psy == T &
               shnro == shift(shnro) &
-              jakso > 0 & shift(jakso) == 0 & tulopvm == shift(tulopvm) + 1])
+              episode_inpatient > 0 & shift(episode_inpatient) == 0 & tulopvm == shift(tulopvm) + 1])
   
   # outpaitent visit within an inpatient period
   nd <-
     nrow(d3[shnro == shift(shnro, type = 'lead') &
-              jakso > 0 & shift(jakso, type = 'lead') == 0 &
+              episode_inpatient > 0 & shift(episode_inpatient, type = 'lead') == 0 &
               shift(tulopvm, type = 'lead') < lahtopvm])
   # psychiatric outpatient visit within a psychiatric inpatient period
   ndP <-
     nrow(d3[shnro == shift(shnro, type = 'lead') &
-              jakso > 0 & shift(jakso, type = 'lead') == 0 &
+              episode_inpatient > 0 & shift(episode_inpatient, type = 'lead') == 0 &
               shift(tulopvm, type = 'lead') < lahtopvm &
               psy == T & shift(psy) == T])
   
   # outpatient visit the day ef discharge
   ne <-
     nrow(d3[shnro == shift(shnro, type = 'lead') &
-              jakso > 0 & shift(jakso, type = 'lead') == 0 &
+              episode_inpatient > 0 & shift(episode_inpatient, type = 'lead') == 0 &
               shift(tulopvm, type = 'lead') == lahtopvm])
   # psychiatric outpatient visit the day of psychiatric discharge
 
   neP <-
     nrow(d3[shnro == shift(shnro, type = 'lead') &
-              jakso > 0 & shift(jakso, type = 'lead') == 0 &
+              episode_inpatient > 0 & shift(episode_inpatient, type = 'lead') == 0 &
               shift(tulopvm, type = 'lead') == lahtopvm &
               psy == T & shift(psy) == T])
   
@@ -201,26 +201,26 @@ aggregate_specialized_care_episodes <- function(part) {
   
   # one outpatient visit on one day, do nothing
   a <-
-    d3[, if (.N == 1 & sum(jakso) == 0)
+    d3[, if (.N == 1 & sum(episode_inpatient) == 0)
       .(
-        tulopvm        = min(tulopvm),
-        lahtopvm       = max(lahtopvm),
-        n_rows_episode = sum(n_rows_inpat),
-        psy            = sum(psy, na.rm = T) > 0,
-        tulopvm_psy    = NA,
-        lahtopvm_psy   = NA,
-        dg_inpat       = NA,
-        dg_inpat_psy   = NA,
-        dg_outpat      = paste0(na.omit(unique(dg_outpat)), collapse = '_'),
-        paltu          = paste0(na.omit(unique(paltu)), collapse = '_'),
-        paltu_psy      = NA,
-        ea_list        = paste0(na.omit(unique(ea_list)), collapse = '_')
+        tulopvm            = min(tulopvm),
+        lahtopvm           = max(lahtopvm),
+        n_rows_episode     = sum(n_rows_inpat),
+        psy                = sum(psy, na.rm = T) > 0,
+        tulopvm_psy_inpat  = NA,
+        lahtopvm_psy_inpat = NA,
+        dg_inpat           = NA,
+        dg_inpat_psy       = NA,
+        dg_outpat          = paste0(na.omit(unique(dg_outpat)), collapse = '_'),
+        paltu              = paste0(na.omit(unique(paltu)), collapse = '_'),
+        paltu_psy          = NA,
+        ea_list            = paste0(na.omit(unique(ea_list)), collapse = '_')
       ), by = .(shnro, episode)]
   
   # # more than one outpatient visit on one day, do nothing but mark these rows, so these rows can be combined if needed later
   b <- 
-    d3[, if(.N > 1 & sum(jakso) == 0) 
-      .(tulopvm, lahtopvm, psy, tulopvm_psy, lahtopvm_psy, 
+    d3[, if(.N > 1 & sum(episode_inpatient) == 0) 
+      .(tulopvm, lahtopvm, psy, tulopvm_psy_inpat, lahtopvm_psy_inpat, 
         dg_inpat, dg_inpat_psy, dg_outpat, paltu, paltu_psy, ea_list), by = .(shnro, episode)]
   
   a[,`:=`(inpatient_psy = FALSE, inpatient = FALSE, dg_inpat_psy_outpat_psy = NA, outpat_same_day = FALSE)]  # type pkl
@@ -228,38 +228,38 @@ aggregate_specialized_care_episodes <- function(part) {
   
   # inpatient care, no psychiatry, one row in the episode, do nothing
   c <-
-    d3[, if (.N == 1 & sum(jakso) > 0 & sum(psy) == 0)
+    d3[, if (.N == 1 & sum(episode_inpatient) > 0 & sum(psy) == 0)
       .(
-        tulopvm        = min(tulopvm),
-        lahtopvm       = max(lahtopvm),
-        n_rows_episode = sum(n_rows_inpat),
-        tulopvm_psy    = NA,
-        lahtopvm_psy   = NA,
-        dg_inpat       = paste0(na.omit(unique(dg_inpat)), collapse = '_'),
-        dg_inpat_psy   = NA,
-        dg_outpat      = NA,
-        paltu          = paste0(na.omit(unique(paltu)), collapse = '_'),
-        paltu_psy      = NA,
-        ea_list        = paste0(na.omit(unique(ea_list)), collapse = '_')
+        tulopvm            = min(tulopvm),
+        lahtopvm           = max(lahtopvm),
+        n_rows_episode     = sum(n_rows_inpat),
+        tulopvm_psy_inpat  = NA,
+        lahtopvm_psy_inpat = NA,
+        dg_inpat           = paste0(na.omit(unique(dg_inpat)), collapse = '_'),
+        dg_inpat_psy       = NA,
+        dg_outpat          = NA,
+        paltu              = paste0(na.omit(unique(paltu)), collapse = '_'),
+        paltu_psy          = NA,
+        ea_list            = paste0(na.omit(unique(ea_list)), collapse = '_')
       ), by = .(shnro, episode)]
 
     c[,`:=`(inpatient_psy = FALSE, inpatient = TRUE, psy = FALSE, dg_inpat_psy_outpat_psy = NA, outpat_same_day = FALSE)]
   
   #  psychiatric inpatient care, one row in the episode, do nothing
     cc <-
-      d3[, if (.N == 1 &  sum(jakso) > 0 & sum(psy) > 0)
+      d3[, if (.N == 1 &  sum(episode_inpatient) > 0 & sum(psy) > 0)
         .(
-          tulopvm        = min(tulopvm),
-          lahtopvm       = max(lahtopvm),
-          n_rows_episode = sum(n_rows_inpat),
-          tulopvm_psy    = min(tulopvm_psy),
-          lahtopvm_psy   = max(lahtopvm_psy),
-          dg_inpat       = na.omit(unique(dg_inpat)),
-          dg_inpat_psy   = na.omit(unique(dg_inpat_psy)),
-          dg_outpat      = NA,
-          paltu          = na.omit(unique(paltu)),
-          paltu_psy      = na.omit(unique(paltu_psy)) ,
-          ea_list        = paste0(na.omit(unique(ea_list)), collapse = '_')
+          tulopvm            = min(tulopvm),
+          lahtopvm           = max(lahtopvm),
+          n_rows_episode     = sum(n_rows_inpat),
+          tulopvm_psy_inpat  = min(tulopvm_psy_inpat),
+          lahtopvm_psy_inpat = max(lahtopvm_psy_inpat),
+          dg_inpat           = na.omit(unique(dg_inpat)),
+          dg_inpat_psy       = na.omit(unique(dg_inpat_psy)),
+          dg_outpat          = NA,
+          paltu              = na.omit(unique(paltu)),
+          paltu_psy          = na.omit(unique(paltu_psy)) ,
+          ea_list            = paste0(na.omit(unique(ea_list)), collapse = '_')
         ), by = .(shnro, episode)]
     
   cc[,`:=`(inpatient_psy = TRUE, inpatient = TRUE, psy = TRUE, dg_inpat_psy_outpat_psy = NA,outpat_same_day = FALSE)]
@@ -268,34 +268,34 @@ aggregate_specialized_care_episodes <- function(part) {
   
   # inpatient care and outpatient visits durning it, no psychiatry, collapse all data
   d <-
-    d3[, if (.N > 1 & sum(jakso) > 0 & sum(psy) == 0)
+    d3[, if (.N > 1 & sum(episode_inpatient) > 0 & sum(psy) == 0)
       .(
-        tulopvm          = min(tulopvm),
-        lahtopvm         = max(lahtopvm),
-        n_rows_episode   = sum(n_rows_inpat),
-        tulopvm_psy      = NA,
-        lahtopvm_psy     = NA,
-        dg_inpat         = paste0(na.omit(unique(dg_inpat)), collapse = '_'),
-        dg_inpat_psy     = NA,
-        dg_outpat        = paste0(na.omit(unique(dg_outpat)), collapse = '_'),
-        paltu            = paste0(na.omit(unique(paltu)), collapse = '_'),
-        paltu_psy        = NA,
-        ea_list          = paste0(na.omit(unique(ea_list)), collapse = '_')
+        tulopvm            = min(tulopvm),
+        lahtopvm           = max(lahtopvm),
+        n_rows_episode     = sum(n_rows_inpat),
+        tulopvm_psy_inpat  = NA,
+        lahtopvm_psy_inpat = NA,
+        dg_inpat           = paste0(na.omit(unique(dg_inpat)), collapse = '_'),
+        dg_inpat_psy       = NA,
+        dg_outpat          = paste0(na.omit(unique(dg_outpat)), collapse = '_'),
+        paltu              = paste0(na.omit(unique(paltu)), collapse = '_'),
+        paltu_psy          = NA,
+        ea_list            = paste0(na.omit(unique(ea_list)), collapse = '_')
       ), by = .(shnro, episode)]
 
   d[,`:=`(inpatient_psy = FALSE, inpatient = TRUE, psy = FALSE, dg_inpat_psy_outpat_psy = NA, outpat_same_day = FALSE)]
   
-  # psychiatric inpatient care and outpatient visits during it. Outpatient diagnoses are collected to seprate variables
+  # psychiatric inpatient care and outpatient visits during it. Outpatient diagnoses are collected to separate variables
   #
-  e1 <- d3[, if(.N > 1 & sum(jakso) > 0 & sum(psy) > 0 & any(jakso > 0 & psy == T)) .SD, by = .(shnro, episode)]
+  e1 <- d3[, if(.N > 1 & sum(episode_inpatient) > 0 & sum(psy) > 0 & any(episode_inpatient > 0 & psy == T)) .SD, by = .(shnro, episode)]
   
   e  <-
     e1[, .(
       tulopvm            = min(tulopvm),
       lahtopvm           = max(lahtopvm),
       n_rows_episode     = sum(n_rows_inpat, na.rm = T),
-      tulopvm_psy        = min(tulopvm_psy, na.rm = T),
-      lahtopvm_psy       = max(lahtopvm_psy, na.rm = T),
+      tulopvm_psy_inpat  = min(tulopvm_psy_inpat, na.rm = T),
+      lahtopvm_psy_inpat = max(lahtopvm_psy_inpat, na.rm = T),
       dg_inpat           = paste0(na.omit(unique(dg_inpat)), collapse = '_'),
       dg_inpat_psy       = paste0(na.omit(unique(dg_inpat_psy)), collapse = '_'),
       paltu              = paste0(na.omit(unique(paltu)), collapse = '_'),
@@ -317,14 +317,14 @@ aggregate_specialized_care_episodes <- function(part) {
   e[,`:=`(inpatient_psy = TRUE, inpatient = TRUE, psy = TRUE, outpat_same_day = FALSE)]
   
   # inpatient care, but only outpatient visits in psychiatry. 
-  f1 <- d3[,if(.N > 1 & sum(jakso) > 0 & sum(psy) > 0 & !any(jakso > 0 & psy == T)) .SD, by = .(shnro, episode)]
+  f1 <- d3[,if(.N > 1 & sum(episode_inpatient) > 0 & sum(psy) > 0 & !any(episode_inpatient > 0 & psy == T)) .SD, by = .(shnro, episode)]
   f  <-
     f1[, .(
       tulopvm           = min(tulopvm),
       lahtopvm          = max(lahtopvm),
       n_rows_episode    = sum(n_rows_inpat, na.rm = T),
-      tulopvm_psy       = NA,
-      lahtopvm_psy      = NA,
+      tulopvm_psy_inpat = NA,
+      lahtopvm_psy_inpat= NA,
       dg_inpat          = paste0(na.omit(unique(dg_inpat)), collapse = '_'),
       paltu             = paste0(na.omit(unique(paltu)), collapse = '_'),
       paltu_psy         = NA,
@@ -354,8 +354,8 @@ aggregate_specialized_care_episodes <- function(part) {
   
 
   # harmonize names
-  setnames(dat, old=c("tulopvm_psy", "lahtopvm_psy", "paltu_psy", "episode"), 
-           new = c("tulopvm_psy_inpat", "lahtopvm_psy_inpat",  "paltu_psy_inpat", "n_episode"))
+  setnames(dat, old=c("paltu_psy"), 
+           new = c("paltu_psy_inpat"))
   
   # psychiatric outpatient diagnoses are in dg_outpat, or in dg:inpat_psy if psychiatric outpatient visit during other inpatient episode
   

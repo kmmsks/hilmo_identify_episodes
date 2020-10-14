@@ -72,7 +72,7 @@ run_aggregate_inpatient <- function(part) {
   
   # mark episodes that contain psychiatric inpatient period lasting over a night 
   d2[, overnight_psy := FALSE]
-  d2[lahtopvm_psy > tulopvm_psy, overnight_psy := TRUE]
+  d2[lahtopvm_psy_inpat > tulopvm_psy_inpat, overnight_psy := TRUE]
   
   
   # return
