@@ -20,16 +20,16 @@ d <- data.table(shnro = paste0(sample(1000:(1000 + fake_size / 5), fake_size, re
          vuosi =  NA,
 #         SUKUP = NA,
          ILAJI = 1,
-         PALTU = sample(5000:5100, size = fake_size, replace = T),
-         PALA  = c(sample(c(1,91, 92, 93, 94), size = fake_size * 4 / 5, replace = T), 
-                   sample(c(1, 2, 5, 6, 83), size = fake_size / 5, replace = T)),
-         EA    = sample(c(10:25, 60:80), size = fake_size, replace = T),
+         PALTU = sample(5000:5100, size = fake_size, replace = TRUE),
+         PALA  = c(sample(c(1,91, 92, 93, 94), size = fake_size * 4 / 5, replace = TRUE), 
+                   sample(c(1, 2, 5, 6, 83), size = fake_size / 5, replace = TRUE)),
+         EA    = sample(c(10:25, 60:80), size = fake_size, replace = TRUE),
          TUPVA = NA,
          LPVM  = sample(as.integer(as.IDate(fake_start)):as.integer(as.IDate(fake_end)), size = fake_size, replace = TRUE),
-         DG1   = paste0(sample(LETTERS[1:6], size = fake_size, replace = TRUE), sample(10:999, size = fake_size, replace = T)),
-         DG2   = paste0(sample(LETTERS[1:6], size = fake_size, replace = TRUE), sample(10:999, size = fake_size, replace = T))
+         DG1   = paste0(sample(LETTERS[1:6], size = fake_size, replace = TRUE), sample(10:999, size = fake_size, replace = TRUE)),
+         DG2   = paste0(sample(LETTERS[1:6], size = fake_size, replace = TRUE), sample(10:999, size = fake_size, replace = TRUE))
          )[, `:=`(vuosi = format(as.IDate(LPVM), '%Y'),
-                  TUPVA = LPVM - sample(1:1000, 1)
+                  TUPVA = LPVM - sample(1:1000, size = fake_size, replace = TRUE)
                   )]
 
 # create overnight_psy == FALSE -case
@@ -38,7 +38,7 @@ d[shnro == '1023E' & EA == 23, LPVM := TUPVA]
 
 d[PALA > 90, TUPVA := LPVM] # outpatient events have the same start_date and end_date
 
-d[EA %like% c(70, 74,75), DG1 := paste0('F', sample(10:999, size = .N, replace = T))]
+d[EA %like% c(70, 74,75), DG1 := paste0('F', sample(10:999, size = .N, replace = TRUE))]
 
 ilaji2 <- tail(d[PALTU == 1], fake_size / 10)[, `:=`(ILAJI = 2,
                                                      LPVM  = NA)]
