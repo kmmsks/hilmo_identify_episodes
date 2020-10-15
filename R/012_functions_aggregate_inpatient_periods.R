@@ -40,21 +40,21 @@ aggregate_inpatient_periods <- function(d1, years_1996_andafter = TRUE) {
               on = .(shnro, episode_inpatient), 
               all.x = TRUE)
   
-  # episodes last diagnoses
+  # episode's last diagnoses
   d2 <- merge(d2, 
               d1[d1[,.I[LPVM == max(LPVM)], by=.(shnro, episode_inpatient)]$V1, dg,  by = .(shnro, episode_inpatient)
                  ][, .(dg_inpat = paste0(na.omit(unique(dg)), collapse = '_')), by = .(shnro, episode_inpatient)], 
               on = .(shnro, episode_inpatient), 
               all.x = TRUE)
   
-  # episodes last diagnoses in psychiatry
+  # episode's last diagnoses in psychiatry
   d2 <- merge(d2, 
               d1[d1[psy == T,.I[LPVM == max(LPVM)], by = .(shnro, episode_inpatient)]$V1, dg,  by = .(shnro, episode_inpatient)
                  ][, .(dg_inpat_psy = paste0(na.omit(unique(dg)), collapse = '_')), by = .(shnro, episode_inpatient)], 
               on = .(shnro, episode_inpatient), 
               all.x=TRUE)
   
-  # ea_list, all specialities during the episode
+  # ea_list, all specialties during the episode
   d2 <- merge(d2, 
               d1[, .(ea_list = paste0(na.omit(unique(EA)), collapse = '_')), by = .(shnro, episode_inpatient)], 
               on = .(shnro, episode_inpatient), 

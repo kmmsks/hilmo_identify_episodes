@@ -81,11 +81,11 @@ To determine the optimal part size is out of scope here. See what is small enoug
 
 Variable | Description
 :--------|:----------
-```dir```| Input file locations for preprocessed data. In this example, data_temp/parts_raw
-```max_year```| Time range of the data, the latest year included 
+```dir```                  | Input file locations for preprocessed data. In this example, data_temp/parts_raw
+```max_year```             | Time range of the data, the latest year included 
 ```min_year``` | The first year included. Earliest 1996. Previous years have their own methods.
 ```outpatient_start_year```| According to THL, outpatient data is relevant starting from 2006
-```add_days``` |Days between periods, see below
+```add_days```             |Days between periods, see below
 ```PALA_inpatient``` <br> ```PALA_outpatient``` | Register entry types defining treatments types of interest, see Hilmo manuals for details
 ```specialties_of_interest``` |  Define speciality (psychiatry in this case). See erikoisala (EA) in Hilmo manuals. Notice changes in the coding between years.
 
@@ -94,6 +94,15 @@ Minimum of full calender days required between two hospital treatment periods:
 
 - 0 : a new period may start the next day after the previous one
 - 1 : there must be one full calender day between two treatment periods. If less, Hilmo entries are considered to belong to a single episode (due to unit transfer etc.)
+
+### Old registers, years 1975 - 1994
+
+Data is usually provided in three setes, years 1969-1986, 1987-1993 and 1994-1994. The method prsented here is suitable starting from the year 1975. Before that recognizing psychiatric treatments is not univocal, and person identification may have more mistakes.
+
+Conversions of diagnoses with mental disorders to ICD-10 inclued.
+
+Set column names, date formats and define specialities of interest in ```120_run_inpatient_old_registers.R```
+
 
 ## Data Output
 Full aggregated data is saved in the folders:
@@ -119,6 +128,7 @@ Variable | Data type | Description
 ```psy```               | logical| Episode contains psychiatric care.
 ```overnight_all```     | logical| Episode starts and ends on different calender days.
 ```overnight_psy```     | logical| Episode's psychiatric treatment starts and ends on different calender days.
+```episode_continues``` | logical| True if inpatient episodes continues after the last day coverd in the data. ```lahtopvm``` is ```NA```.
 ```tulopvm_psy_inpat```    | date| Date of admission to psychiatric inpatient care.
 ```lahtopvm_psy_inpat```   | date| Date of discharge from psychiatric inpatient care, if multiple transfers between specialties, the last one.
 ```ea_list```         | character| List of specialties included in the episode.

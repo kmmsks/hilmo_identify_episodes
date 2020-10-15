@@ -27,8 +27,7 @@ library(here)
 
 dir <- list(
   data_parts_in = here('data_temp', 'parts_raw'), 
-  old_registers = here(),
-  avohilmo_in   = here()
+  old_registers = here() # location of data sets with years before 1996
 )
 
 
@@ -82,16 +81,16 @@ specialties_of_interest <-  '70|70F|70X|70Z|74|75|75X'  # psychiatry
 compression <- 100
 
 
-# // settings ready
 
 # intermediate variables, no need to change ------------------------------------------------------------------------------
 
 # Number of  data parts to be processed, 1996 and later 
 # 1 to n parts possible, persons' all entries should be in the same part
-n_parts <- length(list.files(dir[["data_parts_in"]]))
+n_parts <- length(list.files(dir$data_parts_in))
 
 outpatient_start_date <-  as.integer(as.IDate(paste0(outpatient_start_year, '-01-01')))
 
+# // settings ready
 
 
 # INPATIENT TREATMENT EPISODES  ------------------------------------------------------------------------------------------
@@ -129,15 +128,33 @@ source(here('R', '130_run_in_and_outpatient.R'))
 
 
 # Input:
-# input from dir[['old_registers']]
+# input from dir$old_registers
 
-# Not run, example data not currently provided
+# Example data not currently provided
 
-#source(here('R', '120_run_inpatient_aggregation_old_registers.R')) # Go through settings in this file in detail.
+source(here('R', '120_run_inpatient_aggregation_old_registers.R')) # Go through settings in this file in detail.
 
 
 # Output
 # Same directories as in years 1996 and after
 
+
+# COMBINE INPATIENT EPISODES ----------------------------------------------------------------------
+dir$d2_aggregated_all <-  here('data_processed', '1_inpatient_episodes', paste('add_days', add_days, sep = '_'))
+
+source(here('R', '122_combine_inpatient_all_years.R'))
+
+
+# count episodes ---------------------------------------------------------------------------------
+
+# if only overnight episodes are considered as inpatient treatments:
+  # get number of psychiatric inpatient episodes by person, all years included:
+dat_all_inpatient[overnight_psy == TRUE, .N, by = shnro]
+
+  # get number of psychiatric outpatient episodes by person, starting from the year outpatient_start_year
+
+dat_episodes[psy == TRUE & overnight_psy == FALSE, .N, by = shnro]
+
+dat_all_inpatient
 
 # // end

@@ -27,7 +27,7 @@ source(here('R', '013_functions_create_dirs.R'))
 #        input: d0, returns: d2, the aggregated data 
 #
 run_aggregate_inpatient <- function(part) {
-  setwd(dir[['data_parts_in']])
+  setwd(dir$data_parts_in)
   d0 <- read_fst(paste0(part, '.fst'), as.data.table = TRUE)  #
   
   prepared_part <- prepare_describe_parts(d0)
@@ -64,8 +64,10 @@ run_aggregate_inpatient <- function(part) {
   d2[, vuosi := as.integer(format(as.IDate(lahtopvm), '%Y'))]
   
   # if treatment continues at the end of the data, lahtopvm is NA, year is max year
-  d2[is.na(lahtopvm), vuosi := as.integer(max_year)]
+  d2[, episode_continues := FALSE]
+  d2[is.na(lahtopvm), `:=`(vuosi = as.integer(max_year), episode_continues = TRUE)]
   
+
   # mark episodes that contain any inpatient period lasting over a night 
   d2[, overnight_all := FALSE]
   d2[lahtopvm > tulopvm, overnight_all := TRUE]
@@ -92,26 +94,6 @@ parts_out <- lapply(seq(1, n_parts), run_aggregate_inpatient)
 dat_inpatient <- rbindlist(sapply(parts_out, '[','aggregated_part'))
 
 
-# Process aggregated data -----------------------------------------------------------------------------------------------
-# Both complete data and data parts
-
-# Create variable year (again), based on lahtopvm ---------------------------------
-dat_inpatient[, vuosi := as.integer(format(as.IDate(lahtopvm), '%Y'))]
-
-for(i in seq_along(sapply(parts_out, '[', 'aggregated_part'))) {
-  sapply(parts_out, '[', 'aggregated_part')[[i]][, vuosi := as.integer(format(as.IDate(lahtopvm), '%Y'))]
-}
-
-# if treatment continues, lahtopvm is NA, year is max year
-dat_inpatient[is.na(lahtopvm), vuosi := as.integer(max_year)]
-
-for(i in seq_along(sapply(parts_out, '[', 'aggregated_part'))) {
-  sapply(parts_out, '[', 'aggregated_part')[[i]][is.na(lahtopvm), vuosi := as.integer(max_year)]
-}
-
-
-
-
 
 # create directories for prepared and fully processed data---------------------------------------------------------------
 
@@ -119,11 +101,11 @@ dir <- c(dir, create_dirs_inpatient()) # see 013_create_dirs.R
 
 
 # save aggregated inpatient data ----------------------------------------------------------------------------------------
-setwd(dir[['d2_aggregated_all']])
+setwd(dir$d2_aggregated_all)
 write_fst(dat_inpatient, paste0('data_inpatient_', min_year, '_', max_year, '.fst'), compress = compression)
 
 # save parts
-setwd(dir[['d2_aggregated_parts']])
+setwd(dir$d2_aggregated_parts)
 for(i in seq_along(sapply(parts_out, '[', 'aggregated_part'))) {
   write_fst(
     sapply(parts_out, '[', 'aggregated_part')[[i]],
@@ -133,7 +115,7 @@ for(i in seq_along(sapply(parts_out, '[', 'aggregated_part'))) {
 }
 
 # save prepared parts ---------------------------------------------------------------------------------------------------
-setwd(dir[['d0_prepared_parts']])
+setwd(dir$d0_prepared_parts)
 
 for(i in seq_along(sapply(parts_out, '[', 'prepared_part'))) {
   write_fst(
