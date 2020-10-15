@@ -18,7 +18,6 @@ fake_end <- '2014-12-31'
 set.seed(2)
 d <- data.table(shnro = paste0(sample(1000:(1000 + fake_size / 5), fake_size, replace = TRUE), LETTERS[5]) ,
          vuosi =  NA,
-#         SUKUP = NA,
          ILAJI = 1,
          PALTU = sample(5000:5100, size = fake_size, replace = TRUE),
          PALA  = c(sample(c(1,91, 92, 93, 94), size = fake_size * 4 / 5, replace = TRUE), 
