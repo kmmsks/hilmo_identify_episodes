@@ -71,11 +71,12 @@ run_aggregate_inpatient <- function(part) {
   # mark episodes that contain any inpatient period lasting over a night 
   d2[, overnight_all := FALSE]
   d2[lahtopvm > tulopvm, overnight_all := TRUE]
+  d2[episode_continues == TRUE & tulopvm < as.integer(as.IDate(paste(max_year, '12', '31', sep = '-'))), overnight_all := TRUE]
   
   # mark episodes that contain psychiatric inpatient period lasting over a night 
   d2[, overnight_psy := FALSE]
   d2[lahtopvm_psy_inpat > tulopvm_psy_inpat, overnight_psy := TRUE]
-  
+  d2[episode_continues == TRUE & tulopvm_psy < as.integer(as.IDate(paste(max_year, '12', '31', sep = '-'))), overnight_psy := TRUE]
   
   # return
   list(
