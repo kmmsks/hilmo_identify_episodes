@@ -128,7 +128,7 @@ Variable | Data type | Description
 ```psy```               | logical| Episode contains psychiatric care.
 ```overnight_all```     | logical| Episode starts and ends on different calender days.
 ```overnight_psy```     | logical| Episode's psychiatric treatment starts and ends on different calender days.
-```episode_continues``` | logical| True if inpatient episodes continues after the last day coverd in the data. ```lahtopvm``` is ```NA```.
+```episode_continues``` | logical| True if inpatient episodes continues after the last day coverd in the data. In this case, ```lahtopvm``` is ```NA```.
 ```tulopvm_psy_inpat```    | date| Date of admission to psychiatric inpatient care.
 ```lahtopvm_psy_inpat```   | date| Date of discharge from psychiatric inpatient care, if multiple transfers between specialties, the last one.
 ```ea_list```         | character| List of specialties included in the episode.
