@@ -5,7 +5,7 @@
 # Author: Kimmo Suokas
 #
 #
-# Create fake data to see the scripts in action. 
+# Create fake data to see the scripts in action.
 #The fake data does not necassarey follow the real world patterns in any way!
 
 library(data.table)
