@@ -129,6 +129,7 @@ Variable | Data type | Description
 ```overnight_all```     | logical| Episode starts and ends on different calender days.
 ```overnight_psy```     | logical| Episode's psychiatric treatment starts and ends on different calender days.
 ```episode_continues``` | logical| True if inpatient episodes continues after the last day coverd in the data. In this case, ```lahtopvm``` is ```NA```.
+```vuosi```             | integer| Year if discharge, ie. year of ```lahtopvm``` (note, year of lahtopvm_psy may be different than ```vuosi```)
 ```tulopvm_psy_inpat```    | date| Date of admission to psychiatric inpatient care.
 ```lahtopvm_psy_inpat```   | date| Date of discharge from psychiatric inpatient care, if multiple transfers between specialties, the last one.
 ```ea_list```         | character| List of specialties included in the episode.
@@ -168,7 +169,7 @@ Combination of relevant discharge diagnoses, discharge diagnoses from psychiatri
 - when ```inpatient== TRUE & inpatient_psy == TRUE```, variable ```dg_inpat_psy``` included,
 - when ```inpatient== FALSE```, variable ```dg_outpat``` included.
 
-## select processed data and count episodes by person
+## Subset processed data & count episodes and time spent in hospital by person
 
 If only overnight episodes are considered as inpatient treatments:
 
@@ -191,5 +192,12 @@ If all episodes with any register entry from inpatient care (ie. also shorter th
 To get number of episodes by person, get .N by shnro, f. ex. number of psychiatric inpatient episodes by person, all years included:
    + ```dat_all_inpatient[overnight_psy == TRUE, .N, by = shnro]```
 
+<br><br>
+To get number of days hospitalized:
+- ```dat_all_inpatient[, .(days_hospitalized = lahtopvm - tulopvm), by = shnro]```
 
+To get number of days hospitalized in psychiatric care:
+- ```dat_all_inpatient[, .(days_hospitalized_psy = lahtopvm_psy_inpat - tulopvm_psy_inpat), by = shnro]]```
+   + Note: if patient is transferred from psychiatric inpatient care to other speciality and then back, also the days spent in other speciality are covered. Days spent in other specialties after the last discharge (or before the first admission to psychiatry) are not coverd. 
+   
 <br><br><br>
