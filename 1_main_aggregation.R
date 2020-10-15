@@ -132,7 +132,7 @@ source(here('R', '130_run_in_and_outpatient.R'))
 
 # Example data not currently provided
 
-source(here('R', '120_run_inpatient_aggregation_old_registers.R')) # Go through settings in this file in detail.
+#source(here('R', '120_run_inpatient_aggregation_old_registers.R')) # Go through settings in this file in detail.
 
 
 # Output
@@ -155,6 +155,5 @@ dat_all_inpatient[overnight_psy == TRUE, .N, by = shnro]
 
 dat_episodes[psy == TRUE & overnight_psy == FALSE, .N, by = shnro]
 
-dat_all_inpatient
 
 # // end

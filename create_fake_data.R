@@ -32,6 +32,10 @@ d <- data.table(shnro = paste0(sample(1000:(1000 + fake_size / 5), fake_size, re
                   TUPVA = LPVM - sample(1:1000, 1)
                   )]
 
+# create overnight_psy == FALSE -case
+d[shnro == '1023E' & EA == 74, LPVM := TUPVA]
+d[shnro == '1023E' & EA == 23, LPVM := TUPVA]
+
 d[PALA > 90, TUPVA := LPVM] # outpatient events have the same start_date and end_date
 
 d[EA %like% c(70, 74,75), DG1 := paste0('F', sample(10:999, size = .N, replace = T))]
@@ -41,13 +45,13 @@ ilaji2 <- tail(d[PALTU == 1], fake_size / 10)[, `:=`(ILAJI = 2,
 
 fake_data <- rbindlist(list(d, ilaji2))
 
+setorder(fake_data, shnro, LPVM)
 
 fake_data[, `:=`(TUPVA = format(as.IDate(TUPVA), '%d-%b-%y'),
                  LPVM  = format(as.IDate(LPVM) , '%d-%b-%y')
 )]
 
 
-setorder(fake_data, shnro, LPVM)
 
 
 

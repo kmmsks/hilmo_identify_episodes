@@ -168,4 +168,28 @@ Combination of relevant discharge diagnoses, discharge diagnoses from psychiatri
 - when ```inpatient== TRUE & inpatient_psy == TRUE```, variable ```dg_inpat_psy``` included,
 - when ```inpatient== FALSE```, variable ```dg_outpat``` included.
 
+## select processed data and count episodes by person
+
+If only overnight episodes are considered as inpatient treatments:
+
+- Psychiatric inpatient episodes, all years included:
+   + ```dat_all_inpatient[overnight_psy == TRUE]```
+- Psychiatric outpatient episodes, starting from the year ```outpatient_start_year```
+   + including psychiatric outpatient visits during non psychiatric inpatient care ```dat_episodes[psy == TRUE & overnight_psy == FALSE]```
+   + only psychiatric outpatient visits when not in inpatient care ```dat_episodes[psy == TRUE & overnight_all == FALSE]```
+<br><br>
+
+If all episodes with any register entry from inpatient care (ie. also shorter than overnight episodes) are considered inpatient care:
+
+- Psychiatric inpatient episodes, all years included:
+   + ```dat_all_inpatient[psy == TRUE]```
+- Psychiatric outpatient episodes, starting from the year ```outpatient_start_year```
+   + including psychiatric outpatient visits during non psychiatric inpatient care ```dat_episodes[psy == TRUE & inpatient_psy == FALSE]```
+   + only psychiatric outpatient visits when not in inpatient care ```dat_episodes[psy == TRUE & inpatient == FALSE]```
+   
+<br><br>
+To get number of episodes by person, get .N by shnro, f. ex. number of psychiatric inpatient episodes by person, all years included:
+   + ```dat_all_inpatient[overnight_psy == TRUE, .N, by = shnro]```
+
+
 <br><br><br>
