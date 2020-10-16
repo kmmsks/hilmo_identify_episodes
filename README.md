@@ -3,7 +3,7 @@
 R script to identify hospital admissions, discharges and discharge diagnoses from the Finnish [Care Register for Health Care](https://thl.fi/en/web/thlfi-en/statistics/information-on-statistics/register-descriptions/care-register-for-health-care) ("Hilmo" register). 
 This script identifies all episodes, and episodes related to psychiatric care. It can be generalized to other specializes as well.
 
-2010-10-16
+2020-10-16
 
 Author: Kimmo Suokas, kimmo.suokas@tuni.fi
 
