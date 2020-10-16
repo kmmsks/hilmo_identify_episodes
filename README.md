@@ -7,6 +7,8 @@ This script identifies all episodes, and episodes related to psychiatric care. I
 
 Author: Kimmo Suokas, kimmo.suokas@tuni.fi
 
+https://zenodo.org/badge/doi/10.5281/zenodo.4095154.svg
+
 ## Background
 In order to identify actual hospital admissions, discharges, and discharge diagnose from the Finnish Care register for health care, multiple register entries may need be combined, as one hospitalization may consist of multiple register entries. 
 
