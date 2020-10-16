@@ -205,6 +205,6 @@ To get number of days hospitalized in psychiatric care:
 
 ## Citation
 
-Suokas, K (2020) hilmo_identify_episodes (v1.0.0) [Source code]. https://github.com/kmmsks/hilmo_identify_episodes. DOI: 10.5281/zenodo.4095154.
+Suokas, K (2020). hilmo_identify_episodes (v1.0.0) [Source code]. https://github.com/kmmsks/hilmo_identify_episodes. doi: 10.5281/zenodo.4095154.
 
 <br><br><br>
