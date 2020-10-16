@@ -202,10 +202,9 @@ To get number of days hospitalized in psychiatric care:
 - ```dat_all_inpatient[, .(days_hospitalized_psy = lahtopvm_psy_inpat - tulopvm_psy_inpat), by = shnro]]```
    + Note: if patient is transferred from psychiatric inpatient care to other speciality and then back, also the days spent in other speciality are covered. Days spent in other specialties after the last discharge (or before the first admission to psychiatry) are not coverd. 
    
-<br><br><br>
 
 ## Citation
 
-Suokas, K (2020) hilmo_identify_episodes (v1.0.0) [Source code]. https://github.com/kmmsks/hilmo_identify_episodes
+Suokas, K (2020) hilmo_identify_episodes (v1.0.0) [Source code]. https://github.com/kmmsks/hilmo_identify_episodes. DOI: 10.5281/zenodo.4095154.
 
 <br><br><br>
