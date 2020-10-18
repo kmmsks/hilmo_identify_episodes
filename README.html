@@ -368,8 +368,9 @@ summary {
 <div id="hilmo_identify_episodes" class="section level1">
 <h1>hilmo_identify_episodes</h1>
 <p>R script to identify hospital admissions, discharges and discharge diagnoses from the Finnish <a href="https://thl.fi/en/web/thlfi-en/statistics/information-on-statistics/register-descriptions/care-register-for-health-care">Care Register for Health Care</a> (“Hilmo” register). This script identifies all episodes, and episodes related to psychiatric care. It can be generalized to other specializes as well.</p>
-<p>Version: 0.0.0.9000 (2020-09-28)</p>
+<p>2020-10-16</p>
 <p>Author: Kimmo Suokas, <a href="mailto:kimmo.suokas@tuni.fi" class="email">kimmo.suokas@tuni.fi</a></p>
+<p><a href="https://zenodo.org/badge/latestdoi/299097747"><img src="data:image/svg+xml; charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgICAgd2lkdGg9IjE4NiIgaGVpZ2h0PSIyMCI+CiAgICAgICAgPGxpbmVhckdyYWRpZW50IGlkPSJiIiB4Mj0iMCIgeTI9IjEwMCUiPgogICAgICAgICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNiYmIiIHN0b3Atb3BhY2l0eT0iLjEiLz4KICAgICAgICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLW9wYWNpdHk9Ii4xIi8+CiAgICAgICAgPC9saW5lYXJHcmFkaWVudD4KICAgICAgICA8bWFzayBpZD0iYSIgd2lkdGg9IjE4NiIgaGVpZ2h0PSIyMCI+CiAgICAgICAgICAgIDxyZWN0IHdpZHRoPSIxODYiIGhlaWdodD0iMjAiIHJ4PSIzIgogICAgICAgICAgICBmaWxsPSIjZmZmIi8+CiAgICAgICAgPC9tYXNrPgogICAgICAgIDxnIG1hc2s9InVybCgjYSkiPgogICAgICAgICAgICA8cGF0aCBmaWxsPSIjNTU1IiBkPSJNMCAwaDMxdjIwSDB6IiAvPgogICAgICAgICAgICA8cGF0aCBmaWxsPSIjMDA3ZWM2IgogICAgICAgICAgICBkPSJNMzEgMGgxNTV2MjBIMzF6IgogICAgICAgICAgICAvPgogICAgICAgICAgICA8cGF0aCBmaWxsPSJ1cmwoI2IpIiBkPSJNMCAwaDE4NnYyMEgweiIgLz4KICAgICAgICA8L2c+CiAgICAgICAgPGcgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkRlamFWdSBTYW5zLAogICAgICAgIFZlcmRhbmEsR2VuZXZhLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiPgogICAgICAgICAgICA8dGV4dCB4PSIxNiIgeT0iMTUiIGZpbGw9IiMwMTAxMDEiCiAgICAgICAgICAgIGZpbGwtb3BhY2l0eT0iLjMiPgogICAgICAgICAgICAgICAgRE9JCiAgICAgICAgICAgIDwvdGV4dD4KICAgICAgICAgICAgPHRleHQgeD0iMTYiIHk9IjE0Ij4KICAgICAgICAgICAgICAgIERPSQogICAgICAgICAgICA8L3RleHQ+CiAgICAgICAgICAgIDx0ZXh0IHg9IjEwOCIKICAgICAgICAgICAgeT0iMTUiIGZpbGw9IiMwMTAxMDEiIGZpbGwtb3BhY2l0eT0iLjMiPgogICAgICAgICAgICAgICAgMTAuNTI4MS96ZW5vZG8uNDA5NTE1NAogICAgICAgICAgICA8L3RleHQ+CiAgICAgICAgICAgIDx0ZXh0IHg9IjEwOCIgeT0iMTQiPgogICAgICAgICAgICAgICAgMTAuNTI4MS96ZW5vZG8uNDA5NTE1NAogICAgICAgICAgICA8L3RleHQ+CiAgICAgICAgPC9nPgogICAgPC9zdmc+" alt="DOI" /></a></p>
 <div id="background" class="section level2">
 <h2>Background</h2>
 <p>In order to identify actual hospital admissions, discharges, and discharge diagnose from the Finnish Care register for health care, multiple register entries may need be combined, as one hospitalization may consist of multiple register entries.</p>
@@ -377,7 +378,31 @@ summary {
 <p>In previous research, up to 25 % of the psychiatric inpatient care related register entries have been related to transfers during an actual hospitalizations (<a href="https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186">CEPHOS-LINK)</a> project, p. 35).</p>
 <p>Hospitalization may start from emergency clinic, and during inpatient care, transfers within and between hospitals and outpatient appointments may take place. Hilmo entries of these appointments are registered with possibly preliminary dignoses of that time. Hence, it is important to first identify the actual discharges and then identify the discharge diagnoses.</p>
 <p>In previous papers using the Hilmo register, it is usually mentioned that hospital periods, admissions or discharges were identified. However, usually no criteria, let alone scripts, for this procedure is provided. As far as I know, there is no generally know or accepted methods for identifying treatment episodes available.</p>
-<p>Recognizing real readmissions from transfer from unit to another is not straightforward. Different sets of criteria have previusly been used: - Others require a hospital treatment to start and end on different calender days (f. ex. the <a href="https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186">CEPHOS-LINK</a> project), others do not. - Others state that a new treatment period may start the next day after previous one (f. ex. <a href="https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186">CEPHOS-LINK</a>), others require a full calender day outside of hospital in between two treatment periods (f. ex. <a href="http://urn.fi/URN:NBN:fi-fe201204193720">REDD project</a>). This criteria is used to stronger differentiate transfers between hospitals and real rehospitalizations.</p>
+<p>Recognizing real readmissions from transfer from unit to another is not straightforward. Different sets of criteria have previusly been used:</p>
+<ul>
+<li>Others require a hospital treatment to start and end on different calender days (f. ex. the <a href="https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186">CEPHOS-LINK</a> project), others do not.</li>
+<li>Others state that a new treatment period may start the next day after previous one (f. ex. <a href="https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186">CEPHOS-LINK</a>), others require a full calender day outside of hospital in between two treatment periods (f. ex. <a href="http://urn.fi/URN:NBN:fi-fe201204193720">REDD project</a>). This criteria is used to stronger differentiate transfers between hospitals and real rehospitalizations.</li>
+</ul>
+<p>Combinations of these criteria form four models:</p>
+<ul>
+<li>Model 1: A new hospitalization may start the next day after a previous one. No minimun length for a hospitalization.
+<ul>
+<li>The most liberal model.</li>
+</ul></li>
+<li>Model 2: A new hospitalization may start the next day after a previous one. Minimun length for a hospitalization is overnight, ie. admission and discharge must take place on different days, otherwise the visit is considered as an outpatient visit.
+<ul>
+<li>F. ex. CEPHOS-LINK</li>
+</ul></li>
+<li>Model 3: A new hospitalization may start after one whole day outside the hopsital after the previus one. No minimun length for a hospitalization.
+<ul>
+<li>F. ex REDD.</li>
+</ul></li>
+<li>Model 4: A new hospitalization may start after one whole day outside the hopsital after the previus one. Minimun length for a hospitalization is overnight, ie. admission and discharge must take place on different days, otherwise the visit is considered as an outpatient visit.
+<ul>
+<li>The most coservative model.</li>
+</ul></li>
+</ul>
+<p>Models 1 and 3 find admissions, as some of the admissions do not necasserily result in hospitalization. Models 2 and 4 differentiate actual inpatient episodes from other visits. If the focus is on inpatient diachagre diagnoses, model 4 may result with little less preliminary diagnoses included, comparing to model 2.</p>
 </div>
 <div id="script-purpose" class="section level2">
 <h2>Script Purpose:</h2>
@@ -521,8 +546,8 @@ summary {
 <h3>Days between periods <code>add_days</code></h3>
 <p>Minimum of full calender days required between two hospital treatment periods:</p>
 <ul>
-<li>0 : a new period may start the next day after the previous one</li>
-<li>1 : there must be one full calender day between two treatment periods. If less, Hilmo entries are considered to belong to a single episode (due to unit transfer etc.)</li>
+<li>0 : a new period may start the next day after the previous one (models 1 and 2).</li>
+<li>1 : there must be one full calender day between two treatment periods (models 3 and 4). If less, Hilmo entries are considered to belong to a single episode (due to unit transfer etc.)</li>
 </ul>
 </div>
 <div id="old-registers-years-1975---1994" class="section level3">
@@ -594,41 +619,46 @@ summary {
 <td align="left">True if inpatient episodes continues after the last day coverd in the data. In this case, <code>lahtopvm</code> is <code>NA</code>.</td>
 </tr>
 <tr class="even">
+<td align="left"><code>vuosi</code></td>
+<td align="left">integer</td>
+<td align="left">Year if discharge, ie. year of <code>lahtopvm</code> (note, year of lahtopvm_psy may be different than <code>vuosi</code>)</td>
+</tr>
+<tr class="odd">
 <td align="left"><code>tulopvm_psy_inpat</code></td>
 <td align="left">date</td>
 <td align="left">Date of admission to psychiatric inpatient care.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left"><code>lahtopvm_psy_inpat</code></td>
 <td align="left">date</td>
 <td align="left">Date of discharge from psychiatric inpatient care, if multiple transfers between specialties, the last one.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left"><code>ea_list</code></td>
 <td align="left">character</td>
 <td align="left">List of specialties included in the episode.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left"><code>paltu</code></td>
 <td align="left">character</td>
 <td align="left">The service provider’s code of the unit of the discharge.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left"><code>paltu_psy</code></td>
 <td align="left">character</td>
 <td align="left">The service provider’s code of the psychiatric unit of the last psychiatric discharge.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left"><code>n_rows_inpat</code></td>
 <td align="left">integer</td>
 <td align="left">Number of rows aggregated to this inpatient episode.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left"><code>dg_inpat</code></td>
 <td align="left">character</td>
 <td align="left">All diagnoses registered on the date of discharge.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left"><code>dg_inpat_psy</code></td>
 <td align="left">character</td>
 <td align="left">All diagnoses registered from psychiatry on the date of discharge from psychiatric unit.</td>
@@ -717,9 +747,9 @@ summary {
 </div>
 </div>
 </div>
-<div id="select-processed-data-and-count-episodes-by-person" class="section level2">
-<h2>select processed data and count episodes by person</h2>
-<p>If only overnight episodes are considered as inpatient treatments:</p>
+<div id="subset-processed-data-count-episodes-and-time-spent-in-hospital-by-person" class="section level2">
+<h2>Subset processed data &amp; count episodes and time spent in hospital by person</h2>
+<p>If only overnight episodes are considered as inpatient treatments (models 2 and 4):</p>
 <ul>
 <li>Psychiatric inpatient episodes, all years included:
 <ul>
@@ -728,14 +758,14 @@ summary {
 <li>Psychiatric outpatient episodes, starting from the year <code>outpatient_start_year</code>
 <ul>
 <li>including psychiatric outpatient visits during non psychiatric inpatient care <code>dat_episodes[psy == TRUE &amp; overnight_psy == FALSE]</code></li>
-<li>only psychiatric outpatient visits when not in inpatient care <code>dat_episodes[psy == TRUE &amp; overnight == FALSE]</code> <br><br></li>
+<li>only psychiatric outpatient visits when not in inpatient care <code>dat_episodes[psy == TRUE &amp; overnight_all == FALSE]</code> <br><br></li>
 </ul></li>
 </ul>
-<p>If all episodes with any register entry from inpatient care (ie. also shorter than overnight episodes) are considered inpatient care:</p>
+<p>If all episodes with any register entry from inpatient care (ie. also shorter than overnight episodes) are considered inpatient care (models 1 and 3):</p>
 <ul>
 <li>Psychiatric inpatient episodes, all years included:
 <ul>
-<li><code>dat_all_inpatient[psy == TRUE,]</code></li>
+<li><code>dat_all_inpatient[psy == TRUE]</code></li>
 </ul></li>
 <li>Psychiatric outpatient episodes, starting from the year <code>outpatient_start_year</code>
 <ul>
@@ -743,7 +773,13 @@ summary {
 <li>only psychiatric outpatient visits when not in inpatient care <code>dat_episodes[psy == TRUE &amp; inpatient == FALSE]</code></li>
 </ul></li>
 </ul>
-<p>To get number of episodes by person, get .N by shnro, f. ex. number of psychiatric inpatient episodes by person, all years included: + <code>dat_all_inpatient[overnight_psy == TRUE, .N, by = shnro]</code></p>
+<p><br><br> To get number of episodes by person, get .N by shnro, f. ex. number of psychiatric inpatient episodes by person, all years included: + <code>dat_all_inpatient[overnight_psy == TRUE, .N, by = shnro]</code></p>
+<p><br><br> To get number of days hospitalized: - <code>dat_all_inpatient[, .(days_hospitalized = lahtopvm - tulopvm), by = shnro]</code></p>
+<p>To get number of days hospitalized in psychiatric care: - <code>dat_all_inpatient[, .(days_hospitalized_psy = lahtopvm_psy_inpat - tulopvm_psy_inpat), by = shnro]]</code> + Note: if patient is transferred from psychiatric inpatient care to other speciality and then back, also the days spent in other speciality are covered. Days spent in other specialties after the last discharge (or before the first admission to psychiatry) are not coverd.</p>
+</div>
+<div id="citation" class="section level2">
+<h2>Citation</h2>
+<p>Suokas, K (2020). hilmo_identify_episodes (v1.0.0) [Source code]. <a href="https://github.com/kmmsks/hilmo_identify_episodes" class="uri">https://github.com/kmmsks/hilmo_identify_episodes</a>. doi: 10.5281/zenodo.4095154.</p>
 <p><br><br><br></p>
 </div>
 </div>

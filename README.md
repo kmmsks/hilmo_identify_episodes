@@ -21,9 +21,23 @@ Hospitalization may start from emergency clinic, and during inpatient care, tran
 In previous papers using the Hilmo register, it is usually mentioned that hospital periods, admissions or discharges were identified. However, usually no criteria, let alone scripts, for this procedure is provided. As far as I know, there is no generally know or accepted methods for identifying treatment episodes available.
 
 Recognizing real readmissions from transfer from unit to another is not straightforward. Different sets of criteria have previusly been used:
+
 - Others require a hospital treatment to start and end on different calender days (f. ex. the [CEPHOS-LINK](https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186) project), others do not.
 - Others state that a new treatment period may start the next day after previous one (f. ex. [CEPHOS-LINK](https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186)), others require a full calender day outside of hospital in between two treatment periods (f. ex. [REDD project](http://urn.fi/URN:NBN:fi-fe201204193720)). This criteria is used to stronger differentiate transfers between hospitals and real rehospitalizations.
 
+
+Combinations of these criteria form four models:
+
+- Model 1: A new hospitalization may start the next day after a previous one. No minimun length for a hospitalization.
+   + The most liberal model.
+- Model 2: A new hospitalization may start the next day after a previous one. Minimun length for a hospitalization is overnight, ie. admission and discharge must take place on different days, otherwise the visit is considered as an outpatient visit. 
+   + F. ex. CEPHOS-LINK
+- Model 3: A new hospitalization may start after one whole day outside the hopsital after the previus one. No minimun length for a hospitalization.
+   + F. ex REDD.
+- Model 4: A new hospitalization may start after one whole day outside the hopsital after the previus one.  Minimun length for a hospitalization is overnight, ie. admission and discharge must take place on different days, otherwise the visit is considered as an outpatient visit.
+   + The most coservative model.
+
+Models 1 and 3 find admissions, as some of the admissions do not necasserily result in hospitalization. Models 2 and 4 differentiate actual inpatient episodes from other visits. If the focus is on inpatient diachagre diagnoses, model 4 may result with little less preliminary diagnoses included, comparing to model 2.
 
 ## Script Purpose: 
 1. To propose a method for aggregating Hilmo entries in order to identify actual admissions, discharges, and discharge diagnoses from the register with different criteria. This is necessary in order to find out: 
@@ -94,8 +108,8 @@ Variable | Description
 ### Days between periods ```add_days``` 
 Minimum of full calender days required between two hospital treatment periods:
 
-- 0 : a new period may start the next day after the previous one
-- 1 : there must be one full calender day between two treatment periods. If less, Hilmo entries are considered to belong to a single episode (due to unit transfer etc.)
+- 0 : a new period may start the next day after the previous one (models 1 and 2).
+- 1 : there must be one full calender day between two treatment periods (models 3 and 4). If less, Hilmo entries are considered to belong to a single episode (due to unit transfer etc.)
 
 ### Old registers, years 1975 - 1994
 
@@ -173,7 +187,7 @@ Combination of relevant discharge diagnoses, discharge diagnoses from psychiatri
 
 ## Subset processed data & count episodes and time spent in hospital by person
 
-If only overnight episodes are considered as inpatient treatments:
+If only overnight episodes are considered as inpatient treatments (models 2 and 4):
 
 - Psychiatric inpatient episodes, all years included:
    + ```dat_all_inpatient[overnight_psy == TRUE]```
@@ -182,7 +196,7 @@ If only overnight episodes are considered as inpatient treatments:
    + only psychiatric outpatient visits when not in inpatient care ```dat_episodes[psy == TRUE & overnight_all == FALSE]```
 <br><br>
 
-If all episodes with any register entry from inpatient care (ie. also shorter than overnight episodes) are considered inpatient care:
+If all episodes with any register entry from inpatient care (ie. also shorter than overnight episodes) are considered inpatient care (models 1 and 3):
 
 - Psychiatric inpatient episodes, all years included:
    + ```dat_all_inpatient[psy == TRUE]```
