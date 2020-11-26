@@ -210,10 +210,10 @@ To get number of episodes by person, get .N by shnro, f. ex. number of psychiatr
 
 <br><br>
 To get number of days hospitalized:
-- ```dat_all_inpatient[, .(days_hospitalized = lahtopvm - tulopvm), by = shnro]```
+- ```dat_all_inpatient[, .(days_hospitalized = lahtopvm - tulopvm), by = shnro][, .(days_hospitalized = sum(days_hospitalized)), by = shnro][]```
 
 To get number of days hospitalized in psychiatric care:
-- ```dat_all_inpatient[, .(days_hospitalized_psy = lahtopvm_psy_inpat - tulopvm_psy_inpat), by = shnro]]```
+- ```dat_all_inpatient[psy == TRUE, .(days_hospitalized = lahtopvm - tulopvm), by = shnro][, .(days_hospitalized = sum(days_hospitalized)), by = shnro][]```
    + Note: if patient is transferred from psychiatric inpatient care to other speciality and then back, also the days spent in other speciality are covered. Days spent in other specialties after the last discharge (or before the first admission to psychiatry) are not coverd. 
    
 

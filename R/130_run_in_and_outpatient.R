@@ -346,7 +346,7 @@ aggregate_specialized_care_episodes <- function(part) {
   f[,`:=`(inpatient_psy = FALSE, inpatient = TRUE, psy = TRUE, dg_inpat_psy_outpat_psy = NA, outpat_same_day = FALSE)] # type: osasto muu; pkl psyk
   
   # combine everything
-  dat <- rbindlist(list(a, b, c, cc, d, e, f), use.names = TRUE)
+  dat <- rbindlist(list(a, b, c, cc, d, e, f), use.names = TRUE, fill = TRUE)
   
   # lahtopvm max value is max year + 1000, representing treatments that continued after the end of
   # the study period. Hence, real value is NA.

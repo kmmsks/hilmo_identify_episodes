@@ -158,9 +158,9 @@ dat_episodes[psy == TRUE & overnight_psy == FALSE, .N, by = shnro]
 
 # get days spent in hospital by person
 
-dat_all_inpatient[overnight_all==F, .(days_hospitalized = lahtopvm - tulopvm), by = shnro ]
+dat_all_inpatient[, .(days_hospitalized = lahtopvm - tulopvm), by = shnro][, .(days_hospitalized = sum(days_hospitalized)), by = shnro][]
 
 # get days in psychiatric inpatient care by person
-dat_all_inpatient[, .(days_hospitalized_psy = lahtopvm_psy_inpat - tulopvm_psy_inpat), by = shnro]
+dat_all_inpatient[psy == TRUE, .(days_hospitalized = lahtopvm - tulopvm), by = shnro][, .(days_hospitalized = sum(days_hospitalized)), by = shnro][]
 
 # // end
