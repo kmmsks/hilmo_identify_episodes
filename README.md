@@ -76,7 +76,8 @@ Set the location of the raw data in **0_data_raw_to_parts.R**. The data folder m
 csv format for data input is used.
 
 This project comes with fake data to see the scripts in action, starting 1996. Notice, the fake data does not necessary follow the real world patterns in any way!
-- **Run create_fake_data.R first to generate fake data for testing the script**
+
+- First, run **create_fake_data.R** to generate data for testing these scripts.
 
 No example datasets currently provided for the years 1975&ndash;1995.
 
