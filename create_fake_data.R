@@ -38,11 +38,10 @@ d[shnro == '1023E' & EA == 23, LPVM := TUPVA]
 d[PALA > 90, TUPVA := LPVM] # outpatient events have the same start_date and end_date
 
 # create case with two outpaitent appointments on the same day
-
-
 d <- rbindlist(list(d, d[shnro == '4924E' & PALA>90][, EA := 11]))
 
-d[EA %like% c(70, 74,75), DG1 := paste0('F', sample(10:999, size = .N, replace = TRUE))]
+
+d[EA %in% c(70, 74,75), DG1 := paste0('F', sample(10:999, size = .N, replace = TRUE))]
 
 ilaji2 <- tail(d[PALTU == 1], fake_size / 10)[, `:=`(ILAJI = 2,
                                                      LPVM  = NA)]

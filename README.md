@@ -1,15 +1,17 @@
 # hilmo_identify_episodes
 
-R script to identify hospital admissions, discharges and discharge diagnoses from the Finnish [Care Register for Health Care](https://thl.fi/en/web/thlfi-en/statistics/information-on-statistics/register-descriptions/care-register-for-health-care) ("Hilmo" register). 
-This script identifies all episodes, and episodes related to psychiatric care. It can be generalized to other specializes as well.
+R script to identify hospital admissions, discharges and discharge diagnoses from the Finnish [Care Register for Health Care](https://thl.fi/en/web/thlfi-en/statistics/information-on-statistics/register-descriptions/care-register-for-health-care) ("Hilmo" register) between years 1975--2018. 
 
-2020-10-16
+This script identifies all episodes and episodes related to psychiatric care. It can be generalized to other specializes as well.
+
+2020-11-27
 
 Author: Kimmo Suokas, kimmo.suokas@tuni.fi
 
 [![DOI](https://zenodo.org/badge/299097747.svg)](https://zenodo.org/badge/latestdoi/299097747)
 
 ## Background
+
 In order to identify actual hospital admissions, discharges, and discharge diagnose from the Finnish Care register for health care, multiple register entries may need be combined, as one hospitalization may consist of multiple register entries. 
 
 This is because during a single hospitalization, a new register entry must be supplied every time a hospital transfer, or trasfer form one specialty to another within the hospital occurs. A register entry is also supplied from outpatient and emergency visit, which may take place at the beginning or during the hospitalization.
@@ -18,53 +20,74 @@ In previous research, up to 25 % of the psychiatric inpatient care related regis
 
 Hospitalization may start from emergency clinic, and during inpatient care, transfers within and between hospitals and outpatient appointments may take place. Hilmo entries of these appointments are registered with possibly preliminary dignoses of that time. Hence, it is important to first identify the actual discharges and then identify the discharge diagnoses.
 
-In previous papers using the Hilmo register, it is usually mentioned that hospital periods, admissions or discharges were identified. However, usually no criteria, let alone scripts, for this procedure is provided. As far as I know, there is no generally know or accepted methods for identifying treatment episodes available.
+In previous papers using the Hilmo register, it is usually mentioned that hospital periods, admissions or discharges were identified. However, usually no criteria, let alone scripts, for this procedure is provided. 
 
-Recognizing real readmissions from transfer from unit to another is not straightforward. Different sets of criteria have previusly been used:
+As far as I know, there is no generally know or accepted methods available for identifying treatment episodes. Different sets of criteria have previusly been used:
 
-- Others require a hospital treatment to start and end on different calender days (f. ex. the [CEPHOS-LINK](https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186) project), others do not.
-- Others state that a new treatment period may start the next day after previous one (f. ex. [CEPHOS-LINK](https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186)), others require a full calender day outside of hospital in between two treatment periods (f. ex. [REDD project](http://urn.fi/URN:NBN:fi-fe201204193720)). This criteria is used to stronger differentiate transfers between hospitals and real rehospitalizations.
+- Others require a hospital treatment to start and end on different calender days (f. ex. the [CEPHOS-LINK](https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186) project), ie. an inpatient episode should last overnight. Others do not require tihis.
+- Others state that a new treatment period may start the next day after previous one (f. ex. [CEPHOS-LINK](https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186)), others require a full calender day outside of hospital in between two treatment periods (f. ex. [REDD project](http://urn.fi/URN:NBN:fi-fe201204193720)). This criteria is used to stronger differentiate transfers between hospitals and 'real' rehospitalizations.
 
 
 Combinations of these criteria form four models:
 
-- Model 1: A new hospitalization may start the next day after a previous one. No minimun length for a hospitalization.
-   + The most liberal model.
-- Model 2: A new hospitalization may start the next day after a previous one. Minimun length for a hospitalization is overnight, ie. admission and discharge must take place on different days, otherwise the visit is considered as an outpatient visit. 
-   + F. ex. CEPHOS-LINK
-- Model 3: A new hospitalization may start after one whole day outside the hopsital after the previus one. No minimun length for a hospitalization.
-   + F. ex REDD.
-- Model 4: A new hospitalization may start after one whole day outside the hopsital after the previus one.  Minimun length for a hospitalization is overnight, ie. admission and discharge must take place on different days, otherwise the visit is considered as an outpatient visit.
-   + The most coservative model.
+Model   |  Description
+:-------|:-------------
+Model 1 | A new hospitalization may start the next day after a previous one. No minimun length for a hospitalization. **The most liberal model.**
+Model 2 | A new hospitalization may start the next day after a previous one. Minimun length for a hospitalization is overnight, ie. admission and discharge must take place on different days, otherwise the visit is considered as an outpatient visit. **F. ex. CEPHOS-LINK*'
+Model 3 | A new hospitalization may start after one whole day outside the hopsital after the previus one. No minimun length for a hospitalization. **F. ex REDD.**
+Model 4 | A new hospitalization may start after one whole day outside the hopsital after the previus one.  Minimun length for a hospitalization is overnight, ie. admission and discharge must take place on different days, otherwise the visit is considered as an outpatient visit. **The most coservative model.**
 
-Models 1 and 3 find admissions, as some of the admissions do not necasserily result in hospitalization. Models 2 and 4 differentiate actual inpatient episodes from other visits. If the focus is on inpatient diachagre diagnoses, model 4 may result with little less preliminary diagnoses included, comparing to model 2.
+Models 1 and 3 find admissions, as some of the admissions do not necasserily result in hospitalization. Models 2 and 4 differentiate actual overnight inpatient episodes from other visits. If the focus is on inpatient diachagre diagnoses, model 4 may result with little less preliminary diagnoses included, comparing to model 2.
+
+### Exampeles of Papers Adopting These Principles
+
+Model 3 was used in:
+
+- Suokas K, Koivisto A, Hakulinen C, et al. Association of Income With the Incidence Rates of First Psychiatric Hospital Admissions in Finland, 1996-2014. JAMA Psychiatry. 2020;77(3):274–284. doi:10.1001/jamapsychiatry.2019.3647
 
 ## Script Purpose: 
 1. To propose a method for aggregating Hilmo entries in order to identify actual admissions, discharges, and discharge diagnoses from the register with different criteria. This is necessary in order to find out: 
    + dates of admission and discharge, i.e. the period actually spent in the hospital,
    + dates of admission to and discharge from psychiatric care, if a single hospitalization includes care in more than one specialty,
    + actual discharge diagnoses at the end of the hospitalization, or the last diagnosis from certain specialty, in this case psychiatry, and the service provider from where the discharge takes place.
-
+<br><br>
 2. To tell apart register entries related to outpatient episodes that take place during an inpatient care. There may be a need to consider these outpatient entries as a part of the inpatient care, not as separate episodes.
 
 3. To provide this script accessible for critical evaluation and further utilization (despite the actual register data is not openly available). The aim is to let future (at least clinically oriented) researchers to focus on their actual research, not technicalities. 
 
+## Covered Register Years
+
+The Disharge Reister was launched in 1969. The method presented here is suitable starting from the year 1975. Before that, recognizing psychiatric treatments is not univocal, and person identifications have more mistakes.
+
+Years  |  Diagnoses | Description
+:------|:-----------|:-----------
+**1969--1974** | ICD-8 | Not covered in this method. 
+**1967--1995** | ICD-8 until 1986 <br> ICD-9 1987--1995 | The older data is usually provided in three datasetes, years 1969--1986, 1987--1993 and 1994-1995 with different formats.  Notice changes in variable codings within datasets.
+**1996--2018** | ICD-10 | Hilmo register data is in structured convergent enough for this scipt to run. Refer to Hilmo manuals concerning the minor changes in the data between years. 
+**2019 ->** | ICD-10 | Major changes in the variables. Not covered in this script yet.
+
+
+
 
 ## 1. Data Input:
+
 Set the location of the raw data in **0_data_raw_to_parts.R**. The data folder must contain only the data files.
 
-csv format for data input is currently used.
+csv format for data input is used.
 
-This project comes with fake data to see the scripts in action. Notice, the fake data does not necessary follow the real world patterns in any way!
-- **Run create_fake_data.R first to generate fake test data**
+This project comes with fake data to see the scripts in action, starting 1996. Notice, the fake data does not necessary follow the real world patterns in any way!
+- **Run create_fake_data.R first to generate fake data for testing the script**
+
+No example datasets currently provided for the years 1975--1995.
 
 ## 2. Prepare Data for the Aggregation:
+
 **Preparations are done in 0_data_raw_to_parts.R**
 
 If your data is in form THL calls the database form, you need to combine the data from different files based on entry id. Variables are in different files and each year is in its own file. Use library(bit64) for long id numbers. 
-- (Example not currently shown here)
+- (Example not currently shown)
 
-What needs to achieved, is to have minimum of the following columns in your data:
+What needs to be achieved, is to have minimum of the following columns in your data:
 
 Variable | Data type | Description
 :--------|:----------|:------------
@@ -79,48 +102,64 @@ Variable | Data type | Description
 ```dg```    | character | see below
 
 Diagnoses: 
-- One register entry may contain multiple diagnoses. 
+- One register entry may contain multiple diagnoses, each in its own column. 
 - Names of the diagnosis variables may vary between years and datasets.
-- Create variable ```dg```, where all diagnoses related to one entry are pasted. 
+- Create variable ```dg```, where all diagnoses related to one register entry are pasted. 
    + f. ex. ```dat[, dg := paste(DG1, DG2, sep = '_')]```
+   
+Make all neacassery preparations in 0_data_raw_to_parts.R.
 
 ### Data Size, Operating with Chunks
+
 If your data is in one file of reasonable size, all you need to do is to check you have above mentioned columns in the data and name the data as '1.csv'
 
-If you have full register, you may need to process the data in smaller parts (chunks), due to performance. In this case, this method require all entries of a single person to locate in one part (instead of having the data split in parts by year and variables).
+If you have full register, you may need to process the data in smaller parts (chunks), due to performance reasons. In this case, this method requires all entries of a single person to locate in one part (instead of having the data split in parts by year and variables).
 
 To determine the optimal part size is out of scope here. See what is small enough on your machine. In this example, five parts are used to demonstrate the action.
 
+Set ```n_parts``` in  0_data_raw_to_parts.R.
+
 
 ## 3. Processing of the Data
-**Control setting for desired episode identification rules in 1_main_aggregation.R**
+
+Control the following setting for desired episode identification rules in **1_main_aggregation.R**:
 
 Variable | Description
 :--------|:----------
-```dir```                  | Input file locations for preprocessed data. In this example, data_temp/parts_raw
-```max_year```             | Time range of the data, the latest year included 
-```min_year``` | The first year included. Earliest 1996. Previous years have their own methods.
-```outpatient_start_year```| According to THL, outpatient data is relevant starting from 2006
+```dir```                  | Input file locations for preprocessed data. In this example, data_temp/parts_raw.
+```max_year```             | Time range of the data, the latest year included. **Currently, maximum is 2018**. 
+```min_year```             | The first year included. **Earliest 1996**. Previous years have their own methods.
+```outpatient_start_year```| According to THL, outpatient data is **relevant starting from 2006**.
 ```add_days```             |Days between periods, see below
 ```PALA_inpatient``` <br> ```PALA_outpatient``` | Register entry types defining treatments types of interest, see Hilmo manuals for details
 ```specialties_of_interest``` |  Define speciality (psychiatry in this case). See erikoisala (EA) in Hilmo manuals. Notice changes in the coding between years.
 
 ### Days between periods ```add_days``` 
+
 Minimum of full calender days required between two hospital treatment periods:
 
 - 0 : a new period may start the next day after the previous one (models 1 and 2).
 - 1 : there must be one full calender day between two treatment periods (models 3 and 4). If less, Hilmo entries are considered to belong to a single episode (due to unit transfer etc.)
 
-### Old registers, years 1975 - 1994
+### Old registers, years 1975--1995
 
-Data is usually provided in three setes, years 1969-1986, 1987-1993 and 1994-1994. The method prsented here is suitable starting from the year 1975. Before that recognizing psychiatric treatments is not univocal, and person identification may have more mistakes.
+The method prsented here is suitable starting from the year 1975. Years 1969--1986, 1987--1993 and 1994--1995 are processed separately first and combined after that with the data starting from 1996.
 
-Conversions of diagnoses with mental disorders to ICD-10 inclued.
+Conversions of diagnoses with mental disorders to ICD-10 inclued. ICD-8 was used until 1986, ICD-9 1987--1995 and ICD-10 thereafter. Conversions are preliminary, please check before use.
 
-Set column names, date formats and define specialities of interest in ```120_run_inpatient_old_registers.R```
+Set column names, date formats, define desired diagnostic cathegories for conversion to ICD-10, and define specialities of interest in 120_run_inpatient_old_registers.R.
 
+**Notice, no example datasets currently provided for years 1975--1995.**
 
-## Data Output
+### Source Desired Scripts
+
+- ```source(here('R', '110_run_inpatient_1996_2018.R'))```, this script identifies inpatient episodes 1996--2018.
+- ```source(here('R', '130_run_in_and_outpatient.R'))```, this script identifies inpatient and outpatient episodes 2006--2018.
+- ```source(here('R', '120_run_inpatient_aggregation_old_registers.R'))```, this identifies inpatient episodes 1975--1995. Go through settings in this file in detail.
+- ```source(here('R', '122_combine_inpatient_all_years.R'))```, combine all inpatient episodes into one file. Identifys episodes that continue between datasets.
+
+## 4. Data Output
+
 Full aggregated data is saved in the folders:
 
 - data_processed -> 1_inpatient_episodes 
@@ -128,15 +167,17 @@ Full aggregated data is saved in the folders:
    + -> preparation_description: description of incorrect entries, PALA distribution, etc.
 - data_processed -> 2_in_and_outpatient_episodes -> add_days_[add_days]: the data and description of included episodes
 
-This test script creates the following object:
+This test script creates the following data object:
 
 - **dat_episodes**: processed data with inpatient and outpatient episodes included
 - **dat_inpatient**: inaptient episodes only
-- **description_episode** and **description_inpatient**: see the formatted xlsx files in folder data_processed
+- **dat_all_inpatient**, all inpatient episodes combined. Practically identical with dat_inpatient with the example fake data.
+- **description_episode** and **description_inpatient**: see read_me sheets in xlsx files in folder data_processe.
 
 
-## New variables in the Processed Data
-### Inpatient data:
+## New Variables in the Processed Data
+
+### Inpatient Data:
 
 Variable | Data type | Description
 :--------|:----------|:--------
@@ -155,7 +196,7 @@ Variable | Data type | Description
 ```dg_inpat```        | character| All diagnoses registered on the date of discharge.
 ```dg_inpat_psy```    | character| All diagnoses registered from psychiatry on the date of discharge from psychiatric unit.
 
-### All episodes, in addition:
+### All Episodes, in Addition:
 
 Variable | Data type | Description
 :--------|:----------|:--------
@@ -170,6 +211,7 @@ Variable | Data type | Description
 ```dg```                | character| Combination of relevant discharge diagnoses, discharge diagnoses from psychiatric inpatient care preferred. See below.
 
 #### Variable ```dg_outpat```
+
 Includes psychiatric outpatient diagnoses, if the episode contains no psychiatric inpatient care.
 
 Otherwise, outpatient diagnoses during inpatient care are included. 
@@ -179,13 +221,14 @@ This diagnoses should be excluded when only discharge diagnoses are collected.
 <br>
 
 #### Variable ```dg```
+
 Combination of relevant discharge diagnoses, discharge diagnoses from psychiatric inpatient care preferred:
 
 - when ```inpatient== TRUE & inpatient_psy == FALSE```, variable ```dg_inpat``` included,
 - when ```inpatient== TRUE & inpatient_psy == TRUE```, variable ```dg_inpat_psy``` included,
 - when ```inpatient== FALSE```, variable ```dg_outpat``` included.
 
-## Subset processed data & count episodes and time spent in hospital by person
+## Subset Processed Data & Count Episodes and Time Spent in Hospital by Person
 
 If only overnight episodes are considered as inpatient treatments (models 2 and 4):
 
@@ -210,9 +253,11 @@ To get number of episodes by person, get .N by shnro, f. ex. number of psychiatr
 
 <br><br>
 To get number of days hospitalized:
+
 - ```dat_all_inpatient[, .(days_hospitalized = lahtopvm - tulopvm), by = shnro][, .(days_hospitalized = sum(days_hospitalized)), by = shnro][]```
 
 To get number of days hospitalized in psychiatric care:
+
 - ```dat_all_inpatient[psy == TRUE, .(days_hospitalized = lahtopvm - tulopvm), by = shnro][, .(days_hospitalized = sum(days_hospitalized)), by = shnro][]```
    + Note: if patient is transferred from psychiatric inpatient care to other speciality and then back, also the days spent in other speciality are covered. Days spent in other specialties after the last discharge (or before the first admission to psychiatry) are not coverd. 
    

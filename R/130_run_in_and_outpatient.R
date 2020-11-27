@@ -399,6 +399,8 @@ parts_out <- lapply(seq(1, n_parts), aggregate_specialized_care_episodes)
 # all episodes
 dat_episodes <- rbindlist(sapply(parts_out, '[', 'episodes'))
 
+setorder(dat_episodes, 'shnro', 'tulopvm')
+
 # descriptions
 description_episodes <-  rbindlist(sapply(parts_out, '[','description'))[, .(n = sum(n)), by = .(episode, sample)]
 

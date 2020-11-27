@@ -2,6 +2,8 @@
 #
 # Identify Hilmo episodes // Hilmojen ketjutus
 #
+# Run inaptient aggregation functions for each part and save. Years 1996--2018
+#
 # Author: Kimmo Suokas
 #
 #
@@ -94,7 +96,7 @@ parts_out <- lapply(seq(1, n_parts), run_aggregate_inpatient)
 # processed inpatient data
 dat_inpatient <- rbindlist(sapply(parts_out, '[','aggregated_part'))
 
-
+setorder(dat_inpatient, 'shnro', 'tulopvm')
 
 # create directories for prepared and fully processed data---------------------------------------------------------------
 

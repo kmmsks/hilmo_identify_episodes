@@ -4,7 +4,7 @@
 #
 # Author: Kimmo Suokas
 #
-# Function definition
+# Function definitions
 
 
 # prepare data part for aggregation and give description of the preparation:

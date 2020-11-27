@@ -9,7 +9,7 @@
 #
 # In this main script, control the setting for the aggregations
 #
-# Version 0.1 beta 
+# Version v1.0.1
 # Author: Kimmo Suokas
 
 
@@ -27,14 +27,13 @@ library(here)
 
 dir <- list(
   data_parts_in = here('data_temp', 'parts_raw'), 
-  old_registers = here() # location of data sets with years before 1996
+  old_registers = here() # location of data sets with years before 1996, no example currently provided.
 )
 
 
-# Time range of the data with current data form (form 1996 and 2018) ----------------------------------------------------
+# Time range of the data with current data format (between 1996 and 2018) --------------------------------------------
 # Note some major changes in the data definitions (at least in PALA) in 2019
 
-# Inpatient data:
 # fake data 2010 -2014
 
 max_year <- 2014 
@@ -52,7 +51,7 @@ outpatient_start_year <- 2007
 # THL says data is relevant after 2006, here 2007 is the beginning of any analysis
 
 
-# Days between periods ---------------------------------------------
+# Days between periods ------------------------------------------------------------------------------------------------
 #
 # Minimum of full calender days required between two hospital treatment periods:
 # 0 : a new period may start the next day after the previous one
@@ -93,12 +92,12 @@ outpatient_start_date <-  as.integer(as.IDate(paste0(outpatient_start_year, '-01
 # // settings ready
 
 
-# INPATIENT TREATMENT EPISODES  ------------------------------------------------------------------------------------------
+# INPATIENT TREATMENT EPISODES 1996--2018 --- ----------------------------------------------------------------------------
 
 
 # Run aggregation
 
-source(here('R', '110_run_inpatient_1996_and_after.R'))
+source(here('R', '110_run_inpatient_1996_2018.R'))
 
 # Output:
   # data_processed -> 1_inpatient_episodes -> add_days_[add_days] -> data_inpatient_[years_range].fst"
@@ -110,6 +109,7 @@ source(here('R', '110_run_inpatient_1996_and_after.R'))
   ## data_processed -> 1_inpatient_episodes -> preparation_description 
       # -> preparation_description__add_days_[add_days]_[years_range].xlsx
       # description of invalid rows etc.
+
 
 # INPATIENT AND OUTPATIENT EPISODES --------------------------------------------------------------------------------------
 
@@ -124,7 +124,8 @@ source(here('R', '130_run_in_and_outpatient.R'))
   # and description_episodes_[years_range].xlsx
 
 
-# OLD POISTO- and HILMO- REGISTERS (inpatient only), 1996 - 1993 ---------------------------------------------------------
+
+# OLD POISTO- and HILMO- REGISTERS (inpatient only), 1969 - 1995 ---------------------------------------------------------
 
 
 # Input:
@@ -144,6 +145,10 @@ dir$d2_aggregated_all <-  here('data_processed', '1_inpatient_episodes', paste('
 
 source(here('R', '122_combine_inpatient_all_years.R'))
 
+
+
+
+# GET SOME PERSON-LEVEL DATA OUT OF THE PROCESSED DATASETS ---------------------------------------
 
 # count episodes and time spent in hospital -------------------------------------------------------
 

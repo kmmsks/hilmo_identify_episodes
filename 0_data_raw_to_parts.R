@@ -2,8 +2,10 @@
 #
 # Identify Hilmo episodes // Hilmojen ketjutus
 #
-# Author: Kimmo Suokas
+# Data Preparations
 #
+# Version v1.0.1
+# Author: Kimmo Suokas
 #
 library(data.table)
 library(here)
@@ -11,15 +13,19 @@ library(fst)
 
 # This step depends on the form of data you have.
 
-# At least check column names and data types.
-# Turn dates to integers.
+# At least check column names and data types, turn dates to integers.
 
-# In this example, the data is divided to five sub parts.
-# Save the parts.
+# In this example, the data is divided to five sub parts, as the whole data can usually not be processed at once with normal PC.
 
-# Set location of the raw data ------------------------------------------------------------------------------------------
+# SET NUMBER OF SUB PARTS TO SPLIT THE DATA -----------------------------------------------------------------------------
+
+n_parts <- 5
+
+
+# SET LOCATION OF THE RAW DATA  ------------------------------------------------------------------------------------------
 
 raw_data_location <- here('data_raw_fake')
+
 
 # Read the data ----------------------------------------------------------------------------------------------------------
 
@@ -34,21 +40,23 @@ gc()
 
 # modify variables -------------------------------------------------------------------------------------------------------
 
+# SET DATE TYPES
+
 dat[, `:=`(TUPVA = as.integer(as.IDate(TUPVA, '%d-%b-%y')),
            LPVM  = as.integer(as.IDate(LPVM, '%d-%b-%y'))
 )]
 
+# SET DIAGNOSIS COLUMUN NAMES HERE
 dat[, dg := paste(DG1, DG2, sep = '_')]
 dat[, `:=`(DG1 = NULL,
            DG2 = NULL)]
+
+# POSSIBLE OTHER TRANSFORMATIONS HERE:
 
 
 # Divide data in parts by person (instead of year) -----------------------------------------------------------------------
 
 dat[, idn := .GRP, by = shnro]
-
-n_parts <- 5
-
 
 dat[, part := cut(
   idn,
@@ -60,6 +68,7 @@ dat[, part := cut(
 
 # save data parts --------------------------------------------------------------------------------------------------------
 
+# folder for data parts
 dir.create(here('data_temp'))
 dir.create(here('data_temp', 'parts_raw'))
 

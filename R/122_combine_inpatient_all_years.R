@@ -98,8 +98,12 @@ d1[lahtopvm_psy_inpat > tulopvm_psy_inpat, overnight_psy := TRUE]
 # lahtopvm max is last day + 1000 years, if treatment continues at the end of the data. 
 # In this case, set lahtopvm NA
 d1[, episode_continues := FALSE]
-d1[lahtopvm == max(lahtopvm) & lahtopvm > as.integer(as.IDate('2050-01-01')), `:=`(lahtopvm = NA,
-                                                                                   episode_continues = TRUE)]
+d1[lahtopvm == max(lahtopvm) & lahtopvm > as.integer(as.IDate('2050-01-01')),
+   `:=`(lahtopvm = NA,
+        episode_continues = TRUE)]
+
+setorder(d1, 'shnro', 'tulopvm')
+
 rm(d0)
 gc()
 

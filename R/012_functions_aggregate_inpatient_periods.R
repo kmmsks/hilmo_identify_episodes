@@ -8,7 +8,7 @@
 
 # Aggregataion on pre-precossed data parts
 #
-# param d1 data table input
+# param d1 data.table input
 # param years_1996_andafter TRUE if working with data on years 1996 or after
 # return processed data
 #
