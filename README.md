@@ -62,9 +62,9 @@ The Disharge Reister was launched in 1969. The method presented here is suitable
 Years  |  Diagnoses | Description
 :------|:-----------|:-----------
 **1969&ndash;1974** | ICD-8 | Not covered in this method. 
-**1975&ndash;1995** | ICD-8 1975&ndash;1986, <br> ICD-9 1987&ndash;1995 | The older data is usually provided in three datasetes, years 1969&ndash;1986, 1987&ndash;1993 and 1994-1995, with slightly different formating in each of them.  Notice changes in variable codings within datasets.
-**1996&ndash;2018** | ICD-10 | Hilmo register data is in structured convergent enough for this scipt to run. Refer to Hilmo manuals concerning the minor changes in the data between years. 
-**2019 ->** | ICD-10 | Major changes in the variables. Not covered in this script yet.
+**1975&ndash;1995** | ICD-8 1975&ndash;1986, <br> ICD-9 1987&ndash;1995 | The older data is usually provided in three datasetes, years 1969&ndash;1986, 1987&ndash;1993 and 1994-1995, with slightly different formating in each of them. Notice changes in variable codings within datasets.
+**1996&ndash;2018** | ICD-10 | Data is convergent enough to be processed together. Refer to Hilmo manuals concerning the minor changes in the data between years. 
+**2019 ->** | ICD-10 | some major changes in the variables. Not covered in this script yet.
 
 
 
