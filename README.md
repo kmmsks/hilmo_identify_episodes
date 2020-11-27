@@ -1,6 +1,6 @@
 # hilmo_identify_episodes
 
-R script to identify hospital admissions, discharges and discharge diagnoses from the Finnish [Care Register for Health Care](https://thl.fi/en/web/thlfi-en/statistics/information-on-statistics/register-descriptions/care-register-for-health-care) ("Hilmo" register) between years 1975--2018. 
+R script to identify hospital admissions, discharges and discharge diagnoses from the Finnish [Care Register for Health Care](https://thl.fi/en/web/thlfi-en/statistics/information-on-statistics/register-descriptions/care-register-for-health-care) ("Hilmo" register) between years 1975&ndash;2018. 
 
 This script identifies all episodes and episodes related to psychiatric care. It can be generalized to other specializes as well.
 
@@ -61,9 +61,9 @@ The Disharge Reister was launched in 1969. The method presented here is suitable
 
 Years  |  Diagnoses | Description
 :------|:-----------|:-----------
-**1969--1974** | ICD-8 | Not covered in this method. 
-**1967--1995** | ICD-8 until 1986 <br> ICD-9 1987--1995 | The older data is usually provided in three datasetes, years 1969--1986, 1987--1993 and 1994-1995 with different formats.  Notice changes in variable codings within datasets.
-**1996--2018** | ICD-10 | Hilmo register data is in structured convergent enough for this scipt to run. Refer to Hilmo manuals concerning the minor changes in the data between years. 
+**1969&ndash;1974** | ICD-8 | Not covered in this method. 
+**1967&ndash;1995** | ICD-8 until 1986 <br> ICD-9 1987&ndash;1995 | The older data is usually provided in three datasetes, years 1969&ndash;1986, 1987&ndash;1993 and 1994-1995 with different formats.  Notice changes in variable codings within datasets.
+**1996&ndash;2018** | ICD-10 | Hilmo register data is in structured convergent enough for this scipt to run. Refer to Hilmo manuals concerning the minor changes in the data between years. 
 **2019 ->** | ICD-10 | Major changes in the variables. Not covered in this script yet.
 
 
@@ -78,7 +78,7 @@ csv format for data input is used.
 This project comes with fake data to see the scripts in action, starting 1996. Notice, the fake data does not necessary follow the real world patterns in any way!
 - **Run create_fake_data.R first to generate fake data for testing the script**
 
-No example datasets currently provided for the years 1975--1995.
+No example datasets currently provided for the years 1975&ndash;1995.
 
 ## 2. Prepare Data for the Aggregation:
 
@@ -141,21 +141,21 @@ Minimum of full calender days required between two hospital treatment periods:
 - 0 : a new period may start the next day after the previous one (models 1 and 2).
 - 1 : there must be one full calender day between two treatment periods (models 3 and 4). If less, Hilmo entries are considered to belong to a single episode (due to unit transfer etc.)
 
-### Old registers, years 1975--1995
+### Old registers, years 1975&ndash;1995
 
-The method prsented here is suitable starting from the year 1975. Years 1969--1986, 1987--1993 and 1994--1995 are processed separately first and combined after that with the data starting from 1996.
+The method prsented here is suitable starting from the year 1975. Years 1969&ndash;1986, 1987&ndash;1993 and 1994&ndash;1995 are processed separately first and combined after that with the data starting from 1996.
 
-Conversions of diagnoses with mental disorders to ICD-10 inclued. ICD-8 was used until 1986, ICD-9 1987--1995 and ICD-10 thereafter. Conversions are preliminary, please check before use.
+Conversions of diagnoses with mental disorders to ICD-10 inclued. ICD-8 was used until 1986, ICD-9 1987&ndash;1995 and ICD-10 thereafter. Conversions are preliminary, please check before use.
 
 Set column names, date formats, define desired diagnostic cathegories for conversion to ICD-10, and define specialities of interest in 120_run_inpatient_old_registers.R.
 
-**Notice, no example datasets currently provided for years 1975--1995.**
+**Notice, no example datasets currently provided for years 1975&ndash;1995.**
 
 ### Source Desired Scripts
 
-- ```source(here('R', '110_run_inpatient_1996_2018.R'))```, this script identifies inpatient episodes 1996--2018.
-- ```source(here('R', '130_run_in_and_outpatient.R'))```, this script identifies inpatient and outpatient episodes 2006--2018.
-- ```source(here('R', '120_run_inpatient_aggregation_old_registers.R'))```, this identifies inpatient episodes 1975--1995. Go through settings in this file in detail.
+- ```source(here('R', '110_run_inpatient_1996_2018.R'))```, this script identifies inpatient episodes 1996&ndash;2018.
+- ```source(here('R', '130_run_in_and_outpatient.R'))```, this script identifies inpatient and outpatient episodes 2006&ndash;2018.
+- ```source(here('R', '120_run_inpatient_aggregation_old_registers.R'))```, this identifies inpatient episodes 1975&ndash;1995. Go through settings in this file in detail.
 - ```source(here('R', '122_combine_inpatient_all_years.R'))```, combine all inpatient episodes into one file. Identifys episodes that continue between datasets.
 
 ## 4. Data Output
