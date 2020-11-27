@@ -122,7 +122,7 @@ Set ```n_parts``` in  0_data_raw_to_parts.R.
 
 ## 3. Processing of the Prepared Data
 
-### Years 1996&ndash;2018 inpatient data and years 2006&ndash;2018 also outpaitent data
+### Years 1996&ndash;2018 Inpatient and Outpatient Data
 Control the following setting for desired episode identification rules in **1_main_aggregation.R**:
 
 Variable | Description
@@ -142,7 +142,7 @@ Minimum of full calender days required between two hospital treatment periods:
 - 0 : a new period may start the next day after the previous one (models 1 and 2).
 - 1 : there must be one full calender day between two treatment periods (models 3 and 4). If less, Hilmo entries are considered to belong to a single episode (due to unit transfer etc.)
 
-### Years 1975&ndash;1995, inpatient only
+### Years 1975&ndash;1995, Inpatient Data Only
 
 The method presented here is suitable starting from the year 1975. Years 1969&ndash;1986, 1987&ndash;1993 and 1994&ndash;1995 are processed separately first, and after that, all inpatient data is combined.
 
