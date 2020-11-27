@@ -97,8 +97,8 @@ Variable | Data type | Description
 ```PALTU``` | integer   | (as above)
 ```PALA```  | integer   | (as above)
 ```EA```    | character | (as above)
-```TUPVA``` | integer   | set: as.integer(as.IDate(TUPVA, format = [FORMAT]))
-```LPVM```  | integer   | set: as.integer(as.IDate(LPVM, format = [FORMAT]))
+```TUPVA``` | integer   | set: ```as.integer(as.IDate(TUPVA, format = [FORMAT]))```
+```LPVM```  | integer   | set: ```as.integer(as.IDate(LPVM, format = [FORMAT]))```
 ```dg```    | character | Diagnoses, see below
 
 Diagnoses: 
@@ -165,7 +165,7 @@ Full aggregated data is saved in the folders:
 
 - data_processed -> 1_inpatient_episodes 
    + -> add_days_[add_days]: inpatient datasets, datsets before the year 1996 in separate files.
-   + -> preparation_description: description of incorrect entries, PALA distribution, etc.
+   + -> preparation_description: description of incorrect entries, PALA distribution, etc
 - data_processed -> 1b_inpatient_all_combined: all inaptient episodes combined into one file.
 - data_processed -> 2_in_and_outpatient_episodes -> add_days_[add_days]: the data and description of included episodes
 
@@ -210,19 +210,19 @@ Variable | Data type | Description
 ```dg_outpat```         | charcteg| Outpatient diagnoses during the episode. See below.
 ```dg_inpat_psy_outpat_psy```| character| Psychiatric outpatient diagnoses during psychiatric inpatient episode. Usually to be excluded.
 ```dg_inpat_psy```      | character| If inpatient period contains psychiatric outpatient care, but not psychiatric inpatient care, psychiatric outpatient diagnoses are here. Contains also psychiatric discharge diagnoses from psychiatric inpatien episodes.
-```dg```                | character| Combination of relevant discharge diagnoses, discharge diagnoses from psychiatric inpatient care preferred. See below.
+```dg```                | character| Combination of relevant discharge diagnoses, and diagnoses of outpatient appointments. Discharge diagnoses from psychiatric inpatient care preferred. See below.
 
 #### Outpatient Diagnoses
 
-The ```dg_outpat``` variable contains:
+Outpatient diagnoses situate in different variables in different cases:
 
-- Diagnoses of all sinlge outpatient appointments.
+- Diagnoses of all sinlge outpatient appointments are in ```dg_outpat```.
 
-- Diagnoses of all non psychiatric outpatient appointments during non-psychiatric inpatient episodes.
+- Diagnoses of all non psychiatric outpatient appointments during non-psychiatric inpatient episodes are in ```dg_outpat```.
 
 - If non psychiatric inpatient episode contains psychiatric outpatient appointments, the non psychiatric outpatient diagnoses are in ```dg_outpat```. The psychiatric outpaitent diagnoses are in ```dg_inpat_psy```.
 
-- If psychiatric inpatient episode contains non psychiatric outpatient appointments, they are in ```dg_outpat```. Psychiatric outpatient diagnoses during psychiatric inpatient episodes are in ```dg_inpat_psy_outpat_psy```.
+- If psychiatric inpatient episode contains non psychiatric outpatient appointments, they are in ```dg_outpat```. Psychiatric outpatient diagnoses during psychiatric inpatient episodes are in ```dg_inpat_psy_outpat_psy``` (usually excluded). 
 
 The ```dg_outpat``` variable should be excluded when only discharge diagnoses are collected.
 
@@ -230,11 +230,12 @@ The ```dg_outpat``` variable should be excluded when only discharge diagnoses ar
 
 #### Variable ```dg```
 
-Combination of relevant discharge diagnoses and outpatient diagoses, psychiatric diagnoses are preferred:
+Combination of discharge diagnoses from inpatient episodes only, and outpatient diagoses . From psychiatric inpatient episodes, only diagnoses from psychiatry:
 
 - when ```inpatient== TRUE & inpatient_psy == FALSE```, variable ```dg_inpat``` included,
 - when ```inpatient== TRUE & inpatient_psy == TRUE```, variable ```dg_inpat_psy``` included,
 - when ```inpatient== FALSE```, variable ```dg_outpat``` included.
+
 
 ## Subset Processed Data & Count Episodes and Time Spent in Hospital by Person
 
