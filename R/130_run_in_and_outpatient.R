@@ -4,7 +4,7 @@
 #
 # Author: Kimmo Suokas
 #
-# In and outpatient episodes, combine.
+# Inpatient and outpatient episodes, combine.
 #
 # Source files -----------------------------------------------------------------
 #
@@ -179,7 +179,7 @@ aggregate_specialized_care_episodes <- function(part) {
   
   # aggregation of outpatient appointments with inpatient periods ---------------------------------
   # 
-  # a combination on inpatient and outpatient register-entries is here called an episode
+  # a combination on inpatient and outpatient register entries is here called an episode
   
   setorderv(d3, c('shnro', 'tulopvm', 'lahtopvm'))
   
