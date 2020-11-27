@@ -33,7 +33,7 @@ Combinations of these criteria form four models:
 Model   |  Description
 :-------|:-------------
 Model 1 | A new hospitalization may start the next day after a previous one. No minimun length for a hospitalization. **The most liberal model.**
-Model 2 | A new hospitalization may start the next day after a previous one. Minimun length for a hospitalization is overnight, ie. admission and discharge must take place on different days, otherwise the visit is considered as an outpatient visit. **F. ex. CEPHOS-LINK*'
+Model 2 | A new hospitalization may start the next day after a previous one. Minimun length for a hospitalization is overnight, ie. admission and discharge must take place on different days, otherwise the visit is considered as an outpatient visit. **F. ex. CEPHOS-LINK**
 Model 3 | A new hospitalization may start after one whole day outside the hopsital after the previus one. No minimun length for a hospitalization. **F. ex REDD.**
 Model 4 | A new hospitalization may start after one whole day outside the hopsital after the previus one.  Minimun length for a hospitalization is overnight, ie. admission and discharge must take place on different days, otherwise the visit is considered as an outpatient visit. **The most coservative model.**
 
