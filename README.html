@@ -508,19 +508,19 @@ summary {
 <td align="left">Not covered in this method.</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>1967–1995</strong></td>
-<td align="left">ICD-8 until 1986 <br> ICD-9 1987–1995</td>
-<td align="left">The older data is usually provided in three datasetes, years 1969–1986, 1987–1993 and 1994-1995 with different formats. Notice changes in variable codings within datasets.</td>
+<td align="left"><strong>1975–1995</strong></td>
+<td align="left">ICD-8 1975–1986, <br> ICD-9 1987–1995</td>
+<td align="left">The older data is usually provided in three datasetes, years 1969–1986, 1987–1993 and 1994-1995, with slightly different formating in each of them. Notice changes in variable codings within datasets.</td>
 </tr>
 <tr class="odd">
 <td align="left"><strong>1996–2018</strong></td>
 <td align="left">ICD-10</td>
-<td align="left">Hilmo register data is in structured convergent enough for this scipt to run. Refer to Hilmo manuals concerning the minor changes in the data between years.</td>
+<td align="left">Data is convergent enough to be processed together. Refer to Hilmo manuals concerning the minor changes in the data between years.</td>
 </tr>
 <tr class="even">
 <td align="left"><strong>2019 -&gt;</strong></td>
 <td align="left">ICD-10</td>
-<td align="left">Major changes in the variables. Not covered in this script yet.</td>
+<td align="left">some major changes in the variables. Not covered in this script yet.</td>
 </tr>
 </tbody>
 </table>
@@ -529,13 +529,16 @@ summary {
 <h2>1. Data Input:</h2>
 <p>Set the location of the raw data in <strong>0_data_raw_to_parts.R</strong>. The data folder must contain only the data files.</p>
 <p>csv format for data input is used.</p>
-<p>This project comes with fake data to see the scripts in action, starting 1996. Notice, the fake data does not necessary follow the real world patterns in any way! - <strong>Run create_fake_data.R first to generate fake data for testing the script</strong></p>
+<p>This project comes with fake data to see the scripts in action, starting 1996. Notice, the fake data does not necessary follow the real world patterns in any way!</p>
+<ul>
+<li>First, run <strong>create_fake_data.R</strong> to generate data for testing these scripts.</li>
+</ul>
 <p>No example datasets currently provided for the years 1975–1995.</p>
 </div>
 <div id="prepare-data-for-the-aggregation" class="section level2">
 <h2>2. Prepare Data for the Aggregation:</h2>
-<p><strong>Preparations are done in 0_data_raw_to_parts.R</strong></p>
-<p>If your data is in form THL calls the database form, you need to combine the data from different files based on entry id. Variables are in different files and each year is in its own file. Use library(bit64) for long id numbers. - (Example not currently shown)</p>
+<p>Preparations are defined in <strong>0_data_raw_to_parts.R</strong></p>
+<p>If your data is in form THL calls the database form, you need to combine the data from different files based on entry id. Variables are in different files and each year is in its own file. Use library(bit64) for long id numbers. Example not currently shown.</p>
 <p>What needs to be achieved, is to have minimum of the following columns in your data:</p>
 <table style="width:100%;">
 <colgroup>
@@ -584,17 +587,17 @@ summary {
 <tr class="odd">
 <td align="left"><code>TUPVA</code></td>
 <td align="left">integer</td>
-<td align="left">set: as.integer(as.IDate(TUPVA, format = [FORMAT]))</td>
+<td align="left">set: <code>as.integer(as.IDate(TUPVA, format = [FORMAT]))</code></td>
 </tr>
 <tr class="even">
 <td align="left"><code>LPVM</code></td>
 <td align="left">integer</td>
-<td align="left">set: as.integer(as.IDate(LPVM, format = [FORMAT]))</td>
+<td align="left">set: <code>as.integer(as.IDate(LPVM, format = [FORMAT]))</code></td>
 </tr>
 <tr class="odd">
 <td align="left"><code>dg</code></td>
 <td align="left">character</td>
-<td align="left">see below</td>
+<td align="left">Diagnoses, see below</td>
 </tr>
 </tbody>
 </table>
@@ -608,8 +611,10 @@ summary {
 <p>Set <code>n_parts</code> in 0_data_raw_to_parts.R.</p>
 </div>
 </div>
-<div id="processing-of-the-data" class="section level2">
-<h2>3. Processing of the Data</h2>
+<div id="processing-of-the-prepared-data" class="section level2">
+<h2>3. Processing of the Prepared Data</h2>
+<div id="years-19962018-inpatient-and-outpatient-data" class="section level3">
+<h3>Years 1996–2018 Inpatient and Outpatient Data</h3>
 <p>Control the following setting for desired episode identification rules in <strong>1_main_aggregation.R</strong>:</p>
 <table>
 <colgroup>
@@ -653,19 +658,20 @@ summary {
 </tr>
 </tbody>
 </table>
-<div id="days-between-periods-add_days" class="section level3">
-<h3>Days between periods <code>add_days</code></h3>
+<div id="days-between-periods-add_days" class="section level4">
+<h4>Days between periods <code>add_days</code></h4>
 <p>Minimum of full calender days required between two hospital treatment periods:</p>
 <ul>
 <li>0 : a new period may start the next day after the previous one (models 1 and 2).</li>
-<li>1 : there must be one full calender day between two treatment periods (models 3 and 4). If less, Hilmo entries are considered to belong to a single episode (due to unit transfer etc.)</li>
+<li>1 : there must be one full calender day between two treatment periods (models 3 and 4). Otherwise, Hilmo entries are combined into a single episode.</li>
 </ul>
 </div>
-<div id="old-registers-years-19751995" class="section level3">
-<h3>Old registers, years 1975–1995</h3>
-<p>The method prsented here is suitable starting from the year 1975. Years 1969–1986, 1987–1993 and 1994–1995 are processed separately first and combined after that with the data starting from 1996.</p>
+</div>
+<div id="years-19751995-inpatient-data-only" class="section level3">
+<h3>Years 1975–1995, Inpatient Data Only</h3>
+<p>The method presented here is suitable starting from the year 1975. Years 1969–1986, 1987–1993 and 1994–1995 are processed separately first, and after that, all inpatient data is combined.</p>
 <p>Conversions of diagnoses with mental disorders to ICD-10 inclued. ICD-8 was used until 1986, ICD-9 1987–1995 and ICD-10 thereafter. Conversions are preliminary, please check before use.</p>
-<p>Set column names, date formats, define desired diagnostic cathegories for conversion to ICD-10, and define specialities of interest in 120_run_inpatient_old_registers.R.</p>
+<p>Set column names, date formats, define desired diagnostic cathegories for conversion to ICD-10, and define specialities of interest in 120_run_inpatient_old_registers.R before sourcing.</p>
 <p><strong>Notice, no example datasets currently provided for years 1975–1995.</strong></p>
 </div>
 <div id="source-desired-scripts" class="section level3">
@@ -680,16 +686,44 @@ summary {
 </div>
 <div id="data-output" class="section level2">
 <h2>4. Data Output</h2>
-<p>Full aggregated data is saved in the folders:</p>
-<ul>
-<li>data_processed -&gt; 1_inpatient_episodes
-<ul>
-<li>-&gt; add_days_[add_days]: the data</li>
-<li>-&gt; preparation_description: description of incorrect entries, PALA distribution, etc.</li>
-</ul></li>
-<li>data_processed -&gt; 2_in_and_outpatient_episodes -&gt; add_days_[add_days]: the data and description of included episodes</li>
-</ul>
-<p>This test script creates the following data object:</p>
+<p>Processed data is saved in the following subfolders of the folder <strong>data_processed</strong>:</p>
+<table>
+<colgroup>
+<col width="50%"></col>
+<col width="30%"></col>
+<col width="19%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">First level subfolders</th>
+<th align="left">second level</th>
+<th align="left">Data sets</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1_inpatient_episodes</td>
+<td align="left">add_days_[add_days]</td>
+<td align="left">Inpatient datasets, datsets before the year 1996 in separate files.</td>
+</tr>
+<tr class="even">
+<td align="left">-</td>
+<td align="left">preparation_description</td>
+<td align="left">Description of incorrect entries, PALA distribution, etc.</td>
+</tr>
+<tr class="odd">
+<td align="left">1b_inpatient_all_combined</td>
+<td align="left">-</td>
+<td align="left">All inaptient episodes combined into one file.</td>
+</tr>
+<tr class="even">
+<td align="left">2_in_and_outpatient_episodes</td>
+<td align="left">add_days_[add_days]</td>
+<td align="left">Data set with inpatient and outpatient episodes combined. Description of included episodes.</td>
+</tr>
+</tbody>
+</table>
+<p>This test script creates the following data.tables:</p>
 <ul>
 <li><strong>dat_episodes</strong>: processed data with inpatient and outpatient episodes included</li>
 <li><strong>dat_inpatient</strong>: inaptient episodes only</li>
@@ -832,7 +866,7 @@ summary {
 <tr class="even">
 <td align="left"><code>dg_outpat</code></td>
 <td align="left">charcteg</td>
-<td align="left">Outpatient diagnoses during the episode.See below</td>
+<td align="left">Outpatient diagnoses during the episode. See below.</td>
 </tr>
 <tr class="odd">
 <td align="left"><code>dg_inpat_psy_outpat_psy</code></td>
@@ -840,27 +874,32 @@ summary {
 <td align="left">Psychiatric outpatient diagnoses during psychiatric inpatient episode. Usually to be excluded.</td>
 </tr>
 <tr class="even">
-<td align="left"><code>dg_psy_inpat</code></td>
+<td align="left"><code>dg_inpat_psy</code></td>
 <td align="left">character</td>
-<td align="left">If inpatient period contains psychiatric outpatient care, but not inpatient care, psychiatric outpatient diagnoses are here</td>
+<td align="left">If inpatient period contains psychiatric outpatient care, but not psychiatric inpatient care, psychiatric outpatient diagnoses are here. Contains also psychiatric discharge diagnoses from psychiatric inpatien episodes.</td>
 </tr>
 <tr class="odd">
 <td align="left"><code>dg</code></td>
 <td align="left">character</td>
-<td align="left">Combination of relevant discharge diagnoses, discharge diagnoses from psychiatric inpatient care preferred. See below.</td>
+<td align="left">Combination of relevant discharge diagnoses, and diagnoses of outpatient appointments. Discharge diagnoses from psychiatric inpatient care preferred. See below.</td>
 </tr>
 </tbody>
 </table>
-<div id="variable-dg_outpat" class="section level4">
-<h4>Variable <code>dg_outpat</code></h4>
-<p>Includes psychiatric outpatient diagnoses, if the episode contains no psychiatric inpatient care.</p>
-<p>Otherwise, outpatient diagnoses during inpatient care are included.</p>
-<p>This diagnoses should be excluded when only discharge diagnoses are collected.</p>
+<div id="outpatient-diagnoses" class="section level4">
+<h4>Outpatient Diagnoses</h4>
+<p>Outpatient diagnoses situate in different variables in different cases:</p>
+<ul>
+<li><p>Diagnoses of all sinlge outpatient appointments are in <code>dg_outpat</code>.</p></li>
+<li><p>Diagnoses of all non psychiatric outpatient appointments during non-psychiatric inpatient episodes are in <code>dg_outpat</code>.</p></li>
+<li><p>If non psychiatric inpatient episode contains psychiatric outpatient appointments, the non psychiatric outpatient diagnoses are in <code>dg_outpat</code>. The psychiatric outpaitent diagnoses are in <code>dg_inpat_psy</code>.</p></li>
+<li><p>If psychiatric inpatient episode contains non psychiatric outpatient appointments, they are in <code>dg_outpat</code>. Psychiatric outpatient diagnoses during psychiatric inpatient episodes are in <code>dg_inpat_psy_outpat_psy</code> (usually excluded).</p></li>
+</ul>
+<p>The <code>dg_outpat</code> variable should be excluded when only discharge diagnoses are collected.</p>
 <p><br></p>
 </div>
 <div id="variable-dg" class="section level4">
 <h4>Variable <code>dg</code></h4>
-<p>Combination of relevant discharge diagnoses, discharge diagnoses from psychiatric inpatient care preferred:</p>
+<p>Combination of discharge diagnoses from inpatient episodes only, and outpatient diagoses . From psychiatric inpatient episodes, only diagnoses from psychiatry:</p>
 <ul>
 <li>when <code>inpatient== TRUE &amp; inpatient_psy == FALSE</code>, variable <code>dg_inpat</code> included,</li>
 <li>when <code>inpatient== TRUE &amp; inpatient_psy == TRUE</code>, variable <code>dg_inpat_psy</code> included,</li>
@@ -895,14 +934,14 @@ summary {
 <li>only psychiatric outpatient visits when not in inpatient care <code>dat_episodes[psy == TRUE &amp; inpatient == FALSE]</code></li>
 </ul></li>
 </ul>
-<p><br><br> To get number of episodes by person, get .N by shnro, f. ex. number of psychiatric inpatient episodes by person, all years included: + <code>dat_all_inpatient[overnight_psy == TRUE, .N, by = shnro]</code></p>
-<p><br><br> To get number of days hospitalized:</p>
+<p><br><br> To get number of episodes by person, get .N by shnro, f. ex. number of psychiatric inpatient episodes by person (models 2 and 4), all years included: + <code>dat_all_inpatient[overnight_psy == TRUE, .N, by = shnro]</code></p>
+<p><br><br> To get the total number of days hospitalized:</p>
 <ul>
 <li><code>dat_all_inpatient[, .(days_hospitalized = lahtopvm - tulopvm), by = shnro][, .(days_hospitalized = sum(days_hospitalized)), by = shnro][]</code></li>
 </ul>
-<p>To get number of days hospitalized in psychiatric care:</p>
+<p>To get the number of days hospitalized in psychiatric care:</p>
 <ul>
-<li><code>dat_all_inpatient[psy == TRUE, .(days_hospitalized = lahtopvm - tulopvm), by = shnro][, .(days_hospitalized = sum(days_hospitalized)), by = shnro][]</code>
+<li><code>dat_all_inpatient[psy == TRUE, .(days_hospitalized_psy = lahtopvm_psy_inpat - tulopvm_psy_inpat), by = shnro][, .(days_hospitalized = sum(days_hospitalized_psy)), by = shnro][]</code>
 <ul>
 <li>Note: if patient is transferred from psychiatric inpatient care to other speciality and then back, also the days spent in other speciality are covered. Days spent in other specialties after the last discharge (or before the first admission to psychiatry) are not coverd.</li>
 </ul></li>
