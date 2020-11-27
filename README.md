@@ -164,7 +164,7 @@ Set column names, date formats, define desired diagnostic cathegories for conver
 Full aggregated data is saved in the folders:
 
 - data_processed -> 1_inpatient_episodes 
-   + -> add_days_[add_days]: inpatient dataset, datset before the year 1996 in separate files.
+   + -> add_days_[add_days]: inpatient datasets, datsets before the year 1996 in separate files.
    + -> preparation_description: description of incorrect entries, PALA distribution, etc.
 - data_processed -> 1b_inpatient_all_combined: all inaptient episodes combined into one file.
 - data_processed -> 2_in_and_outpatient_episodes -> add_days_[add_days]: the data and description of included episodes
