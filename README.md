@@ -239,7 +239,7 @@ Combination of discharge diagnoses from inpatient episodes only, and outpatient 
 - when ```inpatient== FALSE```, variable ```dg_outpat``` included.
 
 
-## Subset Processed Data & Count Episodes and Time Spent in Hospital by Person
+## 5. Subset Processed Data & Count Episodes and Time Spent in Hospital by Person
 
 If only overnight episodes are considered as inpatient treatments (models 2 and 4):
 
