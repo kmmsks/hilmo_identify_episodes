@@ -140,7 +140,7 @@ Variable | Description
 Minimum of full calender days required between two hospital treatment periods:
 
 - 0 : a new period may start the next day after the previous one (models 1 and 2).
-- 1 : there must be one full calender day between two treatment periods (models 3 and 4). If less, Hilmo entries are considered to belong to a single episode (due to unit transfer etc.)
+- 1 : there must be one full calender day between two treatment periods (models 3 and 4). Otherwise, Hilmo entries are combined into a single episode.
 
 ### Years 1975&ndash;1995, Inpatient Data Only
 
