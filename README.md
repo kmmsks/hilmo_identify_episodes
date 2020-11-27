@@ -207,24 +207,30 @@ Variable | Data type | Description
 ```inpatient_psy```     |Logical| Psychiatric inpatient care included in the episode.
 ```n_rows_episode```    |Integer | Number of rows aggregated to this inpatient episode.
 ```outpat_same_day```   | Logical| More than one outpatient visit on the same day.           
-```dg_outpat```         | charcteg| Outpatient diagnoses during the episode.See below
+```dg_outpat```         | charcteg| Outpatient diagnoses during the episode. See below.
 ```dg_inpat_psy_outpat_psy```| character| Psychiatric outpatient diagnoses during psychiatric inpatient episode. Usually to be excluded.
-```dg_psy_inpat```      | character| If inpatient period contains psychiatric outpatient care, but not inpatient care, psychiatric outpatient diagnoses are here
+```dg_inpat_psy```      | character| If inpatient period contains psychiatric outpatient care, but not psychiatric inpatient care, psychiatric outpatient diagnoses are here. Contains also psychiatric discharge diagnoses from psychiatric inpatien episodes.
 ```dg```                | character| Combination of relevant discharge diagnoses, discharge diagnoses from psychiatric inpatient care preferred. See below.
 
-#### Variable ```dg_outpat```
+#### Outpatient Diagnoses
 
-Includes psychiatric outpatient diagnoses, if the episode contains no psychiatric inpatient care.
+The ```dg_outpat``` variable contains:
 
-Otherwise, outpatient diagnoses during inpatient care are included. 
+- Diagnoses of all sinlge outpatient appointments.
 
-This diagnoses should be excluded when only discharge diagnoses are collected.
+- Diagnoses of all non psychiatric outpatient appointments during non-psychiatric inpatient episodes.
+
+- If non psychiatric inpatient episode contains psychiatric outpatient appointments, the non psychiatric outpatient diagnoses are in ```dg_outpat```. The psychiatric outpaitent diagnoses are in ```dg_inpat_psy```.
+
+- If psychiatric inpatient episode contains non psychiatric outpatient appointments, they are in ```dg_outpat```. Psychiatric outpatient diagnoses during psychiatric inpatient episodes are in ```dg_inpat_psy_outpat_psy```.
+
+The ```dg_outpat``` variable should be excluded when only discharge diagnoses are collected.
 
 <br>
 
 #### Variable ```dg```
 
-Combination of relevant discharge diagnoses, discharge diagnoses from psychiatric inpatient care preferred:
+Combination of relevant discharge diagnoses and outpatient diagoses, psychiatric diagnoses are preferred:
 
 - when ```inpatient== TRUE & inpatient_psy == FALSE```, variable ```dg_inpat``` included,
 - when ```inpatient== TRUE & inpatient_psy == TRUE```, variable ```dg_inpat_psy``` included,
