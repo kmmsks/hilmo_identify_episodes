@@ -48,12 +48,12 @@ Model 3 was used in:
 ## Script Purpose: 
 1. To propose a method for aggregating Hilmo entries in order to identify actual admissions, discharges, and discharge diagnoses from the register with different criteria. This is necessary in order to find out: 
    + dates of admission and discharge, i.e. the period actually spent in the hospital,
-   + dates of admission to and discharge from psychiatric care, if a single hospitalization includes care in more than one specialty,
-   + actual discharge diagnoses at the end of the hospitalization, or the last diagnosis from certain specialty, in this case psychiatry, and the service provider from where the discharge takes place.
+   + dates of admission to and discharge from psychiatric care, if a single hospitalization included care in more than one specialty,
+   + actual discharge diagnoses at the end of the hospitalization, or the last diagnosis from certain specialty, in this case psychiatry, and the service provider from where the discharge took place.
 <br><br>
-2. To tell apart register entries related to outpatient episodes that take place during an inpatient care. There may be a need to consider these outpatient entries as a part of the inpatient care, not as separate episodes.
+2. To tell apart register entries related to outpatient episodes that took place during an inpatient care. There may be a need to consider these outpatient entries as a part of the inpatient care, not as separate episodes.
 
-3. To provide this script accessible for critical evaluation and further utilization (despite the actual register data is not openly available). The aim is to let future (at least clinically oriented) researchers to focus on their actual research, not technicalities. 
+3. To provide this script accessible for critical evaluation and further utilization (despite the actual register data is not openly available). The aim is to let future (at least clinically oriented) researchers to focus more on their actual research, and less on technicalities like this. 
 
 ## Covered Register Years
 
