@@ -83,10 +83,9 @@ No example datasets currently provided for the years 1975&ndash;1995.
 
 ## 2. Prepare Data for the Aggregation:
 
-**Preparations are done in 0_data_raw_to_parts.R**
+Preparations are defined in **0_data_raw_to_parts.R**
 
-If your data is in form THL calls the database form, you need to combine the data from different files based on entry id. Variables are in different files and each year is in its own file. Use library(bit64) for long id numbers. 
-- (Example not currently shown)
+If your data is in form THL calls the database form, you need to combine the data from different files based on entry id. Variables are in different files and each year is in its own file. Use library(bit64) for long id numbers. Example not currently shown.
 
 What needs to be achieved, is to have minimum of the following columns in your data:
 
@@ -100,7 +99,7 @@ Variable | Data type | Description
 ```EA```    | character | (as above)
 ```TUPVA``` | integer   | set: as.integer(as.IDate(TUPVA, format = [FORMAT]))
 ```LPVM```  | integer   | set: as.integer(as.IDate(LPVM, format = [FORMAT]))
-```dg```    | character | see below
+```dg```    | character | Diagnoses, see below
 
 Diagnoses: 
 - One register entry may contain multiple diagnoses, each in its own column. 
@@ -121,8 +120,9 @@ To determine the optimal part size is out of scope here. See what is small enoug
 Set ```n_parts``` in  0_data_raw_to_parts.R.
 
 
-## 3. Processing of the Data
+## 3. Processing of the Prepared Data
 
+### Years 1996;ndash;2018 inpatient data and years 2006;ndash;2018 also outpaitent data
 Control the following setting for desired episode identification rules in **1_main_aggregation.R**:
 
 Variable | Description
@@ -135,20 +135,20 @@ Variable | Description
 ```PALA_inpatient``` <br> ```PALA_outpatient``` | Register entry types defining treatments types of interest, see Hilmo manuals for details
 ```specialties_of_interest``` |  Define speciality (psychiatry in this case). See erikoisala (EA) in Hilmo manuals. Notice changes in the coding between years.
 
-### Days between periods ```add_days``` 
+#### Days between periods ```add_days``` 
 
 Minimum of full calender days required between two hospital treatment periods:
 
 - 0 : a new period may start the next day after the previous one (models 1 and 2).
 - 1 : there must be one full calender day between two treatment periods (models 3 and 4). If less, Hilmo entries are considered to belong to a single episode (due to unit transfer etc.)
 
-### Old registers, years 1975&ndash;1995
+### Years 1975&ndash;1995, inpatient only
 
-The method prsented here is suitable starting from the year 1975. Years 1969&ndash;1986, 1987&ndash;1993 and 1994&ndash;1995 are processed separately first and combined after that with the data starting from 1996.
+The method presented here is suitable starting from the year 1975. Years 1969&ndash;1986, 1987&ndash;1993 and 1994&ndash;1995 are processed separately first, and after that, all inpatient data is combined.
 
 Conversions of diagnoses with mental disorders to ICD-10 inclued. ICD-8 was used until 1986, ICD-9 1987&ndash;1995 and ICD-10 thereafter. Conversions are preliminary, please check before use.
 
-Set column names, date formats, define desired diagnostic cathegories for conversion to ICD-10, and define specialities of interest in 120_run_inpatient_old_registers.R.
+Set column names, date formats, define desired diagnostic cathegories for conversion to ICD-10, and define specialities of interest in 120_run_inpatient_old_registers.R before sourcing.
 
 **Notice, no example datasets currently provided for years 1975&ndash;1995.**
 
@@ -166,6 +166,7 @@ Full aggregated data is saved in the folders:
 - data_processed -> 1_inpatient_episodes 
    + -> add_days_[add_days]: the data
    + -> preparation_description: description of incorrect entries, PALA distribution, etc.
+- data_processed -> 1b_inpatient_all_combined: the data with all inaptient episodes combined.
 - data_processed -> 2_in_and_outpatient_episodes -> add_days_[add_days]: the data and description of included episodes
 
 This test script creates the following data object:
@@ -249,17 +250,17 @@ If all episodes with any register entry from inpatient care (ie. also shorter th
    + only psychiatric outpatient visits when not in inpatient care ```dat_episodes[psy == TRUE & inpatient == FALSE]```
    
 <br><br>
-To get number of episodes by person, get .N by shnro, f. ex. number of psychiatric inpatient episodes by person, all years included:
+To get number of episodes by person, get .N by shnro, f. ex. number of psychiatric inpatient episodes by person (models 2 and 4), all years included:
    + ```dat_all_inpatient[overnight_psy == TRUE, .N, by = shnro]```
 
 <br><br>
-To get number of days hospitalized:
+To get the total number of days hospitalized:
 
 - ```dat_all_inpatient[, .(days_hospitalized = lahtopvm - tulopvm), by = shnro][, .(days_hospitalized = sum(days_hospitalized)), by = shnro][]```
 
-To get number of days hospitalized in psychiatric care:
+To get the number of days hospitalized in psychiatric care:
 
-- ```dat_all_inpatient[psy == TRUE, .(days_hospitalized = lahtopvm - tulopvm), by = shnro][, .(days_hospitalized = sum(days_hospitalized)), by = shnro][]```
+- ```dat_all_inpatient[psy == TRUE, .(days_hospitalized_psy = lahtopvm_psy_inpat - tulopvm_psy_inpat), by = shnro][, .(days_hospitalized = sum(days_hospitalized_psy)), by = shnro][]```
    + Note: if patient is transferred from psychiatric inpatient care to other speciality and then back, also the days spent in other speciality are covered. Days spent in other specialties after the last discharge (or before the first admission to psychiatry) are not coverd. 
    
 
