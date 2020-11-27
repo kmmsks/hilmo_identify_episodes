@@ -122,7 +122,7 @@ Set ```n_parts``` in  0_data_raw_to_parts.R.
 
 ## 3. Processing of the Prepared Data
 
-### Years 1996ndash;2018 inpatient data and years 2006;ndash;2018 also outpaitent data
+### Years 1996&ndash;2018 inpatient data and years 2006&ndash;2018 also outpaitent data
 Control the following setting for desired episode identification rules in **1_main_aggregation.R**:
 
 Variable | Description
