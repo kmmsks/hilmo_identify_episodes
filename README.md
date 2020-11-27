@@ -159,7 +159,7 @@ Set column names, date formats, define desired diagnostic cathegories for conver
 - ```source(here('R', '120_run_inpatient_aggregation_old_registers.R'))```, this identifies inpatient episodes 1975&ndash;1995. Go through settings in this file in detail.
 - ```source(here('R', '122_combine_inpatient_all_years.R'))```, combine all inpatient episodes into one file. Identifys episodes that continue between datasets.
 
-## 4. Data Output
+## Data Output
 
 Processed data is saved in the following subfolders of the folder **data_processed**:
 
@@ -239,7 +239,7 @@ Combination of discharge diagnoses from inpatient episodes only, and outpatient 
 - when ```inpatient== FALSE```, variable ```dg_outpat``` included.
 
 
-## 5. Subset Processed Data & Count Episodes and Time Spent in Hospital by Person
+## 4. Subset Processed Data & Count Episodes and Time Spent in Hospital by Person
 
 If only overnight episodes are considered as inpatient treatments (models 2 and 4):
 
