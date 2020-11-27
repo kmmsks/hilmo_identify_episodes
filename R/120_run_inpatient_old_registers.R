@@ -5,7 +5,7 @@
 # Author: Kimmo Suokas
 #
 
-# Registers 1969-1993 have different data forms than 1996 and after. 
+# Registers 1969-1995 have different data forms than 1996 and after. 
 # Datasets need harmonization
 
 # In this file, go through settings for each time period with different data forms.

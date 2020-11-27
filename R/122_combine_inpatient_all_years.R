@@ -1,3 +1,11 @@
+#
+#
+# Identify Hilmo episodes // Hilmojen ketjutus
+#
+# Author: Kimmo Suokas
+#
+# Combine all inpatient data. A new aggregation must be done to combine episodes that continue over data sets.
+
 
 setwd(dir$d2_aggregated_all)
 
@@ -112,7 +120,8 @@ gc()
 
 # save --------------------------------------------------------------------------------------------------------
 
-write_fst(d1, here('data_processed', '1b_inpatient_all_combined', paste0('data_inpatient_', 'add_days_', add_days, '_all_years.fst')), compress = compression)
+write_fst(d1, here('data_processed', '1b_inpatient_all_combined', 
+                   paste0('data_inpatient_', 'add_days_', add_days, '_all_years.fst')), compress = compression)
 
 dat_all_inpatient <- d1
 
