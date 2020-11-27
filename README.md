@@ -169,7 +169,7 @@ Full aggregated data is saved in the folders:
 - data_processed -> 1b_inpatient_all_combined: all inaptient episodes combined into one file.
 - data_processed -> 2_in_and_outpatient_episodes -> add_days_[add_days]: the data and description of included episodes
 
-This test script creates the following data object:
+This test script creates the following data.tables:
 
 - **dat_episodes**: processed data with inpatient and outpatient episodes included
 - **dat_inpatient**: inaptient episodes only
