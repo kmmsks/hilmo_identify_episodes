@@ -4,11 +4,12 @@ R script to identify hospital admissions, discharges and discharge diagnoses fro
 
 This script identifies all episodes and episodes related to psychiatric care. It can be generalized to other specializes as well.
 
-2020-11-27
+2020-11-29
 
 Author: Kimmo Suokas, kimmo.suokas@tuni.fi
 
 [![DOI](https://zenodo.org/badge/299097747.svg)](https://zenodo.org/badge/latestdoi/299097747)
+
 
 ## Background
 
@@ -16,7 +17,7 @@ In order to identify actual hospital admissions, discharges, and discharge diagn
 
 This is because during a single hospitalization, a new register entry must be supplied every time a hospital transfer, or trasfer form one specialty to another within the hospital occurs. A register entry is also supplied from outpatient and emergency visit, which may take place at the beginning or during the hospitalization.
 
-In previous research, up to 25 % of the psychiatric inpatient care related register entries have been related to transfers during an actual hospitalizations ([CEPHOS-LINK)](https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186) project, p. 35).
+In previous research, up to 25 % of the psychiatric inpatient care related register entries have been related to transfers during an actual hospitalizations ([CEPHOS-LINK](https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186) project, p. 35).
 
 Hospitalization may start from emergency clinic, and during inpatient care, transfers within and between hospitals and outpatient appointments may take place. Hilmo entries of these appointments are registered with possibly preliminary dignoses of that time. Hence, it is important to first identify the actual discharges and then identify the discharge diagnoses.
 
@@ -57,7 +58,7 @@ Model 3 was used in:
 
 ## Covered Register Years
 
-The Disharge Reister was launched in 1969. The method presented here is suitable starting from the year 1975. Before that, recognizing psychiatric treatments is not univocal, and person identifications have more mistakes.
+The Disharge Reister was launched in 1969. The method presented here is suitable starting from the year 1975. Before that, recognizing psychiatric treatments is not univocal, and person identifications have more errors.
 
 Years  |  Diagnoses | Description
 :------|:-----------|:-----------
@@ -117,7 +118,7 @@ If you have full register, you may need to process the data in smaller parts (ch
 
 To determine the optimal part size is out of scope here. See what is small enough on your machine. In this example, five parts are used to demonstrate the action.
 
-Set ```n_parts``` in  0_data_raw_to_parts.R.
+Set the desired number of parts, ```n_parts```, in  0_data_raw_to_parts.R.
 
 
 ## 3. Processing of the Prepared Data
@@ -241,6 +242,8 @@ Combination of discharge diagnoses from inpatient episodes only, and outpatient 
 
 ## 4. Subset Processed Data & Count Episodes and Time Spent in Hospital by Person
 
+### Only Overnight Episodes Considers as Inpatient episodes
+
 If only overnight episodes are considered as inpatient treatments (models 2 and 4):
 
 - Psychiatric inpatient episodes, all years included:
@@ -248,7 +251,8 @@ If only overnight episodes are considered as inpatient treatments (models 2 and 
 - Psychiatric outpatient episodes, starting from the year ```outpatient_start_year```
    + including psychiatric outpatient visits during non psychiatric inpatient care ```dat_episodes[psy == TRUE & overnight_psy == FALSE]```
    + only psychiatric outpatient visits when not in inpatient care ```dat_episodes[psy == TRUE & overnight_all == FALSE]```
-<br><br>
+
+### All Episodes with Inpatient Entries
 
 If all episodes with any register entry from inpatient care (ie. also shorter than overnight episodes) are considered inpatient care (models 1 and 3):
 
@@ -258,14 +262,18 @@ If all episodes with any register entry from inpatient care (ie. also shorter th
    + including psychiatric outpatient visits during non psychiatric inpatient care ```dat_episodes[psy == TRUE & inpatient_psy == FALSE]```
    + only psychiatric outpatient visits when not in inpatient care ```dat_episodes[psy == TRUE & inpatient == FALSE]```
    
-<br><br>
+### Number of Episodes by Person
+
 To get number of episodes by person, get .N by shnro, f. ex. number of psychiatric inpatient episodes by person (models 2 and 4), all years included:
    + ```dat_all_inpatient[overnight_psy == TRUE, .N, by = shnro]```
 
-<br><br>
+### Number of Days Hospitalized by Person
+
 To get the total number of days hospitalized:
 
 - ```dat_all_inpatient[, .(days_hospitalized = lahtopvm - tulopvm), by = shnro][, .(days_hospitalized = sum(days_hospitalized)), by = shnro][]```
+
+### Number of Days wiht Hospitalized in Psychiatric Care by Person
 
 To get the number of days hospitalized in psychiatric care:
 
@@ -275,6 +283,6 @@ To get the number of days hospitalized in psychiatric care:
 
 ## Citation
 
-Suokas, K (2020). hilmo_identify_episodes (v1.0.0) [Source code]. https://github.com/kmmsks/hilmo_identify_episodes. doi: 10.5281/zenodo.4095154.
+Suokas, K (2020). hilmo_identify_episodes (v1.0.2) [Source code]. https://github.com/kmmsks/hilmo_identify_episodes. doi: 10.5281/zenodo.4295838.
 
 <br><br><br>
