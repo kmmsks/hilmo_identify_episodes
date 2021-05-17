@@ -196,6 +196,6 @@ write_xlsx(description_inpatient,
   )
 
 setwd(here())
-rm(a,b,c, parts_out)
+rm(a,b,c, parts_out, i)
 ## end
 
