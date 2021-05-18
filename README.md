@@ -8,8 +8,6 @@ This script identifies all episodes and episodes related to psychiatric care. It
 
 Author: Kimmo Suokas, kimmo.suokas@tuni.fi
 
-#[![DOI](https://zenodo.org/badge/299097747.svg)](https://zenodo.org/badge/latestdoi/299097747)
-
 
 ## Background
 
