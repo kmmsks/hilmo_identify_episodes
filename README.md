@@ -1,14 +1,14 @@
-# hilmo_identify_episodes
+# hilmo_identify_episodes v 1.1.0-beta
 
 R script to identify hospital admissions, discharges and discharge diagnoses from the Finnish [Care Register for Health Care](https://thl.fi/en/web/thlfi-en/statistics/information-on-statistics/register-descriptions/care-register-for-health-care) ("Hilmo" register) between years 1975&ndash;2018. 
 
 This script identifies all episodes and episodes related to psychiatric care. It can be generalized to other specializes as well.
 
-v 1.1.0-beta 2021-05-18
+2021-05-18
 
 Author: Kimmo Suokas, kimmo.suokas@tuni.fi
 
-[![DOI](https://zenodo.org/badge/299097747.svg)](https://zenodo.org/badge/latestdoi/299097747)
+#[![DOI](https://zenodo.org/badge/299097747.svg)](https://zenodo.org/badge/latestdoi/299097747)
 
 
 ## Background
