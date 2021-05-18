@@ -284,12 +284,12 @@ To get the number of days hospitalized in psychiatric care:
 
 ## Version History
 
-- v 1.1.0 (2021-05-18): Inferene of disharge dates fixed. Fake data modified. Typos fixed.
+- v 1.1.0 (2021-05-18): Inference of discharge dates fixed. Fake data modified. Typos.
 
-- v 1.0.2 (2020-11-29): First stable version. In this version, however, ```lahtopvm``` disharge date was the date of disharge in the register entry eith the latest admission. This may give too early discharge dates. Admission dates and numbers of episodes were correctly calulated. 
+- v 1.0.2 (2020-11-29): First stable version. In this version, however, discharge date (```lahtopvm```) was the date of discharge in the register entry with the latest admission. This may give too early discharge dates. Admission dates and numbers of episodes were correctly calculated. 
 
 ## Citation
 
-Suokas, K (2020). hilmo_identify_episodes (v1.0.2) [Source code]. https://github.com/kmmsks/hilmo_identify_episodes. doi: 10.5281/zenodo.4295838.
+Suokas, K (2020). hilmo_identify_episodes (v1.1.0) [Source code]. https://github.com/kmmsks/hilmo_identify_episodes. doi: XXX.
 
 <br><br><br>
