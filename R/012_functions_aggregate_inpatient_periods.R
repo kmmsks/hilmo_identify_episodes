@@ -20,9 +20,6 @@ aggregate_inpatient_periods <- function(d1, years_1996_andafter = TRUE) {
   
   # the actual chaining: check if row admission date is greater than the highest discharge date so far (+ add_days)  
   
-  #d1[, `:=`(j_tulopvm = TUPVA[1], j_lahtopvm = LPVM[.N], subgroup = .GRP), 
-  #   by = .(shnro, g = cumsum(TUPVA > highest_so_far + add_days)) ] ####
-
   d1[, `:=`(subgroup = .GRP), 
      by = .(shnro, g = cumsum(TUPVA > highest_so_far + add_days)) ] ####
   
@@ -33,9 +30,6 @@ aggregate_inpatient_periods <- function(d1, years_1996_andafter = TRUE) {
   ###
   ## d2: aggregate rows based on the chaining
   #
-  
-  #d2 <- d1[,.(tulopvm = unique(j_tulopvm), lahtopvm = unique(j_lahtopvm), psy = any(psy > 0), n_rows_inpat = .N), 
-  #         by = .(shnro, episode_inpatient)]
   
   d2 <- d1[,.(tulopvm = min(TUPVA), lahtopvm = max(LPVM), psy = any(psy > 0), n_rows_inpat = .N), 
            by = .(shnro, episode_inpatient)]
