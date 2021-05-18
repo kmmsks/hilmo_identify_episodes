@@ -54,9 +54,24 @@ fake_data[, `:=`(TUPVA = format(as.IDate(TUPVA), '%d-%b-%y'),
                  LPVM  = format(as.IDate(LPVM) , '%d-%b-%y')
 )]
 
+#
+add_person <- data.table(
+  shnro = rep('1000A', 10),
+  vuosi = rep(2014,10),
+  ILAJI = c(rep(1,9), 2),
+  PALTU = sample(5000:5100, size = 10, replace = TRUE),
+  PALA  = c(91, 94, 1, 1, 92, 1, 1, 1, 92, 1 ),
+  EA    = c(70, 98, 15, 70, 70, 77, 70, 10, 70, 10),
+  TUPVA = c('01-helmi-14', '02-helmi-14', '02-helmi-14', '03-helmi-14', '10-helmi-14', '17-helmi-14', '21-helmi-14', '21-helmi-14', '05-huhti-14', format(as.IDate(fake_end)-2, '%d-%b-%y')),
+  LPVM  = c('01-helmi-14', '02-helmi-14', '03-helmi-14', '16-helmi-14', '10-helmi-14', '20-helmi-14', '21-helmi-14', '27-helmi-14', '05-huhti-14', format(as.IDate(fake_end)+9, '%d-%b-%y')),
+  DG1   = c('F29', 'F20', 'F29', 'F31', 'F29', 'G45', 'F31', 'I25', 'F43', 'I25'),
+  DG2   = c('F41', '', 'G49', 'F40', 'F39', 'F20', 'G45', 'F31', 'F31', 'F00' )
+)
 
-
-
+fake_data <- rbindlist(list(
+  fake_data, add_person
+))
+setorder(fake_data, shnro)
 
 # save 
 dir.create(here('data_raw_fake'))
@@ -65,5 +80,5 @@ fake_data[, vuosi2 := vuosi] # just to include vuosi in the .SD
 
 fake_data[, fwrite(.SD, here('data_raw_fake', paste0(vuosi2, '.csv'))), by = vuosi2]
 
-rm(d, fake_end, fake_size, fake_start, ilaji2)
+rm(d, fake_end, fake_size, fake_start, ilaji2, add_person)
 gc()
