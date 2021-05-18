@@ -4,7 +4,7 @@ R script to identify hospital admissions, discharges and discharge diagnoses fro
 
 This script identifies all episodes and episodes related to psychiatric care. It can be generalized to other specializes as well.
 
-2020-11-29
+v 1.1.0 2021-05-18
 
 Author: Kimmo Suokas, kimmo.suokas@tuni.fi
 
@@ -15,15 +15,15 @@ Author: Kimmo Suokas, kimmo.suokas@tuni.fi
 
 In order to identify actual hospital admissions, discharges, and discharge diagnose from the Finnish Care register for health care, multiple register entries may need be combined, as one hospitalization may consist of multiple register entries. 
 
-This is because during a single hospitalization, a new register entry must be supplied every time a hospital transfer, or trasfer form one specialty to another within the hospital occurs. A register entry is also supplied from outpatient and emergency visit, which may take place at the beginning or during the hospitalization.
+This is because during a single hospitalization, a new register entry must be supplied every time a hospital transfer, or transfer form one specialty to another within the hospital occurs. A register entry is also supplied from outpatient and emergency visit, which may take place at the beginning or during the hospitalization.
 
 In previous research, up to 25 % of the psychiatric inpatient care related register entries have been related to transfers during an actual hospitalizations ([CEPHOS-LINK](https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186) project, p. 35).
 
-Hospitalization may start from emergency clinic, and during inpatient care, transfers within and between hospitals and outpatient appointments may take place. Hilmo entries of these appointments are registered with possibly preliminary dignoses of that time. Hence, it is important to first identify the actual discharges and then identify the discharge diagnoses.
+Hospitalization may start from emergency clinic, and during inpatient care, transfers within and between hospitals and outpatient appointments may take place. Hilmo entries of these appointments are registered with possibly preliminary diagnoses of that time. Hence, it is important to first identify the actual discharges and then identify the discharge diagnoses.
 
 In previous papers using the Hilmo register, it is usually mentioned that hospital periods, admissions or discharges were identified. However, usually no criteria, let alone scripts, for this procedure is provided. 
 
-As far as I know, there is no generally know or accepted methods available for identifying treatment episodes. Different sets of criteria have previusly been used:
+As far as I know, there is no generally know or accepted methods available for identifying treatment episodes. Different sets of criteria have previously been used:
 
 - Others require a hospital treatment to start and end on different calender days (f. ex. the [CEPHOS-LINK](https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186) project), ie. an inpatient episode should last overnight. Others do not require tihis.
 - Others state that a new treatment period may start the next day after previous one (f. ex. [CEPHOS-LINK](https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186)), others require a full calender day outside of hospital in between two treatment periods (f. ex. [REDD project](http://urn.fi/URN:NBN:fi-fe201204193720)). This criteria is used to stronger differentiate transfers between hospitals and 'real' rehospitalizations.
@@ -33,12 +33,12 @@ Combinations of these criteria form four models:
 
 Model   |  Description
 :-------|:-------------
-Model 1 | A new hospitalization may start the next day after a previous one. No minimun length for a hospitalization. **The most liberal model.**
-Model 2 | A new hospitalization may start the next day after a previous one. Minimun length for a hospitalization is overnight, ie. admission and discharge must take place on different days, otherwise the visit is considered as an outpatient visit. **F. ex. CEPHOS-LINK**
-Model 3 | A new hospitalization may start after one whole day outside the hopsital after the previus one. No minimun length for a hospitalization. **F. ex REDD.**
-Model 4 | A new hospitalization may start after one whole day outside the hopsital after the previus one.  Minimun length for a hospitalization is overnight, ie. admission and discharge must take place on different days, otherwise the visit is considered as an outpatient visit. **The most coservative model.**
+Model 1 | A new hospitalization may start the next day after a previous one. No minimum length for a hospitalization. **The most liberal model.**
+Model 2 | A new hospitalization may start the next day after a previous one. Minimum length for a hospitalization is overnight, ie. admission and discharge must take place on different days, otherwise the visit is considered as an outpatient visit. **F. ex. CEPHOS-LINK**
+Model 3 | A new hospitalization may start after one whole day outside the hospital after the previews one. No minimum length for a hospitalization. **F. ex REDD.**
+Model 4 | A new hospitalization may start after one whole day outside the hospital after the previews one.  Minimum length for a hospitalization is overnight, ie. admission and discharge must take place on different days, otherwise the visit is considered as an outpatient visit. **The most conservative model.**
 
-Models 1 and 3 find admissions, as some of the admissions do not necasserily result in hospitalization. Models 2 and 4 differentiate actual overnight inpatient episodes from other visits. If the focus is on inpatient diachagre diagnoses, model 4 may result with little less preliminary diagnoses included, comparing to model 2.
+Models 1 and 3 find admissions, as some of the admissions do not necessarily result in hospitalization. Models 2 and 4 differentiate actual overnight inpatient episodes from other visits. If the focus is on inpatient discharge diagnoses, model 4 may result with little less preliminary diagnoses included, comparing to model 2.
 
 ### Exampeles of Papers Adopting These Principles
 
@@ -187,19 +187,21 @@ This test script creates the following data.tables:
 Variable | Data type | Description
 :--------|:----------|:--------
 ```episode_inpatient```| integer | Running number of person's inpatient periods.
+```tulopvm```          | date    | Date of admission to inpatient care or date of outpatient visit.
+```lahtopvm```         | date    | Date of discharge from inpatient care, if multiple transfers between specialties, the last one. For outpatient visits, the date of the visit (same as tulopvm).
+```vuosi```             | integer| Year if discharge, ie. year of ```lahtopvm``` (note, year of lahtopvm_psy may be different than ```vuosi```)
 ```psy```               | logical| Episode contains psychiatric care.
+```n_rows_inpat```    | integer  | Number of rows aggregated to this inpatient episode.
+```ea_list```         | character| List of specialties included in the episode.
+```tulopvm_psy_inpat```    | date| Date of admission to psychiatric inpatient care.
+```lahtopvm_psy_inpat```   | date| Date of discharge from psychiatric inpatient care, if multiple transfers between specialties, the last one.
+```dg_inpat```        | character| All diagnoses registered on the date of discharge.
+```dg_inpat_psy```    | character| All diagnoses registered from psychiatry on the date of discharge from psychiatric unit.
+```paltu```           | character| The service provider's code of the unit of the discharge.
+```paltu_psy```       | character| The service provider's code of the psychiatric unit of the last psychiatric discharge.
 ```overnight_all```     | logical| Episode starts and ends on different calender days.
 ```overnight_psy```     | logical| Episode's psychiatric treatment starts and ends on different calender days.
 ```episode_continues``` | logical| True if inpatient episodes continues after the last day coverd in the data. In this case, ```lahtopvm``` is ```NA```.
-```vuosi```             | integer| Year if discharge, ie. year of ```lahtopvm``` (note, year of lahtopvm_psy may be different than ```vuosi```)
-```tulopvm_psy_inpat```    | date| Date of admission to psychiatric inpatient care.
-```lahtopvm_psy_inpat```   | date| Date of discharge from psychiatric inpatient care, if multiple transfers between specialties, the last one.
-```ea_list```         | character| List of specialties included in the episode.
-```paltu```           | character| The service provider's code of the unit of the discharge.
-```paltu_psy```       | character| The service provider's code of the psychiatric unit of the last psychiatric discharge.
-```n_rows_inpat```    | integer  | Number of rows aggregated to this inpatient episode.
-```dg_inpat```        | character| All diagnoses registered on the date of discharge.
-```dg_inpat_psy```    | character| All diagnoses registered from psychiatry on the date of discharge from psychiatric unit.
 
 ### All Episodes, in Addition:
 
@@ -279,7 +281,12 @@ To get the number of days hospitalized in psychiatric care:
 
 - ```dat_all_inpatient[psy == TRUE, .(days_hospitalized_psy = lahtopvm_psy_inpat - tulopvm_psy_inpat), by = shnro][, .(days_hospitalized = sum(days_hospitalized_psy)), by = shnro][]```
    + Note: if patient is transferred from psychiatric inpatient care to other speciality and then back, also the days spent in other speciality are covered. Days spent in other specialties after the last discharge (or before the first admission to psychiatry) are not coverd. 
-   
+
+## Version History
+
+- v 1.1.0 (2021-05-18): Inferene of disharge dates fixed. Fake data modified. Typos fixed.
+
+- v 1.0.2 (2020-11-29): First stable version. In this version, however, ```lahtopvm``` disharge date was the date of disharge in the register entry eith the latest admission. This may give too early discharge dates. Admission dates and numbers of episodes were correctly calulated. 
 
 ## Citation
 
