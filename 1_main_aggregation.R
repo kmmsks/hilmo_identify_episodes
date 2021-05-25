@@ -133,7 +133,7 @@ source(here('R', '130_run_in_and_outpatient.R'))
 
 # Example data not currently provided
 
-#source(here('R', '120_run_inpatient_aggregation_old_registers.R')) # Go through settings in this file in detail.
+#source(here('R', '120_run_inpatient_old_registers.R')) # Go through settings in this file in detail.
 
 
 # Output

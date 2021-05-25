@@ -155,7 +155,7 @@ Set column names, date formats, define desired diagnostic cathegories for conver
 
 - ```source(here('R', '110_run_inpatient_1996_2018.R'))```, this script identifies inpatient episodes 1996&ndash;2018.
 - ```source(here('R', '130_run_in_and_outpatient.R'))```, this script identifies inpatient and outpatient episodes 2006&ndash;2018.
-- ```source(here('R', '120_run_inpatient_aggregation_old_registers.R'))```, this identifies inpatient episodes 1975&ndash;1995. Go through settings in this file in detail.
+- ```source(here('R', '120_run_inpatient_old_registers.R'))```, this identifies inpatient episodes 1975&ndash;1995. Go through settings in this file in detail.
 - ```source(here('R', '122_combine_inpatient_all_years.R'))```, combine all inpatient episodes into one file. Identifys episodes that continue between datasets.
 
 ## Data Output
