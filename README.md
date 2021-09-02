@@ -4,7 +4,10 @@ R script to identify hospital admissions, discharges and discharge diagnoses fro
 
 This script identifies all episodes and episodes related to psychiatric care. It can be generalized to other specializes as well.
 
-2021-09-02
+2021-09-02 
+
+[![DOI](https://zenodo.org/badge/299097747.svg)](https://zenodo.org/badge/latestdoi/299097747)
+
 
 Author: Kimmo Suokas, kimmo.suokas@tuni.fi
 
@@ -288,6 +291,6 @@ To get the number of days hospitalized in psychiatric care:
 
 ## Citation
 
-Suokas, K (2021). hilmo_identify_episodes (v1.1.0) [Source code]. https://github.com/kmmsks/hilmo_identify_episodes. doi: XXX.
+Suokas, K (2021). hilmo_identify_episodes (v1.1.0) [Source code]. https://github.com/kmmsks/hilmo_identify_episodes. doi: 10.5281/zenodo.5381082.
 
 <br><br><br>
