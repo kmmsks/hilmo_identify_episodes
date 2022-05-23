@@ -1,4 +1,4 @@
-# hilmo_identify_episodes v 1.1.0
+# hilmo_identify_episodes v 1.1.1
 
 R script to identify hospital admissions, discharges and discharge diagnoses from the Finnish [Care Register for Health Care](https://thl.fi/en/web/thlfi-en/statistics/information-on-statistics/register-descriptions/care-register-for-health-care) ("Hilmo" register) between years 1975&ndash;2018. 
 
@@ -55,7 +55,7 @@ Model 3 was used in:
 <br><br>
 2. To tell apart register entries related to outpatient episodes that took place during an inpatient care. There may be a need to consider these outpatient entries as a part of the inpatient care, not as separate episodes.
 
-3. To provide this script accessible for critical evaluation and further utilization (despite the actual register data is not openly available). The aim is to let future (at least clinically oriented) researchers to focus more on their actual research, and less on technicalities like this. 
+3. To provide this script accessible for critical evaluation and further utilization (despite the actual register data is not openly available). The aim is to let future researchers to focus more on their actual research, and less on technicalities like this. 
 
 ## Covered Register Years
 
@@ -68,7 +68,7 @@ Years  |  Diagnoses | Description
 **1996&ndash;2018** | ICD-10 | Data is convergent enough to be processed together. Refer to Hilmo manuals concerning the minor changes in the data between years. 
 **2019 ->** | ICD-10 | some major changes in the variables. Not covered in this script yet.
 
-
+Primary care data is covered int registers since 2011. In section 5, a brief description is given.
 
 
 ## 1. Data Input:
@@ -283,7 +283,60 @@ To get the number of days hospitalized in psychiatric care:
 - ```dat_all_inpatient[psy == TRUE, .(days_hospitalized_psy = lahtopvm_psy_inpat - tulopvm_psy_inpat), by = shnro][, .(days_hospitalized = sum(days_hospitalized_psy)), by = shnro][]```
    + Note: if patient is transferred from psychiatric inpatient care to other speciality and then back, also the days spent in other speciality are covered. Days spent in other specialties after the last discharge (or before the first admission to psychiatry) are not coverd. 
 
+## 5. Primary Care
+
+The primary care register (called Avohilmo) has more complex structure than the secondary care registers. Four follow-up points are included in Avohilmo: the first contact, assessment of treatment needs, scheduling of the appointment, the appointment.
+
+To recognize actual appointments that took place  in person, subset the following values in variable ```yhteystapa```:
+- ``` yhteystapa %in% c('R10', 'R20', 'R30', 'R41')```
+
+If you want to subset doctors appointments only, subset the following values in variable ```ammattioikeus```:
+-```ammattioikeus %in% c("001", "002", "031", "032", "034", "701", "702", "717", "718", "720", "722", "723", "724", "810", "811", "900", "901")```
+
+There are few entries, which do not start and end on the same day. Here, only the start date is considered.
+
+After desired subsettings, bind the Avohilmo data with inpatient data, f.ex. ```dat_all_inpatient[overnight_psy == TRUE]``` and exclude primary care appointments during psychiatric inpatient episodes. This needs to be done to recognize discharge diagnoses only.
+
+Example will be provided in the future.
+
+### ICPC-2 conversion
+
+Some primary care providers use ICPC-2 diagnostic classification.
+
+The following schema was used.
+
+```
+# NOT RUN
+
+icpc2_icd10 <-  list(
+  f0= 'P70|P71',
+  f1= 'P15|P16|P17|P19',
+  f2= 'P72',
+  f3= 'P73',
+  f4= 'P79|P74|P02|P82|P75|P78',
+  f5= 'P86|P06|P07|P08',
+  f6= 'P09|P80',
+  f7= 'P85',
+  f8= 'P24',
+  f9= 'P81|P22,P23|P10|P11|P12|P13',
+  fx= 'P18|P98|P76|P99|P29'
+)
+  
+dat[, dg_converted := '']
+
+for( i in c(0:9, 'x')){
+  dat[grepl(icpc2_icd10[pste('f', i)], dg_icpc2, ignore.case = TRUE),
+      dg_converted := paste(na.omit(dg_converted), paste0('F', i), sep = '_')]
+}
+```
+
+conversion codes: Kvist M, Savolainen T, Suomen Kuntaliitto. [ICPC-2 : perusterveydenhuollon kansainvälinen luokitus](https://www.kuntaliitto.fi/julkaisut/2010/1344-icpc-2-perusterveydenhuollon-kansainvalinen-luokitus). Suomen kuntaliitto, Helsinki 2010. p. 194, Finnish version.
+
+[ICPC-2-R: International Classification of Primary Care](https://www.who.int/standards/classifications/other-classifications/international-classification-of-primary-care) see p. 147
+
 ## Version History
+
+v. 1.1.1 (2022-05-23): Info on primary care included.Typos.
 
 - v 1.1.0-beta (2021-05-18): Inference of discharge dates fixed. Fake data supplemented. Typos.
 
