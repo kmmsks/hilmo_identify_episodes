@@ -330,9 +330,9 @@ for( i in c(0:9, 'x')){
 }
 ```
 
-conversion codes: Kvist M, Savolainen T, Suomen Kuntaliitto. [ICPC-2 : perusterveydenhuollon kansainvälinen luokitus](https://www.kuntaliitto.fi/julkaisut/2010/1344-icpc-2-perusterveydenhuollon-kansainvalinen-luokitus). Suomen kuntaliitto, Helsinki 2010. p. 194, Finnish version.
-
-[ICPC-2-R: International Classification of Primary Care](https://www.who.int/standards/classifications/other-classifications/international-classification-of-primary-care) see p. 147
+Conversion codes:
+- Kvist M, Savolainen T, Suomen Kuntaliitto. [ICPC-2 : perusterveydenhuollon kansainvälinen luokitus](https://www.kuntaliitto.fi/julkaisut/2010/1344-icpc-2-perusterveydenhuollon-kansainvalinen-luokitus). Suomen kuntaliitto, Helsinki 2010. p. 194, Finnish version.
+- [ICPC-2-R: International Classification of Primary Care](https://www.who.int/standards/classifications/other-classifications/international-classification-of-primary-care) see p. 147
 
 ## Version History
 
