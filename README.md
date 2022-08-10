@@ -47,6 +47,8 @@ Model 3 was used in:
 
 - Suokas K, Koivisto A, Hakulinen C, et al. Association of Income With the Incidence Rates of First Psychiatric Hospital Admissions in Finland, 1996-2014. JAMA Psychiatry. 2020;77(3):274–284. doi:10.1001/jamapsychiatry.2019.3647
 
+- Ahti J, Kieseppä T, Suvisaari J, et al. Differences in psychosocial functioning between psychotic disorders in the Finnish SUPER study. Schizophrenia Research. 2022;244:10-17. doi:10.1016/j.schres.2022.04.008
+
 ## Script Purpose: 
 1. To propose a method for aggregating Hilmo entries in order to identify actual admissions, discharges, and discharge diagnoses from the register with different criteria. This is necessary in order to find out: 
    + dates of admission and discharge, i.e. the period actually spent in the hospital,
