@@ -51,7 +51,7 @@ Model 3 was used in:
 
 Model 4 was used in:
 
-- Suokas K, Hakulinen C, Sund R. Mortality in persons with recent primary or secondary care contacts for mental disorders in Finland. World Psychiatry. 2022;21(3):470-1
+- Suokas K, Hakulinen C, Sund R, et. al. Mortality in persons with recent primary or secondary care contacts for mental disorders in Finland. World Psychiatry. 2022;21(3):470-1
 
 ## Script Purpose: 
 1. To propose a method for aggregating Hilmo entries in order to identify actual admissions, discharges, and discharge diagnoses from the register with different criteria. This is necessary in order to find out: 
