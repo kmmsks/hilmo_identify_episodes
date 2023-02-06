@@ -331,7 +331,7 @@ icpc2_icd10 <-  list(
 dat[, dg_converted := '']
 
 for( i in c(0:9, 'x')){
-  dat[grepl(icpc2_icd10[pste('f', i)], dg_icpc2, ignore.case = TRUE),
+  dat[grepl(icpc2_icd10[paste0('f', i)], dg_icpc2, ignore.case = TRUE),
       dg_converted := paste(na.omit(dg_converted), paste0('F', i), sep = '_')]
 }
 ```
