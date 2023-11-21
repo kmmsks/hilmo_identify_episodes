@@ -1,4 +1,4 @@
-# hilmo_identify_episodes v 1.1.1
+# hilmo_identify_episodes v 2.0.0-beta
 
 R script to identify hospital admissions, discharges and discharge diagnoses from the Finnish [Care Register for Health Care](https://thl.fi/en/web/thlfi-en/statistics/information-on-statistics/register-descriptions/care-register-for-health-care) ("Hilmo" register) between years 1975&ndash;2018. 
 
