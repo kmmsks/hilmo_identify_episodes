@@ -1,16 +1,21 @@
 # hilmo_identify_episodes v 2.0.0-beta
 
-R script to identify hospital admissions, discharges and discharge diagnoses from the Finnish [Care Register for Health Care](https://thl.fi/en/web/thlfi-en/statistics/information-on-statistics/register-descriptions/care-register-for-health-care) ("Hilmo" register) between years 1975&ndash;2018. 
+An R script to identify hospital admissions, discharges, discharge diagnoses, and outpatient visits outside inpatient episodes from the Finnish [Care Register for Health Care](https://thl.fi/en/web/thlfi-en/statistics/information-on-statistics/register-descriptions/care-register-for-health-care) (the Hilmo register) between since 1975. 
 
-This script identifies all episodes and episodes related to psychiatric care. It can be generalized to other specializes as well.
+This script identifies all inpatient episodes and episodes related to psychiatric care specifically. It can be generalized to other specializes as well. This script handles secondary care inpatient and outpatient data and primary care data.
 
-2021-09-02 
+This scripts supplement this paper: 
+
+Suokas, Gutvilig, Pirkola, Lumme, Hakulinen. Enhancing the accuracy of register-based metrics: Comparing methods for handling overlapping psychiatric register entries in Finnish healthcare registries. Submittied.
+
+2023-XX-YY 
 
 [![DOI](https://zenodo.org/badge/299097747.svg)](https://zenodo.org/badge/latestdoi/299097747)
 
 
-Author: Kimmo Suokas, kimmo.suokas@tuni.fi
+Author: Kimmo Suokas, kimmo.suokas@helsinki.fi
 
+Aqknowledgements: 
 
 ## Background
 
@@ -18,43 +23,36 @@ In order to identify actual hospital admissions, discharges, and discharge diagn
 
 This is because during a single hospitalization, a new register entry must be supplied every time a hospital transfer, or transfer form one specialty to another within the hospital occurs. A register entry is also supplied from outpatient and emergency visit, which may take place at the beginning or during the hospitalization.
 
-In previous research, up to 25 % of the psychiatric inpatient care related register entries have been related to transfers during an actual hospitalizations ([CEPHOS-LINK](https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186) project, p. 35).
-
-Hospitalization may start from emergency clinic, and during inpatient care, transfers within and between hospitals and outpatient appointments may take place. Hilmo entries of these appointments are registered with possibly preliminary diagnoses of that time. Hence, it is important to first identify the actual discharges and then identify the discharge diagnoses.
-
-In previous papers using the Hilmo register, it is usually mentioned that hospital periods, admissions or discharges were identified. However, usually no criteria, let alone scripts, for this procedure is provided. 
-
-As far as I know, there is no generally know or accepted methods available for identifying treatment episodes. Different sets of criteria have previously been used:
-
-- Others require a hospital treatment to start and end on different calender days (f. ex. the [CEPHOS-LINK](https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186) project), ie. an inpatient episode should last overnight. Others do not require tihis.
-- Others state that a new treatment period may start the next day after previous one (f. ex. [CEPHOS-LINK](https://thl.fi/documents/189940/2732416/CEPHOS-LINK+final+scientific+report+2017-03-31+export.pdf/6f206810-5919-415c-82a1-884795732186)), others require a full calender day outside of hospital in between two treatment periods (f. ex. [REDD project](http://urn.fi/URN:NBN:fi-fe201204193720)). This criteria is used to stronger differentiate transfers between hospitals and 'real' rehospitalizations.
-
-
-Combinations of these criteria form four models:
+Based on the previous efforts to handle these issues, four models can be formulated in order to combine overlapping register entries:
 
 Model   |  Description
 :-------|:-------------
-Model 1 | A new hospitalization may start the next day after a previous one. No minimum length for a hospitalization. **The most liberal model.**
-Model 2 | A new hospitalization may start the next day after a previous one. Minimum length for a hospitalization is overnight, ie. admission and discharge must take place on different days, otherwise the visit is considered as an outpatient visit. **F. ex. CEPHOS-LINK**
-Model 3 | A new hospitalization may start after one whole day outside the hospital after the previews one. No minimum length for a hospitalization. **F. ex REDD.**
-Model 4 | A new hospitalization may start after one whole day outside the hospital after the previews one.  Minimum length for a hospitalization is overnight, ie. admission and discharge must take place on different days, otherwise the visit is considered as an outpatient visit. **The most conservative model.**
+Model 1 | A new hospitalization may begin on the day following a previous one, with no specific minimum length required for a hospitalization. **This represents the most liberal approach.**
+Model 2 | A new hospitalization may begin on the day following a previous one. Valid hospitalizations are those that extend over a minimum of two consecutive days, incorporating at least one overnight stay. If both admission and discharge take place on the same day, the visit is classified as an outpatient visit. **This model was used in the CEPHOS-LINK project.**
+Model 3 | "A new hospitalization is allowed after a full day has been spent outside the hospital following the previous one. There is no specific minimum duration required for a hospitalization. **This model was used in the REDD project.**
+Model 4 | A new hospitalization is allowed after a full day has been spent outside the hospital following the previous one. Valid hospitalizations are those that extend over a minimum of two consecutive days, incorporating at least one overnight stay. If both admission and discharge take place on the same day, the visit is classified as an outpatient visit. **This represents the most conservative model.**
 
-Models 1 and 3 find admissions, as some of the admissions do not necessarily result in hospitalization. Models 2 and 4 differentiate actual overnight inpatient episodes from other visits. If the focus is on inpatient discharge diagnoses, model 4 may result with little less preliminary diagnoses included, comparing to model 2.
+Models 1 and 3 find admissions, as some of the admissions do not necessarily result in hospitalization. Models 2 and 4 differentiate overnight inpatient episodes from other visits to hospitals. If the focus is on inpatient discharge diagnoses, model 4 may result with little less preliminary diagnoses included, comparing to model 2.
 
-### Exampeles of Papers Adopting These Principles
+### The Registers
 
-Model 3 was used in:
+The Disharge Reister was launched in 1969. The method presented here is suitable starting from the year 1975. Before that, recognizing psychiatric treatments is not univocal, and person identifications have more errors. For details, see the paper.
 
-- Suokas K, Koivisto A, Hakulinen C, et al. Association of Income With the Incidence Rates of First Psychiatric Hospital Admissions in Finland, 1996-2014. JAMA Psychiatry. 2020;77(3):274–284. doi:10.1001/jamapsychiatry.2019.3647
+Years  |  Diagnoses | Description
+:------|:-----------|:-----------
+**1969&ndash;1974** | ICD-8 | Not covered in this method.
+**1975&ndash;1995** |  | The older data is usually provided in three datasets, with slightly different formatting in each of them. Notice changes in variable coding within the datasets.
+&nbsp;&nbsp;&nbsp;1975&ndash;1986 | ICD-8 | 
+&nbsp;&nbsp;&nbsp;1987&ndash;1993 | ICD-9 |  
+&nbsp;&nbsp;&nbsp;1994&ndash;1995 | ICD-9 | 
+**1996&ndash;2018** | ICD-10 | Data is convergent enough to be processed together. Refer to Hilmo manuals concerning the minor changes in the data between years. 
+&nbsp;&nbsp;&nbsp;1998 -> | ICD-10 | First data on secondary care outpatient visits are included.
+&nbsp;&nbsp;&nbsp;2006 -> | ICD-10 | Secondary care outpatient data are considered consistently comparable across time and service providers achieved.
+&nbsp;&nbsp;&nbsp;2011 -> | ICD-10 and ICPC-2 | Primary care outpatient appointments from public healthcare services are included in the registers.
+**2019 ->** | ICD-10 and ICPC-2 | Major changes in the structure of the data.
 
-- Ahti J, Kieseppä T, Suvisaari J, et al. Differences in psychosocial functioning between psychotic disorders in the Finnish SUPER study. Schizophrenia Research. 2022;244:10-17. doi:10.1016/j.schres.2022.04.008
-
-Model 4 was used in:
-
-- Suokas K, Hakulinen C, Sund R, et. al. Mortality in persons with recent primary or secondary care contacts for mental disorders in Finland. World Psychiatry. 2022;21(3):470-1
-
-## Script Purpose: 
-1. To propose a method for aggregating Hilmo entries in order to identify actual admissions, discharges, and discharge diagnoses from the register with different criteria. This is necessary in order to find out: 
+### Purposes of this script: 
+1. To propose a method for aggregating Hilmo entries in order to identify admissions, discharges, discharge diagnoses, and outpatient visits outside inpatient episodes from the partly overlapping register entries. This is necessary in order to find out: 
    + dates of admission and discharge, i.e. the period actually spent in the hospital,
    + dates of admission to and discharge from psychiatric care, if a single hospitalization included care in more than one specialty,
    + actual discharge diagnoses at the end of the hospitalization, or the last diagnosis from certain specialty, in this case psychiatry, and the service provider from where the discharge took place.
@@ -63,33 +61,50 @@ Model 4 was used in:
 
 3. To provide this script accessible for critical evaluation and further utilization (despite the actual register data is not openly available). The aim is to let future researchers to focus more on their actual research, and less on technicalities like this. 
 
-## Covered Register Years
+## Step-by-stpe processing
 
-The Disharge Reister was launched in 1969. The method presented here is suitable starting from the year 1975. Before that, recognizing psychiatric treatments is not univocal, and person identifications have more errors.
+### 0. Data preprocessing (real data):
 
-Years  |  Diagnoses | Description
-:------|:-----------|:-----------
-**1969&ndash;1974** | ICD-8 | Not covered in this method. 
-**1975&ndash;1995** | ICD-8 1975&ndash;1986, <br> ICD-9 1987&ndash;1995 | The older data is usually provided in three datasetes, years 1969&ndash;1986, 1987&ndash;1993 and 1994-1995, with slightly different formating in each of them. Notice changes in variable codings within datasets.
-**1996&ndash;2018** | ICD-10 | Data is convergent enough to be processed together. Refer to Hilmo manuals concerning the minor changes in the data between years. 
-**2019 ->** | ICD-10 | some major changes in the variables. Not covered in this script yet.
+Go through the scripts the **0_preparation.R**, **0a_preparation_settings_dgs.R**, and **0a_preparation_funs.R** in the folder **R**, and define necessary settings and paths to data.
 
-Primary care data is covered int registers since 2011. In section 5, a brief description is given.
+These scripts harmonize variable names and types over time, recognize treatment types, medical specialties, and diagnoses over time time with varying classifications.
+
+If working with the full registers, you may need to process the data in chunks, due to performance reasons.
+
+The data are usually provided in so called annual format, meaning that data on each year are in separate files. In this step, the preprocessed data are saved longitudinally, meaning that each individual's all data is written into a single file, using `append = TRUE` in `fwrite` function from `library(data.table)`.
+
+Here, the data are divided into chunks based on the first character of the ID variable (called `shnro`).
 
 
-## 1. Data Input:
+### Testing of the scripts with synthetic data
 
-Set the location of the raw data in **0_data_raw_to_parts.R**. The data folder must contain only the data files.
+Synthetic data may be used for testing these scripts. Access to the actual registers is limited.
 
-csv format for data input is used.
+To create data, use function syntetize_data.
 
-This project comes with fake data to see the scripts in action, starting 1996. Notice, the fake data does not necessary follow the real world patterns in any way!
+#### Usage
 
-- First, run **create_fake_data.R** to generate data for testing these scripts.
+`syntetize_data(n_rows = 20000, n_individuals = 1000, 
+                           start_year = 2015, end_year = 2020, seed = 1,
+                           outpatient_proportion = .35, primary_care_proportion = .4, ilaji2_proportion = .05, 
+                          save_data = TRUE, data_folder_name = 'data_main', longitudinal = TRUE)`
 
-No example datasets currently provided for the years 1975&ndash;1995.
+n_rows = 20000, 
+n_individuals = 1000, 
+start_year = 2015, 
+end_year = 2020, 
+seed = 1,
+outpatient_proportion = .35, 
+primary_care_proportion = .4, 
+ilaji2_proportion = .05, 
+save_data = TRUE, 
+data_folder_name = 'data_main', 
+longitudinal = TRUE
 
-## 2. Prepare Data for the Aggregation:
+
+
+
+## Prepare Data for the Aggregation:
 
 Preparations are defined in **0_data_raw_to_parts.R**
 
@@ -342,11 +357,13 @@ Conversion codes:
 
 ## Version History
 
-v. 1.1.1 (2022-05-23): Info on primary care included.Typos.
+- 2.0.0 (DATE): New functional format for the scripts. The coding of treatment types in the Hilmo rgisters changed in 2019 and is now included in this method. The current behaviour is tested with data up to the year 2020. ICD-8 and ICD-9 conversion are included in more datail. This version supplements this paper: LINK TO PAPER.
 
-- v 1.1.0-beta (2021-05-18): Inference of discharge dates fixed. Fake data supplemented. Typos.
+- 1.1.1 (2022-05-23): Info on primary care included.Typos.
 
-- v 1.0.2 (2020-11-29): First stable version. In this version, however, discharge date (```lahtopvm```) was the date of discharge in the register entry with the latest admission. This may give too early discharge dates. Admission dates and numbers of episodes were correctly calculated. 
+- 1.1.0-beta (2021-05-18): Inference of discharge dates fixed. Fake data supplemented. Typos.
+
+- 1.0.2 (2020-11-29): First stable version. In this version, however, discharge date (```lahtopvm```) was the date of discharge in the register entry with the latest admission. This may give too early discharge dates. Admission dates and numbers of episodes were correctly calculated. 
 
 ## Citation
 
