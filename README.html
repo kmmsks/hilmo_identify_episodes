@@ -364,10 +364,10 @@ psychiatric care specifically. It can be generalized to other
 specializes as well. This script handles secondary care inpatient and
 outpatient data and primary care data.</p>
 <p>This scripts supplement this paper:</p>
-<p>Suokas, Gutvilig, Pirkola, Lumme, Hakulinen. Enhancing the accuracy
-of register-based metrics: Comparing methods for handling overlapping
-psychiatric register entries in Finnish healthcare registries.
-Submittied.</p>
+<p>Suokas K, Gutvilig M, Pirkola S, Lumme S, Hakulinen C. Enhancing the
+accuracy of register-based metrics: Comparing methods for handling
+overlapping psychiatric register entries in Finnish healthcare
+registries. Submittied.</p>
 <p>2023-XX-YY</p>
 <p><a href="https://zenodo.org/badge/latestdoi/299097747"><img src="data:image/svg+xml; charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgICAgd2lkdGg9IjE5MC44NTkzNzUiIGhlaWdodD0iMjAiPgogICAgICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iYiIgeDI9IjAiIHkyPSIxMDAlIj4KICAgICAgICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYmJiIiBzdG9wLW9wYWNpdHk9Ii4xIi8+CiAgICAgICAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1vcGFjaXR5PSIuMSIvPgogICAgICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICAgICAgPG1hc2sgaWQ9ImEiIHdpZHRoPSIxOTAuODU5Mzc1IiBoZWlnaHQ9IjIwIj4KICAgICAgICAgICAgPHJlY3Qgd2lkdGg9IjE5MC44NTkzNzUiIGhlaWdodD0iMjAiIHJ4PSIzIgogICAgICAgICAgICBmaWxsPSIjZmZmIi8+CiAgICAgICAgPC9tYXNrPgogICAgICAgIDxnIG1hc2s9InVybCgjYSkiPgogICAgICAgICAgICA8cGF0aCBmaWxsPSIjNTU1IiBkPSJNMCAwaDMxLjM3NXYyMEgweiIgLz4KICAgICAgICAgICAgPHBhdGggZmlsbD0iIzAwN2VjNiIKICAgICAgICAgICAgZD0iTTMxLjM3NSAwaDE1OS40ODQzNzV2MjBIMzEuMzc1eiIKICAgICAgICAgICAgLz4KICAgICAgICAgICAgPHBhdGggZmlsbD0idXJsKCNiKSIgZD0iTTAgMGgxOTAuODU5Mzc1djIwSDB6IiAvPgogICAgICAgIDwvZz4KICAgICAgICA8ZyBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iRGVqYVZ1IFNhbnMsCiAgICAgICAgVmVyZGFuYSxHZW5ldmEsc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMSI+CiAgICAgICAgICAgIDx0ZXh0IHg9IjE2LjE4NzUiIHk9IjE1IiBmaWxsPSIjMDEwMTAxIgogICAgICAgICAgICBmaWxsLW9wYWNpdHk9Ii4zIj4KICAgICAgICAgICAgICAgIERPSQogICAgICAgICAgICA8L3RleHQ+CiAgICAgICAgICAgIDx0ZXh0IHg9IjE2LjE4NzUiIHk9IjE0Ij4KICAgICAgICAgICAgICAgIERPSQogICAgICAgICAgICA8L3RleHQ+CiAgICAgICAgICAgIDx0ZXh0IHg9IjExMC42MTcxODc1IgogICAgICAgICAgICB5PSIxNSIgZmlsbD0iIzAxMDEwMSIgZmlsbC1vcGFjaXR5PSIuMyI+CiAgICAgICAgICAgICAgICAxMC41MjgxL3plbm9kby4xMDE3MTA4OAogICAgICAgICAgICA8L3RleHQ+CiAgICAgICAgICAgIDx0ZXh0IHg9IjExMC42MTcxODc1IiB5PSIxNCI+CiAgICAgICAgICAgICAgICAxMC41MjgxL3plbm9kby4xMDE3MTA4OAogICAgICAgICAgICA8L3RleHQ+CiAgICAgICAgPC9nPgogICAgPC9zdmc+" alt="DOI" /></a></p>
 <p>Author: Kimmo Suokas, <a href="mailto:kimmo.suokas@helsinki.fi" class="email">kimmo.suokas@helsinki.fi</a></p>
@@ -398,14 +398,14 @@ be formulated in order to combine overlapping register entries:</p>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">Model 1</td>
+<td align="left">1</td>
 <td align="left">A new hospitalization may begin on the day following a
 previous one, with no specific minimum length required for a
 hospitalization. <strong>This represents the most liberal
 approach.</strong></td>
 </tr>
 <tr class="even">
-<td align="left">Model 2</td>
+<td align="left">2</td>
 <td align="left">A new hospitalization may begin on the day following a
 previous one. Valid hospitalizations are those that extend over a
 minimum of two consecutive days, incorporating at least one overnight
@@ -414,14 +414,14 @@ visit is classified as an outpatient visit. <strong>This model was used
 in the CEPHOS-LINK project.</strong></td>
 </tr>
 <tr class="odd">
-<td align="left">Model 3</td>
+<td align="left">3</td>
 <td align="left">“A new hospitalization is allowed after a full day has
 been spent outside the hospital following the previous one. There is no
 specific minimum duration required for a hospitalization. <strong>This
 model was used in the REDD project.</strong></td>
 </tr>
 <tr class="even">
-<td align="left">Model 4</td>
+<td align="left">4</td>
 <td align="left">A new hospitalization is allowed after a full day has
 been spent outside the hospital following the previous one. Valid
 hospitalizations are those that extend over a minimum of two consecutive
@@ -432,15 +432,16 @@ model.</strong></td>
 </tr>
 </tbody>
 </table>
-<p>Models 1 and 3 find admissions, as some of the admissions do not
-necessarily result in hospitalization. Models 2 and 4 differentiate
-overnight inpatient episodes from other visits to hospitals. If the
-focus is on inpatient discharge diagnoses, model 4 may result with
-little less preliminary diagnoses included, comparing to model 2.</p>
+<p>Note: - Models 1 and 3 find admissions, as some of the admissions do
+not necessarily result in hospitalization. - Models 2 and 4
+differentiate overnight inpatient episodes from other visits to
+hospitals. - If the focus is on inpatient discharge diagnoses, model 4
+may result with little less preliminary diagnoses included, comparing to
+model 2.</p>
 <div id="the-registers" class="section level3">
 <h3>The Registers</h3>
-<p>The Disharge Reister was launched in 1969. The method presented here
-is suitable starting from the year 1975. Before that, recognizing
+<p>The Discharge Register was launched in 1969. The method presented
+here is suitable starting from the year 1975. Before that, recognizing
 psychiatric treatments is not univocal, and person identifications have
 more errors. For details, see the paper.</p>
 <table>

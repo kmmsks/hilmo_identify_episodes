@@ -6,7 +6,7 @@ This script identifies all inpatient episodes and episodes related to psychiatri
 
 This scripts supplement this paper: 
 
-Suokas, Gutvilig, Pirkola, Lumme, Hakulinen. Enhancing the accuracy of register-based metrics: Comparing methods for handling overlapping psychiatric register entries in Finnish healthcare registries. Submittied.
+Suokas K, Gutvilig M, Pirkola S, Lumme S, Hakulinen C. Enhancing the accuracy of register-based metrics: Comparing methods for handling overlapping psychiatric register entries in Finnish healthcare registries. Submittied.
 
 2023-XX-YY 
 
@@ -27,18 +27,21 @@ Based on the previous efforts to handle these issues, four models can be formula
 
 Model   |  Description
 :-------|:-------------
-Model 1 | A new hospitalization may begin on the day following a previous one, with no specific minimum length required for a hospitalization. **This represents the most liberal approach.**
-Model 2 | A new hospitalization may begin on the day following a previous one. Valid hospitalizations are those that extend over a minimum of two consecutive days, incorporating at least one overnight stay. If both admission and discharge take place on the same day, the visit is classified as an outpatient visit. **This model was used in the CEPHOS-LINK project.**
-Model 3 | "A new hospitalization is allowed after a full day has been spent outside the hospital following the previous one. There is no specific minimum duration required for a hospitalization. **This model was used in the REDD project.**
-Model 4 | A new hospitalization is allowed after a full day has been spent outside the hospital following the previous one. Valid hospitalizations are those that extend over a minimum of two consecutive days, incorporating at least one overnight stay. If both admission and discharge take place on the same day, the visit is classified as an outpatient visit. **This represents the most conservative model.**
+1 | A new hospitalization may begin on the day following a previous one, with no specific minimum length required for a hospitalization. **This represents the most liberal approach.**
+2 | A new hospitalization may begin on the day following a previous one. Valid hospitalizations are those that extend over a minimum of two consecutive days, incorporating at least one overnight stay. If both admission and discharge take place on the same day, the visit is classified as an outpatient visit. **This model was used in the CEPHOS-LINK project.**
+3 | "A new hospitalization is allowed after a full day has been spent outside the hospital following the previous one. There is no specific minimum duration required for a hospitalization. **This model was used in the REDD project.**
+4 | A new hospitalization is allowed after a full day has been spent outside the hospital following the previous one. Valid hospitalizations are those that extend over a minimum of two consecutive days, incorporating at least one overnight stay. If both admission and discharge take place on the same day, the visit is classified as an outpatient visit. **This represents the most conservative model.**
 
-Models 1 and 3 find admissions, as some of the admissions do not necessarily result in hospitalization. Models 2 and 4 differentiate overnight inpatient episodes from other visits to hospitals. If the focus is on inpatient discharge diagnoses, model 4 may result with little less preliminary diagnoses included, comparing to model 2.
+Note:
+- Models 1 and 3 find admissions, as some of the admissions do not necessarily result in hospitalization. 
+- Models 2 and 4 differentiate overnight inpatient episodes from other visits to hospitals. 
+- If the focus is on inpatient discharge diagnoses, model 4 may result with little less preliminary diagnoses included, comparing to model 2.
 
 ### The Registers
 
-The Disharge Reister was launched in 1969. The method presented here is suitable starting from the year 1975. Before that, recognizing psychiatric treatments is not univocal, and person identifications have more errors. For details, see the paper.
+The Discharge Register was launched in 1969. The method presented here is suitable starting from the year 1975. Before that, recognizing psychiatric treatments is not univocal, and person identifications have more errors. For details, see the paper.
 
-Years  |  Diagnoses | Description
+Years &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  |  Diagnoses | Description
 :------|:-----------|:-----------
 **1969&ndash;1974** | ICD-8 | Not covered in this method.
 **1975&ndash;1995** |  | The older data is usually provided in three datasets, with slightly different formatting in each of them. Notice changes in variable coding within the datasets.
