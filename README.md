@@ -421,7 +421,7 @@ Now the identification of inpatient episodes and outpatient and primary care app
 The default behavior for inpatient episodes is that discharge must be at or after the age of `min_age`, and the date of incidence is the admission date of the episode. Hence, the incident date may be before the age of `min_age`. Incident dates before `min_age` can be set to `min_age`
 afterwards.
 
-###### Returns 
+##### Returns 
 
 A data.table with the following columns
 
