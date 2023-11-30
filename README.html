@@ -355,14 +355,18 @@ display: none;
 <div id="hilmo_identify_episodes-v-2.0.0-beta" class="section level1">
 <h1>hilmo_identify_episodes v 2.0.0-beta</h1>
 <p>An R script to identify hospital admissions, discharges, discharge
-diagnoses, and outpatient visits outside inpatient episodes from the
+diagnoses, and outpatient visits during inpatient episodes in the
 Finnish <a href="https://thl.fi/en/web/thlfi-en/statistics/information-on-statistics/register-descriptions/care-register-for-health-care">Care
-Register for Health Care</a> (the Hilmo register) between since
-1975.</p>
-<p>This script identifies all inpatient episodes and episodes related to
-psychiatric care specifically. It can be generalized to other
-specializes as well. This script handles secondary care inpatient and
-outpatient data and primary care data.</p>
+Register for Health Care</a> (FCRHC, commonly called as Hilmo register)
+and <a href="https://thl.fi/en/web/thlfi-en/statistics-and-data/data-and-services/register-descriptions/register-of-primary-health-care-visits">The
+Register of Primary Health Care visits</a> (RPHC, commonly called as
+AvoHilmo register) between 1975 and 2020 (and possibly later but this
+has not been tested).</p>
+<p>This script identifies all inpatient episodes from all medical
+specialties and episodes related to psychiatric care specificallyand can
+handle secondary care inpatient and outpatient data and primary care
+data. These behaviors can be generalized to other specializes than
+psychiatry as well.</p>
 <p>This scripts supplement this paper:</p>
 <p>Suokas K, Gutvilig M, Pirkola S, Lumme S, Hakulinen C. Enhancing the
 accuracy of register-based metrics: Comparing methods for handling
@@ -371,24 +375,24 @@ registries. Submittied.</p>
 <p>2023-XX-YY</p>
 <p><a href="https://zenodo.org/badge/latestdoi/299097747"><img src="data:image/svg+xml; charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgICAgd2lkdGg9IjE5MC44NTkzNzUiIGhlaWdodD0iMjAiPgogICAgICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iYiIgeDI9IjAiIHkyPSIxMDAlIj4KICAgICAgICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYmJiIiBzdG9wLW9wYWNpdHk9Ii4xIi8+CiAgICAgICAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1vcGFjaXR5PSIuMSIvPgogICAgICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICAgICAgPG1hc2sgaWQ9ImEiIHdpZHRoPSIxOTAuODU5Mzc1IiBoZWlnaHQ9IjIwIj4KICAgICAgICAgICAgPHJlY3Qgd2lkdGg9IjE5MC44NTkzNzUiIGhlaWdodD0iMjAiIHJ4PSIzIgogICAgICAgICAgICBmaWxsPSIjZmZmIi8+CiAgICAgICAgPC9tYXNrPgogICAgICAgIDxnIG1hc2s9InVybCgjYSkiPgogICAgICAgICAgICA8cGF0aCBmaWxsPSIjNTU1IiBkPSJNMCAwaDMxLjM3NXYyMEgweiIgLz4KICAgICAgICAgICAgPHBhdGggZmlsbD0iIzAwN2VjNiIKICAgICAgICAgICAgZD0iTTMxLjM3NSAwaDE1OS40ODQzNzV2MjBIMzEuMzc1eiIKICAgICAgICAgICAgLz4KICAgICAgICAgICAgPHBhdGggZmlsbD0idXJsKCNiKSIgZD0iTTAgMGgxOTAuODU5Mzc1djIwSDB6IiAvPgogICAgICAgIDwvZz4KICAgICAgICA8ZyBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iRGVqYVZ1IFNhbnMsCiAgICAgICAgVmVyZGFuYSxHZW5ldmEsc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMSI+CiAgICAgICAgICAgIDx0ZXh0IHg9IjE2LjE4NzUiIHk9IjE1IiBmaWxsPSIjMDEwMTAxIgogICAgICAgICAgICBmaWxsLW9wYWNpdHk9Ii4zIj4KICAgICAgICAgICAgICAgIERPSQogICAgICAgICAgICA8L3RleHQ+CiAgICAgICAgICAgIDx0ZXh0IHg9IjE2LjE4NzUiIHk9IjE0Ij4KICAgICAgICAgICAgICAgIERPSQogICAgICAgICAgICA8L3RleHQ+CiAgICAgICAgICAgIDx0ZXh0IHg9IjExMC42MTcxODc1IgogICAgICAgICAgICB5PSIxNSIgZmlsbD0iIzAxMDEwMSIgZmlsbC1vcGFjaXR5PSIuMyI+CiAgICAgICAgICAgICAgICAxMC41MjgxL3plbm9kby4xMDE3MTA4OAogICAgICAgICAgICA8L3RleHQ+CiAgICAgICAgICAgIDx0ZXh0IHg9IjExMC42MTcxODc1IiB5PSIxNCI+CiAgICAgICAgICAgICAgICAxMC41MjgxL3plbm9kby4xMDE3MTA4OAogICAgICAgICAgICA8L3RleHQ+CiAgICAgICAgPC9nPgogICAgPC9zdmc+" alt="DOI" /></a></p>
 <p>Author: Kimmo Suokas, <a href="mailto:kimmo.suokas@helsinki.fi" class="email">kimmo.suokas@helsinki.fi</a></p>
-<p>Aqknowledgements:</p>
+<p>Acknowledgments:</p>
 <div id="background" class="section level2">
 <h2>Background</h2>
 <p>In order to identify actual hospital admissions, discharges, and
-discharge diagnose from the Finnish Care register for health care,
-multiple register entries may need be combined, as one hospitalization
-may consist of multiple register entries.</p>
+discharge diagnose from the Finnish healthcare registers, multiple
+register entries may need be combined, as one hospitalization may
+consist of multiple register entries.</p>
 <p>This is because during a single hospitalization, a new register entry
 must be supplied every time a hospital transfer, or transfer form one
-specialty to another within the hospital occurs. A register entry is
-also supplied from outpatient and emergency visit, which may take place
-at the beginning or during the hospitalization.</p>
+specialty to another within the hospital, occurs. A register entry is
+also supplied from each outpatient and emergency visit, which may take
+place at the beginning or during the hospitalization.</p>
 <p>Based on the previous efforts to handle these issues, four models can
 be formulated in order to combine overlapping register entries:</p>
 <table>
 <colgroup>
-<col width="36%" />
-<col width="63%" />
+<col width="9%" />
+<col width="90%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -432,23 +436,61 @@ model.</strong></td>
 </tr>
 </tbody>
 </table>
-<p>Note: - Models 1 and 3 find admissions, as some of the admissions do
-not necessarily result in hospitalization. - Models 2 and 4
-differentiate overnight inpatient episodes from other visits to
-hospitals. - If the focus is on inpatient discharge diagnoses, model 4
-may result with little less preliminary diagnoses included, comparing to
-model 2.</p>
-<div id="the-registers" class="section level3">
-<h3>The Registers</h3>
+<p>Note:</p>
+<ul>
+<li>Models 1 and 3 find admissions, as some of the admissions do not
+necessarily result in hospitalization.</li>
+<li>Models 2 and 4 differentiate overnight inpatient episodes from other
+visits to hospitals.</li>
+<li>If the focus is on inpatient discharge diagnoses, model 4 may result
+with little less preliminary diagnoses included, comparing to model
+<ol start="2" style="list-style-type: decimal">
+<li></li>
+</ol></li>
+<li>The secondary care contacts that are not considered inpatient
+episodes and are not within any inpatient episode are considered as
+outpatient events. Hence, the choise of the model for identification of
+inpatient episodes affects the number of outpatient events as well.</li>
+</ul>
+<p>See the paper for further information.</p>
+<div id="purposes-of-this-script" class="section level3">
+<h3>Purposes of this script:</h3>
+<ol style="list-style-type: decimal">
+<li><p>To propose a method for aggregating Hilmo entries in order to
+identify admissions, discharges, discharge diagnoses, and outpatient
+visits outside inpatient episodes from the partly overlapping register
+entries. This is necessary in order to find out:</p>
+<ul>
+<li>dates of admission and discharge, i.e. the period actually spent in
+the hospital,</li>
+<li>dates of admission to and discharge from psychiatric care, if a
+single hospitalization included care in more than one specialty,</li>
+<li>actual discharge diagnoses at the end of the hospitalization, or the
+last diagnosis from certain specialty, in this case psychiatry, and the
+service provider from where the discharge took place. <br><br></li>
+</ul></li>
+<li><p>To tell apart register entries related to outpatient episodes
+that took place during an inpatient care. There may be a need to
+consider these outpatient entries as a part of the inpatient care, not
+as separate episodes.</p></li>
+<li><p>To provide fully reproducible scripts accessible for critical
+evaluation and further utilization (despite the actual register data are
+not openly available).</p></li>
+</ol>
+<p><br></p>
+</div>
+</div>
+<div id="the-registers" class="section level2">
+<h2>The Registers</h2>
 <p>The Discharge Register was launched in 1969. The method presented
 here is suitable starting from the year 1975. Before that, recognizing
-psychiatric treatments is not univocal, and person identifications have
+psychiatric treatments is not univocal and person identifications have
 more errors. For details, see the paper.</p>
 <table>
 <colgroup>
-<col width="22%" />
-<col width="38%" />
-<col width="38%" />
+<col width="13%" />
+<col width="15%" />
+<col width="71%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -517,229 +559,27 @@ healthcare services are included in the registers.</td>
 </tr>
 </tbody>
 </table>
+<p><br></p>
 </div>
-<div id="purposes-of-this-script" class="section level3">
-<h3>Purposes of this script:</h3>
-<ol style="list-style-type: decimal">
-<li><p>To propose a method for aggregating Hilmo entries in order to
-identify admissions, discharges, discharge diagnoses, and outpatient
-visits outside inpatient episodes from the partly overlapping register
-entries. This is necessary in order to find out:</p>
-<ul>
-<li>dates of admission and discharge, i.e. the period actually spent in
-the hospital,</li>
-<li>dates of admission to and discharge from psychiatric care, if a
-single hospitalization included care in more than one specialty,</li>
-<li>actual discharge diagnoses at the end of the hospitalization, or the
-last diagnosis from certain specialty, in this case psychiatry, and the
-service provider from where the discharge took place. <br><br></li>
-</ul></li>
-<li><p>To tell apart register entries related to outpatient episodes
-that took place during an inpatient care. There may be a need to
-consider these outpatient entries as a part of the inpatient care, not
-as separate episodes.</p></li>
-<li><p>To provide this script accessible for critical evaluation and
-further utilization (despite the actual register data is not openly
-available). The aim is to let future researchers to focus more on their
-actual research, and less on technicalities like this.</p></li>
-</ol>
-</div>
-</div>
-<div id="step-by-stpe-processing" class="section level2">
-<h2>Step-by-stpe processing</h2>
-<div id="data-preprocessing-real-data" class="section level3">
-<h3>0. Data preprocessing (real data):</h3>
-<p>Go through the scripts the <strong>0_preparation.R</strong>,
-<strong>0a_preparation_settings_dgs.R</strong>, and
-<strong>0a_preparation_funs.R</strong> in the folder <strong>R</strong>,
-and define necessary settings and paths to data.</p>
-<p>These scripts harmonize variable names and types over time, recognize
-treatment types, medical specialties, and diagnoses over time time with
-varying classifications.</p>
-<p>If working with the full registers, you may need to process the data
-in chunks, due to performance reasons.</p>
-<p>The data are usually provided in so called annual format, meaning
-that data on each year are in separate files. In this step, the
-preprocessed data are saved longitudinally, meaning that each
-individual’s all data is written into a single file, using
-<code>append = TRUE</code> in <code>fwrite</code> function from
-<code>library(data.table)</code>.</p>
-<p>Here, the data are divided into chunks based on the first character
-of the ID variable (called <code>shnro</code>).</p>
-</div>
-<div id="testing-of-the-scripts-with-synthetic-data" class="section level3">
-<h3>Testing of the scripts with synthetic data</h3>
-<p>Synthetic data may be used for testing these scripts. Access to the
-actual registers is limited.</p>
-<p>To create data, use function syntetize_data.</p>
-<div id="usage" class="section level4">
-<h4>Usage</h4>
-<p><code>syntetize_data(n_rows = 20000, n_individuals = 1000,                             start_year = 2015, end_year = 2020, seed = 1,                            outpatient_proportion = .35, primary_care_proportion = .4, ilaji2_proportion = .05,                            save_data = TRUE, data_folder_name = &#39;data_main&#39;, longitudinal = TRUE)</code></p>
-<p>n_rows = 20000, n_individuals = 1000, start_year = 2015, end_year =
-2020, seed = 1, outpatient_proportion = .35, primary_care_proportion =
-.4, ilaji2_proportion = .05, save_data = TRUE, data_folder_name =
-‘data_main’, longitudinal = TRUE</p>
-</div>
-</div>
-</div>
-<div id="prepare-data-for-the-aggregation" class="section level2">
-<h2>Prepare Data for the Aggregation:</h2>
-<p>Preparations are defined in
-<strong>0_data_raw_to_parts.R</strong></p>
-<p>If your data is in form THL calls the database form, you need to
-combine the data from different files based on entry id. Variables are
-in different files and each year is in its own file. Use library(bit64)
-for long id numbers. Example not currently shown.</p>
-<p>What needs to be achieved, is to have minimum of the following
-columns in your data:</p>
-<table style="width:100%;">
-<colgroup>
-<col width="27%" />
-<col width="33%" />
-<col width="39%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="left">Variable</th>
-<th align="left">Data type</th>
-<th align="left">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left"><code>shnro</code></td>
-<td align="left">character</td>
-<td align="left">person id. The name shnro is used by the Statistic
-Finland, it refers to a person, not ID number, which may change (in
-relative rare occasions).</td>
-</tr>
-<tr class="even">
-<td align="left"><code>vuosi</code></td>
-<td align="left">integer</td>
-<td align="left">Year of the entry</td>
-</tr>
-<tr class="odd">
-<td align="left"><code>ILAJI</code></td>
-<td align="left">integer</td>
-<td align="left">See Hilmo manuals for details. Note possible changes in
-the classifications between years.</td>
-</tr>
-<tr class="even">
-<td align="left"><code>PALTU</code></td>
-<td align="left">integer</td>
-<td align="left">(as above)</td>
-</tr>
-<tr class="odd">
-<td align="left"><code>PALA</code></td>
-<td align="left">integer</td>
-<td align="left">(as above)</td>
-</tr>
-<tr class="even">
-<td align="left"><code>EA</code></td>
-<td align="left">character</td>
-<td align="left">(as above)</td>
-</tr>
-<tr class="odd">
-<td align="left"><code>TUPVA</code></td>
-<td align="left">integer</td>
-<td align="left">set:
-<code>as.integer(as.IDate(TUPVA, format = [FORMAT]))</code></td>
-</tr>
-<tr class="even">
-<td align="left"><code>LPVM</code></td>
-<td align="left">integer</td>
-<td align="left">set:
-<code>as.integer(as.IDate(LPVM, format = [FORMAT]))</code></td>
-</tr>
-<tr class="odd">
-<td align="left"><code>dg</code></td>
-<td align="left">character</td>
-<td align="left">Diagnoses, see below</td>
-</tr>
-</tbody>
-</table>
-<p>Diagnoses: - One register entry may contain multiple diagnoses, each
-in its own column. - Names of the diagnosis variables may vary between
-years and datasets. - Create variable <code>dg</code>, where all
-diagnoses related to one register entry are pasted. + f. ex.
-<code>dat[, dg := paste(DG1, DG2, sep = &#39;_&#39;)]</code></p>
-<p>Make all neacassery preparations in 0_data_raw_to_parts.R.</p>
-<div id="data-size-operating-with-chunks" class="section level3">
-<h3>Data Size, Operating with Chunks</h3>
-<p>If your data is in one file of reasonable size, all you need to do is
-to check you have above mentioned columns in the data and name the data
-as ‘1.csv’</p>
-<p>If you have full register, you may need to process the data in
-smaller parts (chunks), due to performance reasons. In this case, this
-method requires all entries of a single person to locate in one part
-(instead of having the data split in parts by year and variables).</p>
-<p>To determine the optimal part size is out of scope here. See what is
-small enough on your machine. In this example, five parts are used to
-demonstrate the action.</p>
-<p>Set the desired number of parts, <code>n_parts</code>, in
-0_data_raw_to_parts.R.</p>
-</div>
-</div>
-<div id="processing-of-the-prepared-data" class="section level2">
-<h2>3. Processing of the Prepared Data</h2>
-<div id="years-19962018-inpatient-and-outpatient-data" class="section level3">
-<h3>Years 1996–2018 Inpatient and Outpatient Data</h3>
-<p>Control the following setting for desired episode identification
-rules in <strong>1_main_aggregation.R</strong>:</p>
-<table>
-<colgroup>
-<col width="45%" />
-<col width="55%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="left">Variable</th>
-<th align="left">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left"><code>dir</code></td>
-<td align="left">Input file locations for preprocessed data. In this
-example, data_temp/parts_raw.</td>
-</tr>
-<tr class="even">
-<td align="left"><code>max_year</code></td>
-<td align="left">Time range of the data, the latest year included.
-<strong>Currently, maximum is 2018</strong>.</td>
-</tr>
-<tr class="odd">
-<td align="left"><code>min_year</code></td>
-<td align="left">The first year included. <strong>Earliest
-1996</strong>. Previous years have their own methods.</td>
-</tr>
-<tr class="even">
-<td align="left"><code>outpatient_start_year</code></td>
-<td align="left">According to THL, outpatient data is <strong>relevant
-starting from 2006</strong>.</td>
-</tr>
-<tr class="odd">
-<td align="left"><code>add_days</code></td>
-<td align="left">Days between periods, see below</td>
-</tr>
-<tr class="even">
-<td align="left"><code>PALA_inpatient</code> <br>
-<code>PALA_outpatient</code></td>
-<td align="left">Register entry types defining treatments types of
-interest, see Hilmo manuals for details</td>
-</tr>
-<tr class="odd">
-<td align="left"><code>specialties_of_interest</code></td>
-<td align="left">Define speciality (psychiatry in this case). See
-erikoisala (EA) in Hilmo manuals. Notice changes in the coding between
-years.</td>
-</tr>
-</tbody>
-</table>
-<div id="days-between-periods-add_days" class="section level4">
-<h4>Days between periods <code>add_days</code></h4>
-<p>Minimum of full calender days required between two hospital treatment
-periods:</p>
+<div id="step-by-step-processing" class="section level2">
+<h2>Step-by-step processing</h2>
+<p>The numbered headings referes to the numbered section in the
+<code>main.R</code>, which is the main script file that controls the
+whole behavior. All subfiles are lacated in the directory <code>R</code>
+and the first number in the name of the file refers to these numbered
+sections as well.</p>
+<div id="general-considerations" class="section level3">
+<h3>General considerations</h3>
+<div id="separation-of-the-four-models-add_days-and-overnight-stays" class="section level4">
+<h4><span style="color:firebrick">Separation of the four models:
+<code>add_days</code> and overnight stays</span></h4>
+<p>The two characteristics that separate the four models are:</p>
+<p><br></p>
+<div id="add_days-the-mimimun-number-of-days-between-separate-inpatient-episodes" class="section level5">
+<h5><code>add_days</code>: the mimimun number of days between separate
+inpatient episodes</h5>
+<p>The minimum of full calender days required between two hospital
+treatment periods:</p>
 <ul>
 <li>0 : a new period may start the next day after the previous one
 (models 1 and 2).</li>
@@ -748,115 +588,341 @@ periods (models 3 and 4). Otherwise, Hilmo entries are combined into a
 single episode.</li>
 </ul>
 </div>
+<div id="overnight-whether-or-not-an-inpatient-episode-extends-over-a-minimum-of-two-consecutive-days" class="section level5">
+<h5>Overnight: whether or not an inpatient episode extends over a
+minimum of two consecutive days</h5>
+<p>In models 2 and 4, valid hospitalizations are those that extend over
+a minimum of two consecutive days, incorporating at least one overnight
+stay. This can be determined after processing of the data by supseting,
+see 4. subsetting below.</p>
+<p><br></p>
 </div>
-<div id="years-19751995-inpatient-data-only" class="section level3">
-<h3>Years 1975–1995, Inpatient Data Only</h3>
-<p>The method presented here is suitable starting from the year 1975.
-Years 1969–1986, 1987–1993 and 1994–1995 are processed separately first,
-and after that, all inpatient data is combined.</p>
-<p>Conversions of diagnoses with mental disorders to ICD-10 inclued.
-ICD-8 was used until 1986, ICD-9 1987–1995 and ICD-10 thereafter.
-Conversions are preliminary, please check before use.</p>
-<p>Set column names, date formats, define desired diagnostic cathegories
-for conversion to ICD-10, and define specialities of interest in
-120_run_inpatient_old_registers.R before sourcing.</p>
-<p><strong>Notice, no example datasets currently provided for years
-1975–1995.</strong></p>
 </div>
-<div id="source-desired-scripts" class="section level3">
-<h3>Source Desired Scripts</h3>
+<div id="operating-with-chunks-longitudinal-or-annual" class="section level4">
+<h4>Operating with chunks, longitudinal or annual</h4>
+<p>If working with the full registers, you may need to process the data
+in chunks, due to performance.</p>
+<p>The data are usually provided in so called annual format, meaning
+that data on each year are in separate files.</p>
+<p>Here, the data will be divided into chunks based on the first
+character of the ID variable (called <code>shnro</code>) so that each
+individual’s all data is written into a single file. This will be called
+as the <strong>longitudinal</strong> format.</p>
+<p>If data from each year are handled separately, this will bve called
+<strong>annual</strong> format. Notice, that in this case episodes cut
+at the last day of each year. This behaviour will be singnaled,
+though.</p>
+<p><br></p>
+</div>
+<div id="directory-tree" class="section level4">
+<h4>Directory tree</h4>
+<p>This scripts create the following directory tree:</p>
 <ul>
-<li><code>source(here(&#39;R&#39;, &#39;110_run_inpatient_1996_2018.R&#39;))</code>,
-this script identifies inpatient episodes 1996–2018.</li>
-<li><code>source(here(&#39;R&#39;, &#39;130_run_in_and_outpatient.R&#39;))</code>, this
-script identifies inpatient and outpatient episodes 2006–2018.</li>
-<li><code>source(here(&#39;R&#39;, &#39;120_run_inpatient_old_registers.R&#39;))</code>,
-this identifies inpatient episodes 1975–1995. Go through settings in
-this file in detail.</li>
-<li><code>source(here(&#39;R&#39;, &#39;122_combine_inpatient_all_years.R&#39;))</code>,
-combine all inpatient episodes into one file. Identifys episodes that
-continue between datasets.</li>
+<li>[data_folder_name]
+<ul>
+<li>0_preprocessed_longitudinal_[start_year]_[end_year]</li>
+<li>0_preprocessed_annual</li>
+<li>1_identified_episodes
+<ul>
+<li>add_days_[add_days]
+<ul>
+<li>longitudinal_[start_year]_[end_year]</li>
+</ul></li>
+</ul></li>
+<li>2_first_dates
+<ul>
+<li>add_days_[add_days]
+<ul>
+<li>mental_health_services_2015_2020</li>
+<li>non_processed
+<ul>
+<li>mental_health_services_2015_2020</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
 </ul>
+<p><code>data_folder_name</code> can be specified in the functions.
+<code>data_main</code> as default.</p>
+<p><code>start_year</code>and <code>end_year</code> specify the the
+period of data within the longitudinal chunks.</p>
+<p><br></p>
+</div>
+<div id="conversion-of-diagnostic-classifications" class="section level4">
+<h4>Conversion of diagnostic classifications</h4>
+<p>ICD-8 and ICD-9 codes are converted into ICD-10 codes, the conversion
+key is set in <code>0a_preparation_settings_dgs.R</code></p>
+<p>Conversion codes from ICPC-2 to ICD-10 can be found from:</p>
+<ul>
+<li>Kvist M, Savolainen T, Suomen Kuntaliitto. <a href="https://www.kuntaliitto.fi/julkaisut/2010/1344-icpc-2-perusterveydenhuollon-kansainvalinen-luokitus">ICPC-2
+:perusterveydenhuollon kansainvälinen luokitus</a>. Suomen kuntaliitto,
+Helsinki 2010. p. 194, Finnish version.</li>
+<li><a href="https://www.who.int/standards/classifications/other-classifications/international-classification-of-primary-care">ICPC-2-R:International
+Classification of Primary Care</a>, p. 147</li>
+</ul>
+<p>When ICPC-2 code does not convert into ICD-10 but represents some
+kind of mental distrubance, groupf fx is used in these scripts.</p>
+<p><br></p>
 </div>
 </div>
-<div id="data-output" class="section level2">
-<h2>Data Output</h2>
-<p>Processed data is saved in the following subfolders of the folder
-<strong>data_processed</strong>:</p>
-<table style="width:100%;">
+<div id="data-preprocessing" class="section level3">
+<h3>0. Data preprocessing</h3>
+<div id="real-data" class="section level4">
+<h4>Real data</h4>
+<p>Go through the scripts the <code>0_preparation.R</code>,
+<code>0a_preparation_settings_dgs.R</code>, and
+<code>0a_preparation_funs.R</code> in the folder <code>R</code>, and
+define necessary settings and data paths.</p>
+<p>These scripts harmonize variable names and types over time, recognize
+treatment types, medical specialties, and diagnoses over time time with
+varying classifications.</p>
+<p>In this step, the preprocessed data will be saved longitudinally,
+meaning that each individual’s all data is written into a single file,
+using <code>append = TRUE</code> in <code>fwrite</code> function from
+<code>library(data.table)</code>.</p>
+<p><br></p>
+</div>
+<div id="synthetic-data-for-demonstration" class="section level4">
+<h4>Synthetic data for demonstration</h4>
+<p>Synthetic data may be used for testing these scripts. Access to the
+real registers is limited.</p>
+<p><span style="color:blue"><strong>To create data, use function
+<code>syntetize_data()</code>.</strong></span> <br></p>
+<div id="usage" class="section level5">
+<h5>Usage</h5>
+<pre><code>syntetize_data(n_rows = 20000, n_individuals = 1000,
+  start_year = 2015, end_year = 2020, seed = 1,
+  outpatient_proportion = .35, primary_care_proportion = .4, ilaji2_proportion = .05,
+  save_data = TRUE, data_folder_name = &#39;data_main&#39;, longitudinal = TRUE)</code></pre>
+<p><br></p>
+</div>
+<div id="arguments" class="section level5">
+<h5>Arguments</h5>
+<table>
 <colgroup>
-<col width="46%" />
-<col width="38%" />
-<col width="14%" />
+<col width="18%" />
+<col width="9%" />
+<col width="72%" />
 </colgroup>
-<thead>
-<tr class="header">
-<th align="left">First level subfolders</th>
-<th align="left">Second level</th>
-<th align="left">Data sets</th>
-</tr>
-</thead>
 <tbody>
 <tr class="odd">
-<td align="left">1_inpatient_episodes</td>
-<td align="left">add_days_[add_days]</td>
-<td align="left">Inpatient datasets, datsets before the year 1996 in
-separate files.</td>
+<td align="left">n_rows</td>
+<td align="left">Numeric</td>
+<td align="left">number or row to generate</td>
 </tr>
 <tr class="even">
-<td align="left">1_inpatient_episodes</td>
-<td align="left">preparation_description</td>
-<td align="left">Descriptions of incorrect entries, PALA distribution,
-etc.</td>
+<td align="left">n_individuals</td>
+<td align="left">Numeric</td>
+<td align="left">number of individuals to generate, n_individuals must
+be &lt;= n_rows</td>
 </tr>
 <tr class="odd">
-<td align="left">1b_inpatient_all_combined</td>
-<td align="left">-</td>
-<td align="left">All inaptient episodes combined into one file.</td>
+<td align="left">start_year</td>
+<td align="left">Numeric</td>
+<td align="left">Start year of the data</td>
 </tr>
 <tr class="even">
-<td align="left">2_in_and_outpatient_episodes</td>
-<td align="left">add_days_[add_days]</td>
-<td align="left">Data set with inpatient and outpatient episodes
-combined. Description of included episodes.</td>
+<td align="left">end_year</td>
+<td align="left">Numeric</td>
+<td align="left">End Year of the data</td>
+</tr>
+<tr class="odd">
+<td align="left">seed</td>
+<td align="left">Numeric</td>
+<td align="left">Seed for the random generator</td>
+</tr>
+<tr class="even">
+<td align="left">outpatient_proportion</td>
+<td align="left">Double</td>
+<td align="left">The proportion of rows to be labeled as secondary
+outpatient care, must be between 0 and 1</td>
+</tr>
+<tr class="odd">
+<td align="left">primary_care_proportion</td>
+<td align="left">Double</td>
+<td align="left">The proportion of rows to be labeled as primary care,
+must be between 0 and 1</td>
+</tr>
+<tr class="even">
+<td align="left">ilaji2_proportion</td>
+<td align="left">Double</td>
+<td align="left">The proportion of rows to be labeled as patient count
+on the last day of each calendar year, must be between 0 and 1</td>
+</tr>
+<tr class="odd">
+<td align="left">save_data</td>
+<td align="left">Logical</td>
+<td align="left">Wether to save the generated data. If FALSE, the
+data.table will be returned, not saved</td>
+</tr>
+<tr class="even">
+<td align="left">data_folder_name</td>
+<td align="left">Character</td>
+<td align="left">The name of the file where data will be saved. See
+below</td>
+</tr>
+<tr class="odd">
+<td align="left">longitudinal</td>
+<td align="left">Logical</td>
+<td align="left">If TRUE, the data will be saved in longitudinal format,
+meaning that each individual’s all data is written into a single file.
+if FALSE, data will be saved in annual format</td>
 </tr>
 </tbody>
 </table>
-<p>This test script creates the following data.tables:</p>
-<ul>
-<li><strong>dat_episodes</strong>: processed data with inpatient and
-outpatient episodes included</li>
-<li><strong>dat_inpatient</strong>: inaptient episodes only</li>
-<li><strong>dat_all_inpatient</strong>, all inpatient episodes combined.
-Practically identical with dat_inpatient with the example fake
-data.</li>
-<li><strong>description_episode</strong> and
-<strong>description_inpatient</strong>: see read_me sheets in xlsx files
-in folder data_processe.</li>
-</ul>
+<p><br></p>
 </div>
-<div id="new-variables-in-the-processed-data" class="section level2">
-<h2>New Variables in the Processed Data</h2>
-<div id="inpatient-data" class="section level3">
-<h3>Inpatient Data:</h3>
+</div>
+</div>
+<div id="processing" class="section level3">
+<h3><span style="color:firebrick">1. Processing</span></h3>
+<p>These are the main operations:</p>
+<p>First, the following lines are used for identifying inpatient
+episodes with possible overlapping dates:</p>
+<pre><code># Order by  id, admission date, and discharge date
+    setkey(inpat_0, shnro, tupva, lpvm)
+  
+  # Treshold for the highest lpvm (= end date) so far
+  inpat_0[, highest_so_far := shift(cummax(lpvm), fill = lpvm[1]), by = shnro]
+  
+  #Chaining of the overlapping dates. 
+  #If tupva (start date) is higher than the highest end date  so far + the add_days value before the current row,
+  # a new episode starts. Otherwise, the row is recognized to be a part of the episode that is already
+  # ongoing in the previous row(s).
+  
+  inpat_0[, `:=`(subgroup = .GRP), by = .(shnro, g = cumsum(tupva &gt; highest_so_far + add_days)) ]
+  
+  # Running number of episode
+  inpat_0[order(subgroup), episode := cumsum(!duplicated(subgroup)), by = shnro]</code></pre>
+<p>Where <code>inpat_0</code> is preprocessed inpatient data,
+<code>shnro</code> is ID variable, <code>tupva</code> is admission date
+in integer format, and <code>lpvm</code> is discharge date in integer
+format.</p>
+<p>After this step, the episodes can be aggregated by id
+<code>shnro</code>and <code>episode</code>. The desired aggregation
+functions need to be defined for each variable of interest.</p>
+<p>Second, outpatient appointments during the inpatient episodes wre
+recognized in similar way.The aggregation of desired information is more
+complex at this stage if diagnoses of mental disorders and other
+diagnoses from different medical specialties at the different stages of
+the episode need to be specified.</p>
+<p>Third, primary care appointements during inpatient episodes or at the
+same day with secondary care psychiatric outpatient visits are
+ignored.</p>
+<p>See <code>1a_processing_subfuns.R</code> for details regarding these
+behaviors.</p>
+<p><br></p>
+<p><span style="color:blue"><strong>The <code>process_data()</code>
+function controls the main processing.</strong></span></p>
+<p><br></p>
+<div id="usage-1" class="section level5">
+<h5>Usage</h5>
+<pre><code>process_data(add_days, start_year, end_year, longitudinal = TRUE, 
+                         process_secondary_outpatient = TRUE, process_primary_care = TRUE, 
+                         separate_files_for_old_registers = FALSE)</code></pre>
+<p><br></p>
+</div>
+<div id="arguments-1" class="section level5">
+<h5>Arguments</h5>
 <table>
 <colgroup>
-<col width="31%" />
-<col width="37%" />
-<col width="31%" />
+<col width="25%" />
+<col width="25%" />
+<col width="50%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td align="left">add_days</td>
+<td align="left">Numeric</td>
+<td align="left">The minimum number of full calender days required
+between two hospital treatment</td>
+</tr>
+<tr class="even">
+<td align="left">periods. See general considerations above</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">start_year</td>
+<td align="left">Numeric</td>
+<td align="left">Start year of the data</td>
+</tr>
+<tr class="even">
+<td align="left">end_year</td>
+<td align="left">Numeric</td>
+<td align="left">End Year of the data</td>
+</tr>
+<tr class="odd">
+<td align="left">longitudinal</td>
+<td align="left">Logical</td>
+<td align="left">If each individual’s all data is written into a single
+file set TRUE, if the data is in the annual format, set FALSE, see
+general considerations above</td>
+</tr>
+<tr class="even">
+<td align="left">process_secondary_outpatient</td>
+<td align="left">Logical</td>
+<td align="left">If only inpatient care data is processed, set to FALSE,
+otherwise TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">process_primary_care</td>
+<td align="left">Logical</td>
+<td align="left">If only secondary care data is process, set to FALSE,
+otherwise TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">separate_files_for_old_registers</td>
+<td align="left">Logical</td>
+<td align="left">If years are before 1996 are saved to separate files in
+preprocessing, set TRUE, if working with synthetic data, must be set to
+FALSE</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+</div>
+<div id="data-output-location" class="section level5">
+<h5>Data output location</h5>
+<p>Processed data are saved into the location [data_folder_name] -&gt;
+1_identified_episodes -&gt; add_days_[add_days] -&gt;
+longitudinal_[start_year]_[end_year]</p>
+<p>Files are named as follows:</p>
+<pre><code>[chunk]_1_inpatient_outpatient.csv
+[chunk]_primary_care.csv</code></pre>
+</div>
+<div id="variables-in-the-processed-data" class="section level5">
+<h5>Variables in the processed data</h5>
+<table>
+<colgroup>
+<col width="26%" />
+<col width="26%" />
+<col width="47%" />
 </colgroup>
 <thead>
 <tr class="header">
 <th align="left">Variable</th>
-<th align="left">Data type</th>
+<th align="left">Variable type</th>
 <th align="left">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left"><code>episode_inpatient</code></td>
+<td align="left"><code>shnro</code></td>
+<td align="left">Character</td>
+<td align="left">ID</td>
+</tr>
+<tr class="even">
+<td align="left"><code>event</code></td>
 <td align="left">integer</td>
-<td align="left">Running number of person’s inpatient periods.</td>
+<td align="left">Running number of person’s inpatient or outpatient
+contacts in the FCRHC (secondary care register) after the
+processing.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>vuosi</code></td>
+<td align="left">Integer</td>
+<td align="left">Year of discharge</td>
 </tr>
 <tr class="even">
 <td align="left"><code>tulopvm</code></td>
@@ -869,30 +935,7 @@ outpatient visit.</td>
 <td align="left">date</td>
 <td align="left">Date of discharge from inpatient care, if multiple
 transfers between specialties, the last one. For outpatient visits, the
-date of the visit (same as tulopvm).</td>
-</tr>
-<tr class="even">
-<td align="left"><code>vuosi</code></td>
-<td align="left">integer</td>
-<td align="left">Year if discharge, ie. year of <code>lahtopvm</code>
-(note, year of lahtopvm_psy may be different than
-<code>vuosi</code>)</td>
-</tr>
-<tr class="odd">
-<td align="left"><code>psy</code></td>
-<td align="left">logical</td>
-<td align="left">Episode contains psychiatric care.</td>
-</tr>
-<tr class="even">
-<td align="left"><code>n_rows_inpat</code></td>
-<td align="left">integer</td>
-<td align="left">Number of rows aggregated to this inpatient
-episode.</td>
-</tr>
-<tr class="odd">
-<td align="left"><code>ea_list</code></td>
-<td align="left">character</td>
-<td align="left">List of specialties included in the episode.</td>
+end date of the visit.</td>
 </tr>
 <tr class="even">
 <td align="left"><code>tulopvm_psy_inpat</code></td>
@@ -906,15 +949,113 @@ episode.</td>
 multiple transfers between specialties, the last one.</td>
 </tr>
 <tr class="even">
-<td align="left"><code>dg_inpat</code></td>
-<td align="left">character</td>
-<td align="left">All diagnoses registered on the date of discharge.</td>
+<td align="left"><code>episode_continues</code></td>
+<td align="left">logical</td>
+<td align="left">True if inpatient episodes continues after the last day
+covered in the data. In this case, <code>lahtopvm</code> is the last day
+covered in the data. Note<sup>a</sup></td>
 </tr>
 <tr class="odd">
+<td align="left"><code>episode_psy_continues</code></td>
+<td align="left">logical</td>
+<td align="left">True if inpatient episodes continues after the last day
+coverd in the data. In this case, <code>lahtopvm_inpat_psy</code> is is
+the last day covered in the data. Note<sup>a</sup></td>
+</tr>
+<tr class="even">
+<td align="left"><code>psy</code></td>
+<td align="left">Logical</td>
+<td align="left">TRUE if event contains psychiatry.
+Note<sup>a</sup></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>inpat</code></td>
+<td align="left">Logical</td>
+<td align="left">TRUE if the event includes inpatient care.
+Note<sup>a</sup></td>
+</tr>
+<tr class="even">
+<td align="left"><code>inpat_psy</code></td>
+<td align="left">Logical</td>
+<td align="left">TRUE if the event includes psychiatric inpatient care.
+Note<sup>a</sup></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>overnight</code></td>
+<td align="left">Logical</td>
+<td align="left">TRUE if inpatient episode lasts overnight.
+Note<sup>a</sup></td>
+</tr>
+<tr class="even">
+<td align="left"><code>overnight_psy</code></td>
+<td align="left">Logical</td>
+<td align="left">TRUE if inpatient episode in psychiatric unit lasts
+overnight. Note<sup>a</sup></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>outpat</code></td>
+<td align="left">Logical</td>
+<td align="left">Event contains secondary outpatient care.
+Note<sup>a</sup></td>
+</tr>
+<tr class="even">
+<td align="left"><code>primary_care</code></td>
+<td align="left">Logical</td>
+<td align="left">TRUE if the row presents primary care appointment.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>dg_inpat</code></td>
+<td align="left">Character</td>
+<td align="left">All diagnoses registered on the date of discharge.</td>
+</tr>
+<tr class="even">
 <td align="left"><code>dg_inpat_psy</code></td>
-<td align="left">character</td>
+<td align="left">Character</td>
 <td align="left">All diagnoses registered from psychiatry on the date of
-discharge from psychiatric unit.</td>
+the last discharge from psychiatric unit during the inpatient
+episode.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>dg_outpat</code></td>
+<td align="left">Character</td>
+<td align="left">Outpatient diagnoses. Contains outpatient diagnoses
+during inpatient care, also. No psychiatric diagnoses from other
+specialties during psychiatric inpatient care</td>
+</tr>
+<tr class="even">
+<td align="left"><code>dg_outpat_psy</code></td>
+<td align="left">Character</td>
+<td align="left">Outpatient diagnoses during inpatient care only from
+psychiatric outpatient services</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>dg_all</code></td>
+<td align="left">Character</td>
+<td align="left">All diagnoses during the event (secondary care
+only)</td>
+</tr>
+<tr class="even">
+<td align="left"><code>dg_psy</code></td>
+<td align="left">Character</td>
+<td align="left">All relevant psychiatric diagnoses from the FCRHC
+(secondary care registers). Preliminary diagnoses excluded.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>dg_avo</code></td>
+<td align="left">Character</td>
+<td align="left">Primary care diagnoses</td>
+</tr>
+<tr class="even">
+<td align="left"><code>outpat_same_day</code></td>
+<td align="left">Logical</td>
+<td align="left">Two ore more secondary outpatient appointments on a
+single day</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>n_appointments</code></td>
+<td align="left">Integer</td>
+<td align="left">Number of primary care appointments on a single
+day</td>
 </tr>
 <tr class="even">
 <td align="left"><code>paltu</code></td>
@@ -923,269 +1064,270 @@ discharge from psychiatric unit.</td>
 discharge.</td>
 </tr>
 <tr class="odd">
-<td align="left"><code>paltu_psy</code></td>
-<td align="left">character</td>
-<td align="left">The service provider’s code of the psychiatric unit of
-the last psychiatric discharge.</td>
-</tr>
-<tr class="even">
-<td align="left"><code>overnight_all</code></td>
-<td align="left">logical</td>
-<td align="left">Episode starts and ends on different calender
-days.</td>
-</tr>
-<tr class="odd">
-<td align="left"><code>overnight_psy</code></td>
-<td align="left">logical</td>
-<td align="left">Episode’s psychiatric treatment starts and ends on
-different calender days.</td>
-</tr>
-<tr class="even">
-<td align="left"><code>episode_continues</code></td>
-<td align="left">logical</td>
-<td align="left">True if inpatient episodes continues after the last day
-coverd in the data. In this case, <code>lahtopvm</code> is
-<code>NA</code>.</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div id="all-episodes-in-addition" class="section level3">
-<h3>All Episodes, in Addition:</h3>
-<table>
-<colgroup>
-<col width="31%" />
-<col width="37%" />
-<col width="31%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="left">Variable</th>
-<th align="left">Data type</th>
-<th align="left">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left"><code>episode</code></td>
+<td align="left"><code>ilaji_2_n</code></td>
 <td align="left">Integer</td>
-<td align="left">Running number of person’s episodes.</td>
-</tr>
-<tr class="even">
-<td align="left"><code>inpatient</code></td>
-<td align="left">Logical</td>
-<td align="left">Any inpatient care included in the episode.</td>
-</tr>
-<tr class="odd">
-<td align="left"><code>inpatient_psy</code></td>
-<td align="left">Logical</td>
-<td align="left">Psychiatric inpatient care included in the
+<td align="left">The number of ILAJI == 2 rows within the inpatient
 episode.</td>
 </tr>
 <tr class="even">
-<td align="left"><code>n_rows_episode</code></td>
-<td align="left">Integer</td>
-<td align="left">Number of rows aggregated to this inpatient
+<td align="left"><code>n_rows</code></td>
+<td align="left">Intger</td>
+<td align="left">The total cnumber of rows within the event
 episode.</td>
 </tr>
 <tr class="odd">
-<td align="left"><code>outpat_same_day</code></td>
-<td align="left">Logical</td>
-<td align="left">More than one outpatient visit on the same day.</td>
+<td align="left"><code>ea_list</code></td>
+<td align="left">Character</td>
+<td align="left">All medical specialties within the event</td>
 </tr>
 <tr class="even">
-<td align="left"><code>dg_outpat</code></td>
-<td align="left">charcteg</td>
-<td align="left">Outpatient diagnoses during the episode. See
-below.</td>
-</tr>
-<tr class="odd">
-<td align="left"><code>dg_inpat_psy_outpat_psy</code></td>
-<td align="left">character</td>
-<td align="left">Psychiatric outpatient diagnoses during psychiatric
-inpatient episode. Usually to be excluded.</td>
-</tr>
-<tr class="even">
-<td align="left"><code>dg_inpat_psy</code></td>
-<td align="left">character</td>
-<td align="left">If inpatient period contains psychiatric outpatient
-care, but not psychiatric inpatient care, psychiatric outpatient
-diagnoses are here. Contains also psychiatric discharge diagnoses from
-psychiatric inpatien episodes.</td>
-</tr>
-<tr class="odd">
-<td align="left"><code>dg</code></td>
-<td align="left">character</td>
-<td align="left">Combination of relevant discharge diagnoses, and
-diagnoses of outpatient appointments. Discharge diagnoses from
-psychiatric inpatient care preferred. See below.</td>
+<td align="left"><code>highest_so_far</code></td>
+<td align="left">Integer</td>
+<td align="left">Technical variable for quality control only.</td>
 </tr>
 </tbody>
 </table>
-<div id="outpatient-diagnoses" class="section level4">
-<h4>Outpatient Diagnoses</h4>
-<p>Outpatient diagnoses situate in different variables in different
-cases:</p>
+<p><strong>Notes:</strong></p>
 <ul>
-<li><p>Diagnoses of all sinlge outpatient appointments are in
-<code>dg_outpat</code>.</p></li>
-<li><p>Diagnoses of all non psychiatric outpatient appointments during
-non-psychiatric inpatient episodes are in
-<code>dg_outpat</code>.</p></li>
-<li><p>If non psychiatric inpatient episode contains psychiatric
-outpatient appointments, the non psychiatric outpatient diagnoses are in
-<code>dg_outpat</code>. The psychiatric outpaitent diagnoses are in
-<code>dg_inpat_psy</code>.</p></li>
-<li><p>If psychiatric inpatient episode contains non psychiatric
-outpatient appointments, they are in <code>dg_outpat</code>. Psychiatric
-outpatient diagnoses during psychiatric inpatient episodes are in
-<code>dg_inpat_psy_outpat_psy</code> (usually excluded).</p></li>
+<li>a: Always FALSE in primary care.</li>
 </ul>
-<p>The <code>dg_outpat</code> variable should be excluded when only
-discharge diagnoses are collected.</p>
 <p><br></p>
 </div>
-<div id="variable-dg" class="section level4">
-<h4>Variable <code>dg</code></h4>
-<p>Combination of discharge diagnoses from inpatient episodes only, and
-outpatient diagoses . From psychiatric inpatient episodes, only
-diagnoses from psychiatry:</p>
+</div>
+</div>
+<div id="postprocessing" class="section level2">
+<h2><em>Postprocessing</em></h2>
+</div>
+<div id="first-dates" class="section level2">
+<h2>2. First dates</h2>
+<p>Now the identification of inpatient episodes and outpatient and
+primary care appointments is done. Next, the data are ready for analysis
+of postprocessing procedures. Here, each individual’s first occurrence
+of diagnoses of interest is determined. This is useful for incidence
+studies.</p>
+<p><span style="color:blue"><strong>The <code>get_first_dates()</code>
+function controls this operation.</strong></span></p>
+<p><br></p>
+<div id="usage-2" class="section level5">
+<h5>Usage</h5>
+<p><code>get_first_dates(add_days, start_year, end_year, dg_age = dg_groups_w_min_ages)</code></p>
+<p><br></p>
+</div>
+<div id="arguments-2" class="section level5">
+<h5>Arguments</h5>
+<table>
+<colgroup>
+<col width="13%" />
+<col width="24%" />
+<col width="62%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td align="left">add_days</td>
+<td align="left">Numeric</td>
+<td align="left">The value of add_days in the data to be processed</td>
+</tr>
+<tr class="even">
+<td align="left">start_year</td>
+<td align="left">Numeric</td>
+<td align="left">Start year of the data to be processed</td>
+</tr>
+<tr class="odd">
+<td align="left">end_year</td>
+<td align="left">Numeric</td>
+<td align="left">End Year of the data to be processed</td>
+</tr>
+<tr class="even">
+<td align="left">dg_age</td>
+<td align="left">data.table</td>
+<td align="left">A data.table such as <code>dg_groups_w_min_ages</code>
+from <code>2a_first_dates_set_diagnoses.R</code> or similar that
+contains diagnoses of interest, and minimun age for every diagnostic
+category. See below.</td>
+</tr>
+</tbody>
+</table>
+<p><code>dg_age</code> must have structure such as this:</p>
+<p><code>r data.table::data.table(dg = c(&quot;f2&quot;, &quot;schizophrenia&quot;, &quot;bipolar_disorders&quot;, &quot;psychoses&quot;), dg_code = c(&quot;f2&quot;, &quot;f20&quot;, &quot;f30|f31&quot;, &quot;f20|f22|f23|f24|f25|f28|f29|f301|f302|f308|f309|f311|f312|f315|f316|f323|f333|f1.5|f1.7&quot;), min_age = c(5,10,5,5) )</code></p>
 <ul>
-<li>when <code>inpatient== TRUE &amp; inpatient_psy == FALSE</code>,
-variable <code>dg_inpat</code> included,</li>
-<li>when <code>inpatient== TRUE &amp; inpatient_psy == TRUE</code>,
-variable <code>dg_inpat_psy</code> included,</li>
-<li>when <code>inpatient== FALSE</code>, variable <code>dg_outpat</code>
-included.</li>
+<li><code>dg</code> is the name of the category</li>
+<li><code>dg_code</code> is the ICD-10 codes in the category, separated
+by <code>|</code>, regex allowed, and case insensitive.</li>
+<li><code>min_age</code> is the minimun age when the diagnosis is
+considered valid for this process.</li>
 </ul>
 </div>
+<div id="details" class="section level5">
+<h5>Details</h5>
+<p>The default behavior for inpatient episodes is that discharge must be
+at or after the age of <code>min_age</code>, and the date of incidence
+is the admission date of the episode. Hence, the incident date may be
+before the age of <code>min_age</code>. Incident dates before
+<code>min_age</code> can be set to <code>min_age</code> afterwards.</p>
+<div id="returns" class="section level6">
+<h6>Returns</h6>
+<p>A data.table with the following columns</p>
+<table>
+<colgroup>
+<col width="13%" />
+<col width="14%" />
+<col width="72%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td align="left">shnro</td>
+<td align="left">Character</td>
+<td align="left">Personal ID</td>
+</tr>
+<tr class="even">
+<td align="left">birthday</td>
+<td align="left">iDate</td>
+<td align="left">Person’s birthday</td>
+</tr>
+<tr class="odd">
+<td align="left">date_any_psy</td>
+<td align="left">iDate</td>
+<td align="left">The date of the incident psychiatric medical contact,
+no age limits.</td>
+</tr>
+<tr class="even">
+<td align="left">date_any_psy_w_f_dg</td>
+<td align="left">iDate</td>
+<td align="left">The date of the incident psychiatric medical contact
+with a diagnosis of any mental disorder, no age limits.</td>
+</tr>
+<tr class="odd">
+<td align="left">date_[diagnosis]</td>
+<td align="left">iDate</td>
+<td align="left">The date of the incident diagnosis of interest, with
+minimum age considered. The diagnoses of interest are defined in the
+<code>dg_age</code> argument.</td>
+</tr>
+<tr class="even">
+<td align="left">source variable</td>
+<td align="left">Character</td>
+<td align="left">The source of each date of incidence (“inpatient”,
+“outpatient”, or “primary_care”).</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
 </div>
 </div>
-<div id="subset-processed-data-count-episodes-and-time-spent-in-hospital-by-person" class="section level2">
-<h2>4. Subset Processed Data &amp; Count Episodes and Time Spent in
-Hospital by Person</h2>
-<div id="only-overnight-episodes-considers-as-inpatient-episodes" class="section level3">
-<h3>Only Overnight Episodes Considers as Inpatient episodes</h3>
+</div>
+<div id="look-at-the-data" class="section level2">
+<h2>3. Look at the data</h2>
+<p>The processed data are saved in chunks. In this section, all data are
+red to memory and organized into list for inspection.
+<code>read_files_from()</code>is a helper to read on combine the
+chunks.</p>
+<p>First dates are in single files. The four models are red to a
+list.</p>
+<p><br></p>
+</div>
+<div id="subsetting" class="section level2">
+<h2>4. Subsetting</h2>
+<p>Recognizing inpatient episodes that last overnight (models 2 and 4)
+can be done simply by selecting those episodes with
+<code>tulopvm &lt; lahtopvm</code> (i.e. admission date &lt; discharge
+date) and considering inpatient episodes with
+<code>tulopvm == lahtopvm</code> (i.e. admission date == discharge date)
+as outpatient events.</p>
+<p>Here are some examples of subsetting the processed data, and counting
+episodes and time spent in hospital by person.</p>
+<p>Below, <code>dat</code> refers to the processed data, for example,
+<code>dat_processed$ad0</code> or <code>dat_processed$ad1</code>.</p>
+<div id="only-overnight-episodes-considers-as-inpatient-episodes" class="section level4">
+<h4>Only overnight episodes considers as inpatient episodes</h4>
 <p>If only overnight episodes are considered as inpatient treatments
 (models 2 and 4):</p>
 <ul>
-<li>Psychiatric inpatient episodes, all years included:
+<li>Psychiatric inpatient episodes
 <ul>
-<li><code>dat_all_inpatient[overnight_psy == TRUE]</code></li>
+<li><code>dat[overnight_psy == TRUE]</code></li>
 </ul></li>
-<li>Psychiatric outpatient episodes, starting from the year
-<code>outpatient_start_year</code>
+<li>Psychiatric outpatient episodes
 <ul>
 <li>including psychiatric outpatient visits during non psychiatric
 inpatient care
-<code>dat_episodes[psy == TRUE &amp; overnight_psy == FALSE]</code></li>
+<ul>
+<li><code>dat[psy == TRUE &amp; overnight_psy == FALSE]</code></li>
+</ul></li>
 <li>only psychiatric outpatient visits when not in inpatient care
-<code>dat_episodes[psy == TRUE &amp; overnight_all == FALSE]</code></li>
+<ul>
+<li><code>dat[psy == TRUE &amp; overnight == FALSE]</code></li>
+</ul></li>
 </ul></li>
 </ul>
 </div>
-<div id="all-episodes-with-inpatient-entries" class="section level3">
-<h3>All Episodes with Inpatient Entries</h3>
+<div id="all-episodes-with-inpatient-entries" class="section level4">
+<h4>All episodes with inpatient entries</h4>
 <p>If all episodes with any register entry from inpatient care (ie. also
 shorter than overnight episodes) are considered inpatient care (models 1
 and 3):</p>
 <ul>
-<li>Psychiatric inpatient episodes, all years included:
+<li>Psychiatric inpatient episodes:
 <ul>
-<li><code>dat_all_inpatient[psy == TRUE]</code></li>
+<li><code>dat[psy == TRUE]</code></li>
 </ul></li>
-<li>Psychiatric outpatient episodes, starting from the year
-<code>outpatient_start_year</code>
+<li>Psychiatric outpatient episodes
 <ul>
 <li>including psychiatric outpatient visits during non psychiatric
 inpatient care
-<code>dat_episodes[psy == TRUE &amp; inpatient_psy == FALSE]</code></li>
+<ul>
+<li><code>dat[psy == TRUE &amp; inpat_psy == FALSE]</code></li>
+</ul></li>
 <li>only psychiatric outpatient visits when not in inpatient care
-<code>dat_episodes[psy == TRUE &amp; inpatient == FALSE]</code></li>
+<ul>
+<li><code>dat[psy == TRUE &amp; inpat == FALSE]</code></li>
+</ul></li>
 </ul></li>
 </ul>
 </div>
-<div id="number-of-episodes-by-person" class="section level3">
-<h3>Number of Episodes by Person</h3>
+<div id="number-of-episodes-by-person" class="section level4">
+<h4>Number of episodes by person</h4>
 <p>To get number of episodes by person, get .N by shnro, f. ex. number
-of psychiatric inpatient episodes by person (models 2 and 4), all years
-included: +
-<code>dat_all_inpatient[overnight_psy == TRUE, .N, by = shnro]</code></p>
-</div>
-<div id="number-of-days-hospitalized-by-person" class="section level3">
-<h3>Number of Days Hospitalized by Person</h3>
-<p>To get the total number of days hospitalized:</p>
+of psychiatric inpatient episodes by person (models 2 and 4)</p>
 <ul>
-<li><code>dat_all_inpatient[, .(days_hospitalized = lahtopvm - tulopvm), by = shnro][, .(days_hospitalized = sum(days_hospitalized)), by = shnro][]</code></li>
+<li><code>dat[overnight_psy == TRUE, .N, by = shnro]</code></li>
 </ul>
 </div>
-<div id="number-of-days-wiht-hospitalized-in-psychiatric-care-by-person" class="section level3">
-<h3>Number of Days wiht Hospitalized in Psychiatric Care by Person</h3>
-<p>To get the number of days hospitalized in psychiatric care:</p>
+<div id="number-of-days-hospitalized-by-person" class="section level4">
+<h4>Number of days hospitalized by person</h4>
+<p>To get the total number of days hospitalized in all medical
+specialties throughout the data:</p>
 <ul>
-<li><code>dat_all_inpatient[psy == TRUE, .(days_hospitalized_psy = lahtopvm_psy_inpat - tulopvm_psy_inpat), by = shnro][, .(days_hospitalized = sum(days_hospitalized_psy)), by = shnro][]</code>
+<li><code>dat[inpat == TRUE, .(days_hospitalized = lahtopvm - tulopvm), by = shnro][   , .(days_hospitalized = sum(days_hospitalized)), by = shnro][]</code></li>
+</ul>
+</div>
+<div id="number-of-days-hospitalized-in-psychiatric-care-by-person" class="section level4">
+<h4>Number of days hospitalized in psychiatric care by person</h4>
+<p>To get the total number of days hospitalized in psychiatric care:</p>
 <ul>
-<li>Note: if patient is transferred from psychiatric inpatient care to
-other speciality and then back, also the days spent in other speciality
+<li><code>dat[inpat_psy ==T, .(days_hospitalized = lahtopvm - tulopvm), by = shnro][, .(days_hospitalized = sum(days_hospitalized)), by = shnro][]</code></li>
+</ul>
+<p>Note: if patient is transferred from psychiatric inpatient care to
+other specialty and then back, also the days spent in other specialty
 are covered. Days spent in other specialties after the last discharge
-(or before the first admission to psychiatry) are not coverd.</li>
-</ul></li>
+(or before the first admission to psychiatry) are not covered.</p>
+</div>
+<div id="diagnoses" class="section level4">
+<h4>Diagnoses</h4>
+<p>Relevant psychiatric diagnoses, including those set at</p>
+<ul>
+<li><p>the discharge from psychiatric inpatient care,</p></li>
+<li><p>psychiatric secondary outpatient care but not during inpatient
+care, or</p></li>
+<li><p>primary care but not during inpatient care or on the same day
+with psychiatric secondary outpatient care</p></li>
+<li><p><code>dat[, dg_psy_all_relevet := paste(na.omit(dg_psy), dg_avo, sep = &quot;_&quot;) %&gt;% str_remove_all(&quot;_NA&quot;)]</code></p></li>
 </ul>
-</div>
-</div>
-<div id="primary-care" class="section level2">
-<h2>5. Primary Care</h2>
-<p>The primary care register (called Avohilmo) has more complex
-structure than the secondary care registers. Four follow-up points are
-included in Avohilmo: the first contact, assessment of treatment needs,
-scheduling of the appointment, the appointment.</p>
-<p>To recognize actual appointments that took place in person, subset
-the following values in variable <code>yhteystapa</code>: -
-<code>yhteystapa %in% c(&#39;R10&#39;, &#39;R20&#39;, &#39;R30&#39;, &#39;R41&#39;)</code></p>
-<p>If you want to subset doctors appointments only, subset the following
-values in variable <code>ammattioikeus</code>:
--<code>ammattioikeus %in% c(&quot;001&quot;, &quot;002&quot;, &quot;031&quot;, &quot;032&quot;, &quot;034&quot;, &quot;701&quot;, &quot;702&quot;, &quot;717&quot;, &quot;718&quot;, &quot;720&quot;, &quot;722&quot;, &quot;723&quot;, &quot;724&quot;, &quot;810&quot;, &quot;811&quot;, &quot;900&quot;, &quot;901&quot;)</code></p>
-<p>There are few entries, which do not start and end on the same day.
-Here, only the start date is considered.</p>
-<p>After desired subsettings, bind the Avohilmo data with inpatient
-data, f.ex. <code>dat_all_inpatient[overnight_psy == TRUE]</code> and
-exclude primary care appointments during psychiatric inpatient episodes.
-This needs to be done to recognize discharge diagnoses only.</p>
-<p>Example will be provided in the future.</p>
-<div id="icpc-2-conversion" class="section level3">
-<h3>ICPC-2 conversion</h3>
-<p>Some primary care providers use ICPC-2 diagnostic classification.</p>
-<p>The following schema was used.</p>
-<pre><code># NOT RUN
-
-icpc2_icd10 &lt;-  list(
-  f0= &#39;P70|P71&#39;,
-  f1= &#39;P15|P16|P17|P19&#39;,
-  f2= &#39;P72&#39;,
-  f3= &#39;P73&#39;,
-  f4= &#39;P79|P74|P02|P82|P75|P78&#39;,
-  f5= &#39;P86|P06|P07|P08&#39;,
-  f6= &#39;P09|P80&#39;,
-  f7= &#39;P85&#39;,
-  f8= &#39;P24&#39;,
-  f9= &#39;P81|P22,P23|P10|P11|P12|P13&#39;,
-  fx= &#39;P18|P98|P76|P99|P29&#39;
-)
-  
-dat[, dg_converted := &#39;&#39;]
-
-for( i in c(0:9, &#39;x&#39;)){
-  dat[grepl(icpc2_icd10[paste0(&#39;f&#39;, i)], dg_icpc2, ignore.case = TRUE),
-      dg_converted := paste(na.omit(dg_converted), paste0(&#39;F&#39;, i), sep = &#39;_&#39;)]
-}</code></pre>
-<p>Conversion codes: - Kvist M, Savolainen T, Suomen Kuntaliitto. <a href="https://www.kuntaliitto.fi/julkaisut/2010/1344-icpc-2-perusterveydenhuollon-kansainvalinen-luokitus">ICPC-2
-: perusterveydenhuollon kansainvälinen luokitus</a>. Suomen kuntaliitto,
-Helsinki 2010. p. 194, Finnish version. - <a href="https://www.who.int/standards/classifications/other-classifications/international-classification-of-primary-care">ICPC-2-R:
-International Classification of Primary Care</a> see p. 147</p>
+<p>All diagnos</p>
+<p><br></p>
 </div>
 </div>
 <div id="version-history" class="section level2">
-<h2>Version History</h2>
+<h2>Version history</h2>
 <ul>
 <li><p>2.0.0 (DATE): New functional format for the scripts. The coding
 of treatment types in the Hilmo rgisters changed in 2019 and is now
@@ -1201,6 +1343,7 @@ discharge in the register entry with the latest admission. This may give
 too early discharge dates. Admission dates and numbers of episodes were
 correctly calculated.</p></li>
 </ul>
+<p><br></p>
 </div>
 <div id="citation" class="section level2">
 <h2>Citation</h2>
