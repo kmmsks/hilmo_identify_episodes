@@ -574,7 +574,6 @@ sections as well.</p>
 <h4><strong><em>Separation of the four models: <code>add_days</code> and
 overnight stays</em></strong></h4>
 <p>The two characteristics that separate the four models are:</p>
-<p><br></p>
 <div id="add_days-the-mimimun-number-of-days-between-separate-inpatient-episodes" class="section level5">
 <h5><code>add_days</code>: the mimimun number of days between separate
 inpatient episodes</h5>
@@ -595,7 +594,6 @@ minimum of two consecutive days</h5>
 a minimum of two consecutive days, incorporating at least one overnight
 stay. This can be determined after processing of the data by supseting,
 see 4. subsetting below.</p>
-<p><br></p>
 </div>
 </div>
 <div id="operating-with-chunks-longitudinal-or-annual" class="section level4">
@@ -612,7 +610,6 @@ as the <strong>longitudinal</strong> format.</p>
 <strong>annual</strong> format. Notice, that in this case episodes cut
 at the last day of each year. This behaviour will be singnaled,
 though.</p>
-<p><br></p>
 </div>
 <div id="directory-tree" class="section level4">
 <h4>Directory tree</h4>
@@ -646,7 +643,6 @@ though.</p>
 <code>data_main</code> as default.</p>
 <p><code>start_year</code>and <code>end_year</code> specify the the
 period of data within the longitudinal chunks.</p>
-<p><br></p>
 </div>
 <div id="conversion-of-diagnostic-classifications" class="section level4">
 <h4>Conversion of diagnostic classifications</h4>
@@ -680,7 +676,6 @@ varying classifications.</p>
 meaning that each individual’s all data is written into a single file,
 using <code>append = TRUE</code> in <code>fwrite</code> function from
 <code>library(data.table)</code>.</p>
-<p><br></p>
 </div>
 <div id="synthetize_data-synthetic-data-for-demonstration" class="section level4">
 <h4><code>synthetize_data()</code>: Synthetic data for
@@ -691,7 +686,6 @@ purposes.</p>
 <div id="usage" class="section level5">
 <h5>Usage</h5>
 <p><code>synthetize_data(n_rows = 20000, n_individuals = 1000,   start_year = 2015, end_year = 2020, seed = 1,   outpatient_proportion = .35, primary_care_proportion = .4, ilaji2_proportion = .05,   save_data = TRUE, data_folder_name = &#39;data_main&#39;, longitudinal = TRUE)</code></p>
-<p><br></p>
 </div>
 <div id="arguments" class="section level5">
 <h5>Arguments</h5>
@@ -808,15 +802,12 @@ same day with secondary care psychiatric outpatient visits are
 ignored.</p>
 <p>See <code>1a_processing_subfuns.R</code> for details regarding these
 behaviors.</p>
-<p><br></p>
 <div id="process_data-function-to-control-the-main-processing" class="section level4">
 <h4><code>process_data()</code>: function to control the main
 processing</h4>
-<p><br></p>
 <div id="usage-1" class="section level5">
 <h5>Usage</h5>
 <p><code>process_data(add_days, start_year, end_year, longitudinal = TRUE,  process_secondary_outpatient = TRUE, process_primary_care = TRUE, separate_files_for_old_registers = FALSE)</code></p>
-<p><br></p>
 </div>
 <div id="arguments-1" class="section level5">
 <h5>Arguments</h5>
@@ -872,7 +863,6 @@ FALSE</td>
 </tr>
 </tbody>
 </table>
-<p><br></p>
 </div>
 <div id="data-output-location" class="section level5">
 <h5>Data output location</h5>
@@ -882,7 +872,6 @@ longitudinal_[start_year]_[end_year]</p>
 <p>Files are named as follows:</p>
 <p><code>[chunk]_1_inpatient_outpatient.csv</code></p>
 <p><code>[chunk]_primary_care.csv</code></p>
-<p><br></p>
 </div>
 <div id="variables-in-the-processed-data" class="section level5">
 <h5>Variables in the processed data</h5>
@@ -1101,11 +1090,9 @@ studies.</p>
 <div id="get_first_dates-function-to-control-the-evaluation-of-the-date-of-incidence" class="section level4">
 <h4><code>get_first_dates()</code>: function to control the evaluation
 of the date of incidence</h4>
-<p><br></p>
 <div id="usage-2" class="section level5">
 <h5>Usage</h5>
 <p><code>get_first_dates(add_days, start_year, end_year, dg_age = dg_groups_w_min_ages)</code></p>
-<p><br></p>
 </div>
 <div id="arguments-2" class="section level5">
 <h5>Arguments</h5>

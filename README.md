@@ -128,8 +128,6 @@ The numbered headings referes to the numbered section in the `main.R`, which is 
 
 The two characteristics that separate the four models are:
 
-<br>
-
 ##### `add_days`: the mimimun number of days between separate inpatient episodes
 
 The minimum of full calender days required between two hospital
@@ -144,8 +142,6 @@ treatment periods:
 ##### Overnight: whether or not an inpatient episode extends over a minimum of two consecutive days
 
 In models 2 and 4, valid hospitalizations are those that extend over a minimum of two consecutive days, incorporating at least one overnight stay. This can be determined after processing of the data by supseting, see 4. subsetting below.
-
-<br>
 
 #### Operating with chunks, longitudinal or annual
 
@@ -163,8 +159,6 @@ is written into a single file. This will be called as the
 If data from each year are handled separately, this will bve called
 **annual** format. Notice, that in this case episodes cut at the last
 day of each year. This behaviour will be singnaled, though.
-
-<br>
 
 #### Directory tree
 
@@ -185,8 +179,6 @@ This scripts create the following directory tree:
 `data_folder_name` can be specified in the functions. `data_main` as default.
 
 `start_year`and `end_year` specify the the period of data within the longitudinal chunks.
-
-<br>
 
 #### Conversion of diagnostic classifications
 
@@ -223,8 +215,6 @@ In this step, the preprocessed data will be saved longitudinally,
 meaning that each individual's all data is written into a single file,
 using `append = TRUE` in `fwrite` function from `library(data.table)`.
 
-<br>
-
 #### `synthetize_data()`: Synthetic data for demonstration
 
 Synthetic data may be used for testing these scripts. Access to the real
@@ -236,8 +226,6 @@ registers is limited. This function creates data for testing purposes.
   start_year = 2015, end_year = 2020, seed = 1,
   outpatient_proportion = .35, primary_care_proportion = .4, ilaji2_proportion = .05,
   save_data = TRUE, data_folder_name = 'data_main', longitudinal = TRUE)`
-
-<br>
 
 ##### Arguments
 
@@ -298,17 +286,11 @@ Third, primary care appointements during inpatient episodes or at the same day w
 
 See `1a_processing_subfuns.R` for details regarding these behaviors.
 
-<br>
-
 #### `process_data()`: function to control the main processing
-
-<br>
 
 ##### Usage
 
 `process_data(add_days, start_year, end_year, longitudinal = TRUE,  process_secondary_outpatient = TRUE, process_primary_care = TRUE, separate_files_for_old_registers = FALSE)`
-
-<br>
 
 ##### Arguments
 
@@ -322,8 +304,6 @@ See `1a_processing_subfuns.R` for details regarding these behaviors.
 | process_primary_care                      | Logical | If only secondary care data is process, set to FALSE, otherwise TRUE                                                                                   |
 | separate_files_for_old_registers          | Logical | If years are before 1996 are saved to separate files in preprocessing, set TRUE, if working with synthetic data, must be set to FALSE                  |
 
-<br>
-
 ##### Data output location
 
 Processed data are saved into the location [data_folder_name] -\>
@@ -335,8 +315,6 @@ Files are named as follows:
 `[chunk]_1_inpatient_outpatient.csv`
 
 `[chunk]_primary_care.csv`
-
-<br>
 
 ##### Variables in the  processed data
 
@@ -386,13 +364,9 @@ Now the identification of inpatient episodes and outpatient and primary care app
 
 #### `get_first_dates()`: function to control the evaluation of the date of incidence
 
-<br>
-
 ##### Usage
 
 `get_first_dates(add_days, start_year, end_year, dg_age = dg_groups_w_min_ages)`
-
-<br>
 
 ##### Arguments
 
