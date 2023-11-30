@@ -1,8 +1,3 @@
----
-editor_options: 
-  markdown: 
-    wrap: 72
----
 
 # hilmo_identify_episodes v 2.0.0-beta
 
@@ -109,7 +104,7 @@ psychiatric treatments is not univocal and person identifications have
 more errors. For details, see the paper.
 
 | Years          | Diagnoses         | Description                                                                                                                                                      |
-|:---------|:-----------|:-----------------------------------------------------|
+|:-------------|:-----------|:-------------------------------------------------|
 | **1969--1974** | ICD-8             | Not covered in this method.                                                                                                                                      |
 | **1975--1995** |                   | The older data is usually provided in three datasets, with slightly different formatting in each of them. Notice changes in variable coding within the datasets. |
 |    1975--1986  | ICD-8             |                                                                                                                                                                  |
