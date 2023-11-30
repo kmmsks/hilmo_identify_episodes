@@ -34,7 +34,7 @@ process_data <- function(add_days, start_year, end_year, longitudinal = TRUE,
                          process_secondary_outpatient = TRUE, process_primary_care = TRUE, separate_files_for_old_registers = FALSE){
   
   # Here are the actual processing functions:
-  source(here("scripts", 'R', '1a_processing_subfuns.R'), encoding = 'UTF-8')
+  source(here("R", "1a_processing_subfuns.R"), encoding = "UTF-8")
   
   # location of the pre-processed data and create directory tree for processed data
   dirs <- c(create_dirs_preprocess(start_year = start_year, end_year = end_year, longitudinal = longitudinal),
@@ -47,15 +47,17 @@ process_data <- function(add_days, start_year, end_year, longitudinal = TRUE,
   for( i in chunks_in){
     if(separate_files_for_old_registers == TRUE){
       inpat_0 <- rbindlist(list(
-        fread(file.path(dirs$pre, paste0(i, '_inpatient.csv'))),
-        fread(file.path(dirs$pre, paste0(i, '_before_1996.csv')))
+        fread(file.path(dirs$pre, paste0(i, "_inpatient.csv"))),
+        fread(file.path(dirs$pre, paste0(i, "_before_1996.csv")))
       ), fill = TRUE)
     } else if(separate_files_for_old_registers == FALSE){
-      inpat_0 <- fread(file.path(dirs$pre, paste0(i, '_inpatient.csv')))
+      inpat_0 <- fread(file.path(dirs$pre, paste0(i, "_inpatient.csv")))
     } else {
       stop("separate_files_for_old_registers must be TRUE or FALSE. Old registers refer to data before 1996 which usually are provided in 
            separate files.")
     }
+    
+    if(longitudinal ==FALSE){inpat_0[,vuosi := i]}
     
     # Actual processing of the inpatient data
     inpat_1 <- identify_inpatient_episodes(inpat_0 = inpat_0, add_days = add_days, 
@@ -64,13 +66,15 @@ process_data <- function(add_days, start_year, end_year, longitudinal = TRUE,
     # Processing of the outpatient data
     if(process_secondary_outpatient == TRUE){
       # read pre-processed chunk of outpatient data
-      outpat_0 <- fread(file.path(dirs$pre, paste0(i, '_outpatient.csv')))
+      outpat_0 <- fread(file.path(dirs$pre, paste0(i, "_outpatient.csv")))
+      
+      if(longitudinal ==FALSE){outpat_0[,vuosi := i]}
       
       # Actual processing of the outpatient data
       inpat_outpat_1 <- process_outpatient_data(outpat_0 = outpat_0, inpat_1 = inpat_1, start_year = start_year, end_year = end_year)
       
       # Save processed data
-      inpat_outpat_1 %>% fwrite(file.path(dirs$post, paste0(i, '_inpatient_outpatient.csv')))
+      inpat_outpat_1 %>% fwrite(file.path(dirs$post, paste0(i, "_inpatient_outpatient.csv")))
     }
     # Processing of the primary care data
     if(process_primary_care == TRUE) {
@@ -78,18 +82,20 @@ process_data <- function(add_days, start_year, end_year, longitudinal = TRUE,
         stop("process_secondary_outpatient must be TRUE for primary care processing")
       }
       # read pre-processed chunk of outpatient data
-      prim_care_0 <- fread(file.path(dirs$pre, paste0(i, '_primary_care.csv')))
+      prim_care_0 <- fread(file.path(dirs$pre, paste0(i, "_primary_care.csv")))
+      
+      if(longitudinal ==FALSE){prim_care_0[,vuosi := i]}
       
       # Actual processing
       prim_care_1 <- process_primary_care(prim_care_0 = prim_care_0, inpat_outpat_1 = inpat_outpat_1,
                                                        start_year = start_year, end_year = end_year)
       # save
-      prim_care_1 %>% fwrite(file.path(dirs$post, paste0(i, '_primary_care.csv')))
+      prim_care_1 %>% fwrite(file.path(dirs$post, paste0(i, "_primary_care.csv")))
     } 
     
     # if only period before any secondary care data (before 1998) is processed, save inpatient data only
     if(process_secondary_outpatient == FALSE & process_primary_care == FALSE) {
-      inpat_1 %>% fwrite(file.path(dirs$post, paste0(i, '_inpatient_only.csv')))
+      inpat_1 %>% fwrite(file.path(dirs$post, paste0(i, "_inpatient_only.csv")))
     } 
     
   }

@@ -33,7 +33,7 @@ create_dirs_postprocess <- function(add_days, start_year, end_year, data_folder_
   if (!dir.exists(p)) {dir.create(p)}
   
   post <- here(data_folder_name, "1_identified_episodes", paste0('add_days_', add_days),
-               paste0("longitudinal_", start_year, "_", end_year))
+                 ifelse(longitudinal == TRUE, paste0("longitudinal_",start_year, "_", end_year), "annual"))
 
   if (!dir.exists(post)) {dir.create(post)}
   
@@ -49,26 +49,35 @@ create_dirs_first_dates <- function(add_days, start_year, end_year, data_folder_
   first_dates <- here(data_folder_name, '2_first_dates')
   if (!dir.exists(first_dates)) {dir.create(first_dates)}
   
-  if(is.na(add_days)){
-    p <- here(data_folder_name, '2_first_dates', "non_processed")
-    if (!dir.exists(p)) {dir.create(p)}
-    
-    first_dates_nonprocessed <- file.path(p, paste0('mental_health_services_', start_year, "_", end_year)) 
-    if (!dir.exists(first_dates_nonprocessed)) {dir.create(first_dates_nonprocessed)}
-
-    # named list:
-    return(tibble::lst(first_dates, first_dates_nonprocessed))
-    
+  if(longitudinal == TRUE){
+    l <- paste0('longitudinal_', start_year, "_", end_year)
   } else {
-    p <- here(data_folder_name, '2_first_dates', paste0("add_days_", add_days))
-    if (!dir.exists(p)) {dir.create(p)}
-  
-    first_dates_mh <- file.path(p, paste0('mental_health_services_', start_year, "_", end_year)) 
-    if (!dir.exists(first_dates_mh)) {dir.create(first_dates_mh)}
-    
-    # named list:
-    tibble::lst(first_dates, first_dates_mh)
+    l <- "annual"
   }
+
+  first_dates_long <- here(data_folder_name, '2_first_dates', l)
+  
+  if (!dir.exists(first_dates_long)) {dir.create(first_dates_long)}
+
+  if(is.na(add_days)){
+    p <- here(data_folder_name, '2_first_dates', l, "non_processed")
+    if (!dir.exists(p)) {dir.create(p)}
+        
+    first_dates_nonprocessed <- file.path(p, "mental_health_services") 
+    if (!dir.exists(first_dates_nonprocessed)) {dir.create(first_dates_nonprocessed)}
+        
+    # named list:
+    return(tibble::lst(first_dates, first_dates_long, first_dates_nonprocessed))
+    } else {
+      p <- here(data_folder_name, '2_first_dates', l, paste0("add_days_", add_days))
+      if (!dir.exists(p)) {dir.create(p)}
+        
+      first_dates_mh <- file.path(p, paste0('mental_health_services')) 
+      if (!dir.exists(first_dates_mh)) {dir.create(first_dates_mh)}
+        
+      # named list:
+      tibble::lst(first_dates, first_dates_long, first_dates_mh)
+    }
   }
 
 synthetize_data <- function(n_rows = 20000, n_individuals = 1000, 
@@ -200,9 +209,9 @@ last_day_of <- function(y_in){
   as.IDate(paste0(y_in, '-12-31')) %>% as.integer()
 }
 
-read_files_from <- function(location){
+read_files_from <- function(location, longitudinal = TRUE){
   # read inpatient and outpatient data
-  chunks_in <- location %>% list.files() %>% substr(start = 1, stop = 1) %>% unique()
+  chunks_in <- location %>% list.files() %>%  word(sep = "_") %>% unique()
   
   f <- function(i){  
     secondary <- fread(file.path(location, paste0(i, '_inpatient_outpatient.csv')))[, shnro := as.character(shnro)]
@@ -211,6 +220,11 @@ read_files_from <- function(location){
     
     rbindlist(list(secondary, primary), fill = TRUE)
   }
-  out <- lapply(chunks_in, f) %>% rbindlist()
+  if(longitudinal == TRUE){
+    out <- lapply(chunks_in, f) %>% rbindlist()
+  } else{
+    names(chunks_in) <- paste0("year_", chunks_in)
+    out <- lapply(chunks_in, f)
+  }
   out
 }

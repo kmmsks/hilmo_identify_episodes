@@ -47,34 +47,34 @@ identify_inpatient_episodes <- function(inpat_0, add_days, start_year, end_year,
                         episode_continues = any(episode_continues == 1),
                         episode_psy_continues = any(episode_psy_continues == 1),
                         ilaji_2_n = sum(ilaji ==2), n_rows = .N, 
-                        dg_all = paste(dg, collapse = '_')), 
+                        dg_all = paste(dg, collapse = "_")), 
                      by = .(shnro, episode)]
   
   # Start and end date of psychiatric inpatient care 
   # (may or may not be the same dates as the star and end of whole episode)
   
-  inpat_1[inpat_0[psy == T], on =.(shnro, episode), c('tulopvm_psy', 'lahtopvm_psy') := .(tupva, lpvm) ]
+  inpat_1[inpat_0[psy == T], on =.(shnro, episode), c("tulopvm_psy", "lahtopvm_psy") := .(tupva, lpvm) ]
   
   
   # Diagnoses at the last day of the inpatient episodes == discharge diagnoses
   
   dat <- inpat_0[inpat_0[,.I[lpvm == max(lpvm)], by=.(shnro, episode)]$V1, dg,  by = .(shnro, episode)
-  ][, .(dg_inpat = paste0(na.omit(unique(dg)), collapse = '_')), by = .(shnro, episode)]
+  ][, .(dg_inpat = paste0(na.omit(unique(dg)), collapse = "_")), by = .(shnro, episode)]
   
-  inpat_1[dat, on =.(shnro, episode), c('dg_inpat'):= .(dg_inpat)]
+  inpat_1[dat, on =.(shnro, episode), c("dg_inpat"):= .(dg_inpat)]
   
   # Diagnoses at the last day of the inpatient care at psychiatry == psychiatric discharge diagnoses
 
     dat <- inpat_0[inpat_0[psy == T,.I[lpvm == max(lpvm)], by = .(shnro, episode)]$V1, dg,  by = .(shnro, episode)
-  ][, .(dg_inpat_psy = paste0(na.omit(unique(dg)), collapse = '_')), by = .(shnro, episode)]
+  ][, .(dg_inpat_psy = paste0(na.omit(unique(dg)), collapse = "_")), by = .(shnro, episode)]
   
-  inpat_1[dat, on =.(shnro, episode), c('dg_inpat_psy'):= .(dg_inpat_psy)]
+  inpat_1[dat, on =.(shnro, episode), c("dg_inpat_psy"):= .(dg_inpat_psy)]
   
   
   # List of all medical specialities included in the episode (refer to register manuals for coding)
-  dat <- inpat_0[, .(ea_list = paste0(na.omit(unique(ea)), collapse = '_')), by = .(shnro, episode)]
+  dat <- inpat_0[, .(ea_list = paste0(na.omit(unique(ea)), collapse = "_")), by = .(shnro, episode)]
   
-  inpat_1[dat, on =.(shnro, episode), c('ea_list'):= .(ea_list)]
+  inpat_1[dat, on =.(shnro, episode), c("ea_list"):= .(ea_list)]
   
   ### if data are ONLY before 1996, some of the variables are not present ------
   #   and the following cannot be performed
@@ -82,34 +82,34 @@ identify_inpatient_episodes <- function(inpat_0, add_days, start_year, end_year,
     
     # The last value of the variable paltu (this is a kind of service provider ID)
     dat <- inpat_0[inpat_0[, .I[lpvm == max(lpvm)], by = .(shnro, episode)]$V1, paltu,  by = .(shnro, episode)
-    ][, .(paltu = paste0(na.omit(unique(paltu)), collapse = '_')), by = .(shnro, episode)]
+    ][, .(paltu = paste0(na.omit(unique(paltu)), collapse = "_")), by = .(shnro, episode)]
     
-    inpat_1[dat, on =.(shnro, episode), c('paltu'):= .(paltu)]
+    inpat_1[dat, on =.(shnro, episode), c("paltu"):= .(paltu)]
     
     
     # The last value of the variable paltu in psychiatry (this is a kind of service provider ID)
     
     dat <- inpat_0[inpat_0[psy == T, .I[lpvm == max(lpvm)], by = .(shnro, episode)]$V1, paltu,  by = .(shnro, episode)
-    ][, .(paltu_psy = paste0(na.omit(unique(paltu)), collapse = '_')), by = .(shnro, episode)]
+    ][, .(paltu_psy = paste0(na.omit(unique(paltu)), collapse = "_")), by = .(shnro, episode)]
     
-    inpat_1[dat, on =.(shnro, episode), c('paltu_psy'):= .(paltu_psy)]
+    inpat_1[dat, on =.(shnro, episode), c("paltu_psy"):= .(paltu_psy)]
     
     
     # home municipality of the patient at the start of the episode
     
     dat <- inpat_0[inpat_0[, .I[tupva == min(tupva)], by = .(shnro, episode)]$V1, koku,  by = .(shnro, episode)
-    ][, .(koku = paste0(na.omit(unique(koku)), collapse = '_')), by = .(shnro, episode)]
+    ][, .(koku = paste0(na.omit(unique(koku)), collapse = "_")), by = .(shnro, episode)]
     
-    inpat_1[dat, on =.(shnro, episode), c('koku'):= .(koku)]
+    inpat_1[dat, on =.(shnro, episode), c("koku"):= .(koku)]
     
     
     # urgency of the episode
     
     inpat_0[kiireellisyys == "", kiireellisyys := NA_character_]
     dat <- inpat_0[inpat_0[, .I[lpvm == min(lpvm)], by = .(shnro, episode)]$V1, kiireellisyys,  by = .(shnro, episode)
-    ][, .(kiireellisyys = paste0(na.omit(unique(kiireellisyys)), collapse = '_')), by = .(shnro, episode)]
+    ][, .(kiireellisyys = paste0(na.omit(unique(kiireellisyys)), collapse = "_")), by = .(shnro, episode)]
     
-    inpat_1[dat, on =.(shnro, episode), c('kiireellisyys'):= .(kiireellisyys)]
+    inpat_1[dat, on =.(shnro, episode), c("kiireellisyys"):= .(kiireellisyys)]
   }
   
   # Recognize overnight episodes
@@ -132,7 +132,7 @@ process_outpatient_data <- function(outpat_0, inpat_1, start_year, end_year) {
   outpat_0 <- outpat_0[vuosi %between% c(start_year, end_year)]
   
   # Harmonize variable names
-  setnames(outpat_0, old = c('dg', 'tupva', 'lpvm'), new = c('dg_outpat', 'tulopvm', 'lahtopvm'))
+  setnames(outpat_0, old = c("dg", "tupva", "lpvm"), new = c("dg_outpat", "tulopvm", "lahtopvm"))
   
   # Mark outpatient rows
   outpat_0[, `:=`(episode = 0)]
@@ -233,17 +233,17 @@ process_outpatient_data <- function(outpat_0, inpat_1, start_year, end_year) {
                 n_rows = sum(n_rows), 
                 tulopvm_psy = min(tulopvm_psy), 
                 lahtopvm_psy = max(lahtopvm_psy), 
-                paltu = paste0(na.omit(unique(paltu)), collapse = '_'), 
-                #   paltu_psy = paste0(na.omit(unique(paltu_psy)), collapse = '_'), 
-                #    koku = paste0(na.omit(unique(koku)), collapse = '_'), 
-                #    kiireellisyys = paste0(na.omit(unique(kiireellisyys)), collapse = '_'), 
-                #    yhteystapa = paste0(na.omit(unique(yhteystapa)), collapse = '_'), 
-                #   pala = paste0(na.omit(unique(pala)), collapse = '_'), 
-                ea_list = paste0(na.omit(unique(ea_list)), na.omit(unique(ea)), collapse = '_'), 
-                dg_inpat = paste0(na.omit(unique(dg_inpat)), collapse = '_'), 
+                paltu = paste0(na.omit(unique(paltu)), collapse = "_"), 
+                #   paltu_psy = paste0(na.omit(unique(paltu_psy)), collapse = "_"), 
+                #    koku = paste0(na.omit(unique(koku)), collapse = "_"), 
+                #    kiireellisyys = paste0(na.omit(unique(kiireellisyys)), collapse = "_"), 
+                #    yhteystapa = paste0(na.omit(unique(yhteystapa)), collapse = "_"), 
+                #   pala = paste0(na.omit(unique(pala)), collapse = "_"), 
+                ea_list = paste0(na.omit(unique(ea_list)), na.omit(unique(ea)), collapse = "_"), 
+                dg_inpat = paste0(na.omit(unique(dg_inpat)), collapse = "_"), 
                 #    dg_inpat_psy = NA, 
-                dg_outpat = paste0(na.omit(unique(dg_outpat)), collapse = '_'),
-                dg_all = paste0(na.omit(unique(dg_all)), na.omit(unique(dg_outpat)), collapse = '_')
+                dg_outpat = paste0(na.omit(unique(dg_outpat)), collapse = "_"),
+                dg_all = paste0(na.omit(unique(dg_all)), na.omit(unique(dg_outpat)), collapse = "_")
               ), 
               .(shnro, event)]
     
@@ -265,16 +265,16 @@ process_outpatient_data <- function(outpat_0, inpat_1, start_year, end_year) {
     # Outpatient data:
     # If the medical specialty is not psychiatry, psychiatric diagnoses are excluded:
     e_outpat_no_psy <- d1[sum_n_rivi > 1 & sum_episode != 0 & sum_psy > 0 & episode == 0 & psy == FALSE,
-                        .(dg_outpat_no_psy = paste0(na.omit(unique(dg_outpat)), collapse = '_') %>% gsub("F.*?_", "", .) %>% gsub("F.*", "",.) ,
-                          ea_list = paste0(na.omit(unique(ea_list)), na.omit(unique(ea)), collapse = '_')), 
+                        .(dg_outpat_no_psy = paste0(na.omit(unique(dg_outpat)), collapse = "_") %>% gsub("F.*?_", "", .) %>% gsub("F.*", "",.) ,
+                          ea_list = paste0(na.omit(unique(ea_list)), na.omit(unique(ea)), collapse = "_")), 
                         .(shnro, event)]
   
     # outpatient visits in psychiatry
     # All diagnoses included
     e_outpat_psy <- d1[sum_n_rivi > 1 & sum_episode != 0 & sum_psy > 0 & episode == 0 & psy == TRUE,
                      .(lahtopvm = max(lahtopvm),
-                       dg_outpat_psy = paste0(na.omit(unique(dg_outpat)), collapse = '_'),
-                       ea_list = paste0(na.omit(unique(ea_list)), na.omit(unique(ea)), collapse = '_')
+                       dg_outpat_psy = paste0(na.omit(unique(dg_outpat)), collapse = "_"),
+                       ea_list = paste0(na.omit(unique(ea_list)), na.omit(unique(ea)), collapse = "_")
                      ), 
                      .(shnro, event)]
   
@@ -282,7 +282,7 @@ process_outpatient_data <- function(outpat_0, inpat_1, start_year, end_year) {
     # Recoginize psychiatric outpatient diagnoses that are set before the date of discharge from psychiatry
     
     # update join: psychiatric discgharge date to psychiatric outpatient data
-    e_outpat_psy[lst$e_inpat, on = c('shnro', 'event'), c("lahtopvm_psy") := .(i.lahtopvm_psy)]
+    e_outpat_psy[lst$e_inpat, on = c("shnro", "event"), c("lahtopvm_psy") := .(i.lahtopvm_psy)]
   
     # collect outpatient diagnoses that are not from psychiatry (psychiatric diagnoses excluded) and
     # psychiatric outpaitent diagnoses at or after discharge from psychiatry
@@ -290,34 +290,34 @@ process_outpatient_data <- function(outpat_0, inpat_1, start_year, end_year) {
     e_outpat <- merge(
       e_outpat_no_psy,
       e_outpat_psy[is.na(lahtopvm_psy) | (!is.na(lahtopvm_psy) & lahtopvm >= lahtopvm_psy) , .(shnro, event, dg_outpat_psy, ea_list)],
-      by= c('shnro', 'event'),
+      by= c("shnro", "event"),
       all = T
     )
   
     # list medical specialites
-    e_outpat[, `:=`(ea_in = paste0(ea_list.x, '_', ea_list.y))]
+    e_outpat[, `:=`(ea_in = paste0(ea_list.x, "_", ea_list.y))]
   
     # all outpatient dgs
     e_outpat_all <- merge(
       e_outpat_no_psy[,.(shnro, event, dg_outpat_no_psy)],
       e_outpat_psy[,.(shnro, event, dg_outpat_psy)],
-      by= c('shnro', 'event'),
+      by= c("shnro", "event"),
       all = T
     )
   
-    e_outpat_all[,dg_outpat_all := paste(dg_outpat_no_psy, dg_outpat_psy, sep = '_')]
+    e_outpat_all[,dg_outpat_all := paste(dg_outpat_no_psy, dg_outpat_psy, sep = "_")]
   
     ### join the processed outpatient diagnoses to the underlying inpatient events: ----
-    lst$e_inpat[e_outpat, on = c('shnro', 'event'), 
-                c('dg_outpat_psy', 'dg_outpat_no_psy', 'ea_in') := .(i.dg_outpat_psy, i.dg_outpat_no_psy, i.ea_in)]
+    lst$e_inpat[e_outpat, on = c("shnro", "event"), 
+                c("dg_outpat_psy", "dg_outpat_no_psy", "ea_in") := .(i.dg_outpat_psy, i.dg_outpat_no_psy, i.ea_in)]
     
-    lst$e_inpat[e_outpat_all, on = c('shnro', 'event'), 
-                c('dg_outpat_all') := .(i.dg_outpat_all)]
+    lst$e_inpat[e_outpat_all, on = c("shnro", "event"), 
+                c("dg_outpat_all") := .(i.dg_outpat_all)]
     
-    lst$e_inpat[, dg_all := paste(dg_all, dg_outpat_all, sep = '_')]
+    lst$e_inpat[, dg_all := paste(dg_all, dg_outpat_all, sep = "_")]
     lst$e_inpat[, dg_outpat_all := NULL]
     
-    lst$e_inpat[, ea_list := paste(ea_list, ea_in, sep = '_')]
+    lst$e_inpat[, ea_list := paste(ea_list, ea_in, sep = "_")]
     lst$e_inpat[,ea_in := NULL]
     
     lst$e_inpat[dg_outpat_psy =="", dg_outpat_psy := NA_character_]
@@ -367,7 +367,7 @@ process_outpatient_data <- function(outpat_0, inpat_1, start_year, end_year) {
     # Discarge diagnoses from psychiatric inpatient care and possible psychiatric outpatient
     # diagnoses after the discgharge from psychiatry if inpatient care contiues in different
     # medical specialty
-    dat[inpat_psy == T, dg_psy := paste0(dg_inpat_psy, '_', dg_outpat_psy)]
+    dat[inpat_psy == T, dg_psy := paste0(dg_inpat_psy, "_", dg_outpat_psy)]
 
     # Psychiatric outpatient diagnoses during inpatient care in another sepcialty
     # This may include general hospital psychiatry or contacts from psyciatric outpatient clinics 
@@ -405,7 +405,7 @@ process_primary_care <- function(prim_care_0, inpat_outpat_1, start_year, end_ye
   
   prim_care <- prim_care_0[vuosi %between% c(start_year, end_year), 
                            .(tulopvm = min(tupva), 
-                             dg_avo = paste(na.omit(dg_avo), collapse = '_'),
+                             dg_avo = paste(na.omit(dg_avo), collapse = "_"),
                              n_appointments = .N), 
                            by = .(shnro, lahtopvm = lpvm)]
   
@@ -422,12 +422,12 @@ process_primary_care <- function(prim_care_0, inpat_outpat_1, start_year, end_ye
   
   d1 <- rbindlist(list(
     inpat_outpat_1[inpat_psy == TRUE, .(shnro, tulopvm, lahtopvm, psy, inpat_psy)], 
-    inpat_outpat_1[psy == TRUE & inpat_psy == FALSE, head(.SD,1), keyby = .(shnro, tulopvm), .SDcols = c('lahtopvm', 'psy', 'inpat_psy', 'vuosi')],
+    inpat_outpat_1[psy == TRUE & inpat_psy == FALSE, head(.SD,1), keyby = .(shnro, tulopvm), .SDcols = c("lahtopvm", "psy", "inpat_psy", "vuosi")],
     prim_care), fill = TRUE )
   
   d1[, `:=`(inpat_psy = inpat_psy %>% as.integer(), psy = psy %>% as.integer())]
   
-  setnafill(d1, fill = 0, cols = c('psy', 'inpat_psy', 'primary_care'))
+  setnafill(d1, fill = 0, cols = c("psy", "inpat_psy", "primary_care"))
   
   gc()
   
@@ -442,7 +442,7 @@ process_primary_care <- function(prim_care_0, inpat_outpat_1, start_year, end_ye
   d1[, highest_so_far := shift(cummax(lahtopvm), fill = NA), by = shnro] 
   # now, fill is NA instead lahtopvm[1], to treat person first row correctly
   
-  # if appointment within an inpatient period, mark 
+  # if appointment within an inpatient period or same day with outpatient event, mark 
   d1[lahtopvm <= highest_so_far, remove_row := TRUE]
   
   # keep rows not marked
@@ -490,7 +490,7 @@ get_outpat_raport <- function(dat_in){
   
   dat <- copy(dat_in)
   
-  setorderv(dat, c('shnro', 'tulopvm', 'lahtopvm', 'episode'))
+  setorderv(dat, c("shnro", "tulopvm", "lahtopvm", "episode"))
   
   nums <- list(
     ## episode alkaa pkl-kaynnilla
@@ -506,40 +506,40 @@ get_outpat_raport <- function(dat_in){
     # mika tahansa pkl-kaynti psy osastoepisoden edella
     ncP = nrow(dat[psy == T & shnro == shift(shnro) & episode > 0 & shift(episode) == 0 & tulopvm == shift(tulopvm) + 1]),
     #episoden sisalla pkl-kaynti
-    nd = nrow(dat[shnro == shift(shnro, type = 'lead') & episode > 0 & shift(episode, type = 'lead') == 0 & 
-                    lahtopvm > shift(tulopvm, type = 'lead')]),
+    nd = nrow(dat[shnro == shift(shnro, type = "lead") & episode > 0 & shift(episode, type = "lead") == 0 & 
+                    lahtopvm > shift(tulopvm, type = "lead")]),
     # psy episoden sisalla psy pkl kaynti
-    ndP = nrow(dat[shnro == shift(shnro, type = 'lead') & episode > 0 & shift(episode, type = 'lead') == 0 & 
-                     lahtopvm > shift(tulopvm, type = 'lead')  & psy == T & shift(psy) == T]),
+    ndP = nrow(dat[shnro == shift(shnro, type = "lead") & episode > 0 & shift(episode, type = "lead") == 0 & 
+                     lahtopvm > shift(tulopvm, type = "lead")  & psy == T & shift(psy) == T]),
     #episoden paatospaivana pkl-kanyti
-    ne = nrow(dat[shnro == shift(shnro, type = 'lead') & episode > 0 & shift(episode, type = 'lead') == 0 & 
-                    shift(tulopvm, type = 'lead') == lahtopvm]),
+    ne = nrow(dat[shnro == shift(shnro, type = "lead") & episode > 0 & shift(episode, type = "lead") == 0 & 
+                    shift(tulopvm, type = "lead") == lahtopvm]),
     #psy episoden paatospaivana psy pkl-kanyti
-    neP = nrow(dat[shnro == shift(shnro, type = 'lead') & episode > 0 & shift(episode, type = 'lead') == 0 & 
-                     shift(tulopvm, type = 'lead') == lahtopvm & psy == T & shift(psy) == T]),
+    neP = nrow(dat[shnro == shift(shnro, type = "lead") & episode > 0 & shift(episode, type = "lead") == 0 & 
+                     shift(tulopvm, type = "lead") == lahtopvm & psy == T & shift(psy) == T]),
     nf = dat[inpat!=1, .N],
     nfP = dat[inpat!=1 & psy == T, .N]
   )
   
   labs <- list(
-    na = 'inpatient period starts with outpatient appointment', 
-    nb = 'outpatient appointment the previous day of the start of an inpatient period',
-    nd = 'outpatient appointment within an inpatient period', 
-    ne = 'outpatient appointment on the last day of an inpatient period',
-    naP = 'psychiatric inpatient period starts with psychiatric outpatient appointment', 
-    nbP = 'psychiatric outpatient appointment the previous day of the start of a psychiatric inpatient period', 
-    ncP = 'whatever outpatient appointment the previous day of the start of a psychiatric inpatient period',   
-    ndP = 'psychiatric outpatient appointment within a psychiatric inpatient period', 
-    neP = 'psychiatric opoutpatient appointment on the last day of a psychiatric inpatient period',
-    nf  = 'N all outpatient rows before aggregation',
-    nfP = 'N psychiatric outpatient rows before aggregation')
+    na = "inpatient period starts with outpatient appointment", 
+    nb = "outpatient appointment the previous day of the start of an inpatient period",
+    nd = "outpatient appointment within an inpatient period", 
+    ne = "outpatient appointment on the last day of an inpatient period",
+    naP = "psychiatric inpatient period starts with psychiatric outpatient appointment", 
+    nbP = "psychiatric outpatient appointment the previous day of the start of a psychiatric inpatient period", 
+    ncP = "whatever outpatient appointment the previous day of the start of a psychiatric inpatient period",   
+    ndP = "psychiatric outpatient appointment within a psychiatric inpatient period", 
+    neP = "psychiatric opoutpatient appointment on the last day of a psychiatric inpatient period",
+    nf  = "N all outpatient rows before aggregation",
+    nfP = "N psychiatric outpatient rows before aggregation")
   
   
   a <- labs %>% stack() %>% setDT()
   b <- nums %>% stack() %>% setDT()
   
-  out <- a[b, on = 'ind']
-  out[, psy := ifelse(ind %like% 'P', 1,0) ]
+  out <- a[b, on = "ind"]
+  out[, psy := ifelse(ind %like% "P", 1,0) ]
   out[order(psy), .(lab = values, psy, value = i.values)]
 }
 

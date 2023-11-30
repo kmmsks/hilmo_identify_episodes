@@ -1,5 +1,36 @@
+#' Find first date of seleceted diagnoses - nonprocessed data
+#'
+#' Very similar to 2b function, but here preprocessed data (without the actual processing of identifying treatment episodes) is used instead.
+#'
+#' This function finds the first date of selected diagnoses for each individual in
+#' the data. Optionally, minimum age for each diagnosis can be specified in 2a_first_dates_set_diagnoses.R
+#' 
+#' This function controls a set of sub-functions from 2b_first_dates_subfuns.R
+#' - These functions do the job.
+#'
+#' This function does the following:
+#' 1. create dirs to refer to the right data and to create location for the results
+#' 2. Read chunk identifiers. The processed data with identified episodes are in chunks. 
+#' 3. Loop throug chunks and do the following:
+#'   3.1 inpatient and outpatient data
+#'   3.2 Primary care appointments, read, find first dates
+#'  3.3 bind results
+#'  3.4  save results, each treatment type separately
+#'  3.5 combine treatment types to get the first dates in any setting
+#'  3.6 save final results
+#'  
+#'  
+#' @param start_year Numeric, start year of the data to be processed. May be used for subsetting longitudinal data.
+#' @param end_year Numeric, end year of the data to be processed. May be used for subsetting longitudinal data.
+#' @param dg_age_in A data.table such as dg_groups_w_min_ages from 2a_first_dates_set_diagnoses.R or similar.
+#'
+#' @return Nothing. Data are processed in chunks and each chunk is saved as CSV file in the folder defined in 
+#'          the create_dirs_first_dates function in file R/_general_functions.R. Location of the data is printed as a message
+#' @export
+#'
+#' @examples
 
-get_first_dates_nonprocessed_data <- function(start_year, end_year, separate_files_for_old_registers = FALSE) {
+get_first_dates_nonprocessed_data <- function(start_year, end_year, separate_files_for_old_registers = FALSE, dg_age_in = dg_groups_w_min_ages) {
   
   # dirs create ----
   dirs <- c(create_dirs_preprocess(start_year = start_year, end_year = 2020), 
@@ -34,11 +65,11 @@ get_first_dates_nonprocessed_data <- function(start_year, end_year, separate_fil
     prim_care_0[birthdays, on =  'shnro', c('birthday'):= .(i.birthday)]
     
     # variable dg contains all diagnoses, combined in pre processing
-    inpat[[i]]  <- inpat_0[psy == T] %>%  find_first_date(dg_field = 'dg', tulopvm_field = 'tupva', lahtopvm_field = 'lpvm')
+    inpat[[i]]  <- inpat_0[psy == T] %>%  find_first_date(dg_field = 'dg', tulopvm_field = 'tupva', lahtopvm_field = 'lpvm', dg_age = dg_age_in)
     
-    outpat[[i]] <- outpat_0[psy == T] %>% find_first_date(dg_field = 'dg', tulopvm_field = 'tupva', lahtopvm_field = 'lpvm')
+    outpat[[i]] <- outpat_0[psy == T] %>% find_first_date(dg_field = 'dg', tulopvm_field = 'tupva', lahtopvm_field = 'lpvm', dg_age = dg_age_in)
     
-    primary_care[[i]] <- prim_care_0 %>%  find_first_date(dg_field = 'dg_avo', tulopvm_field = 'tupva', lahtopvm_field = 'lpvm')
+    primary_care[[i]] <- prim_care_0 %>%  find_first_date(dg_field = 'dg_avo', tulopvm_field = 'tupva', lahtopvm_field = 'lpvm', dg_age = dg_age_in)
     
   }
   
@@ -50,7 +81,7 @@ get_first_dates_nonprocessed_data <- function(start_year, end_year, separate_fil
   )
   # save first dates by treatment type
   lapply(lst %>% names(), 
-         function(i) lst[[i]] %>% combine_first_dates(one_treatment_type_only = T) %>% fwrite(file = file.path(dirs$first_dates_nonprocessed, paste0(i,'.csv'))))
+         function(i) lst[[i]] %>% combine_first_dates(one_treatment_type_only = T, dg_age = dg_age_in) %>% fwrite(file = file.path(dirs$first_dates_nonprocessed, paste0(i,'.csv'))))
   
   # combine treatment types to get the first dates in any setting
   
@@ -60,7 +91,7 @@ get_first_dates_nonprocessed_data <- function(start_year, end_year, separate_fil
     outpatient = lst$outpatient
   ), idcol = 'source', fill = TRUE)
   
-  first_dates_raw <- combine_first_dates(dat_in = d1)
+  first_dates_raw <- combine_first_dates(dat_in = d1, dg_age = dg_age_in)
   
   first_dates_raw %>% fwrite(file.path(dirs$first_dates_nonprocessed, '1_full_data.csv'))
   
@@ -70,4 +101,5 @@ get_first_dates_nonprocessed_data <- function(start_year, end_year, separate_fil
     dg_info = dg_groups_w_min_ages
   ) %>% write_xlsx(file.path(dirs$first_dates_nonprocessed, paste0('settings_', Sys.time() %>% as.character() %>% gsub("\\:","-",.), '.xlsx')))
 
+  message(paste("Message: Done. Processed data saved at", dirs$first_dates_nonprocessed))
 }

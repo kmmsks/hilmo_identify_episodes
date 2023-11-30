@@ -12,7 +12,7 @@
 #'
 #' @examples
 find_first_date <- function(dat_in, dg_field, tulopvm_field = "tulopvm_inpat_psy", 
-                            lahtopvm_field = "lahtopvm", id_field = "shnro", dg_age = dg_groups_w_min_ages){
+                            lahtopvm_field = "lahtopvm", id_field = "shnro", dg_age){
   
   # same false date entries may have persisted even at this point. Hence, discard episodes that start before birth.
   d0 <- dat_in[get(tulopvm_field)> birthday]
@@ -60,7 +60,7 @@ find_first_date <- function(dat_in, dg_field, tulopvm_field = "tulopvm_inpat_psy
 #' @export
 #'
 #' @examples
-combine_first_dates <- function(dat_in,one_treatment_type_only = FALSE, dg_age = dg_age){
+combine_first_dates <- function(dat_in,one_treatment_type_only = FALSE, dg_age, id_field = "shnro"){
   
   dg_maingroups <- paste0("f", seq(0,9))
   # get earliest dates by person and by diagnoses ------------------------
@@ -68,7 +68,7 @@ combine_first_dates <- function(dat_in,one_treatment_type_only = FALSE, dg_age =
   
   setnames(d2, 'date_min', 'date')
   
-  for (i in dg_age$dg %>% as.character()){
+  for (i in (dg_age$dg %>% as.character())){
     pttrn <- dg_age[dg == i, dg_code]
     min_age <- dg_age[dg == i, age]
     
