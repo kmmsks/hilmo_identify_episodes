@@ -12,7 +12,7 @@
 #
 # This process has the following steps:
 #
-# 0. Pre-processing: 
+# 0. preprocessing: 
 #     Real data: Preparation of the real data for the actual processing,
 #       including: 
 #           reading the data, controlling for changes over time in variable names,
@@ -53,7 +53,7 @@ library(magrittr)
 source(here("scripts", "R", "_general_funs.R"), encoding = "UTF-8")
 
 
-# 0. Pre-processing of the registers -------------------------------------------
+# 0. Preprocessing of the registers -------------------------------------------
 
 # when using real data, go through the file R/0a_preparation_settings_dgs.R
 # After controlling for setting values, source the following:
@@ -71,11 +71,11 @@ source(here("scripts", "R", "_general_funs.R"), encoding = "UTF-8")
 start_year <- 2015
 end_year <- 2020
 
-dat_synthetic <- syntetize_data(start_year = start_year, end_year = end_year)
+dat_synthetic <- synthetize_data(start_year = start_year, end_year = end_year)
 
 
 # 1. Processing ----------------------------------------------------------------
-# IDENTIFY episodes in longitudinal or annual pre-processed data
+# IDENTIFY episodes in longitudinal or annual preprocessed data
 
 # process_data function controls the actual identification of treatment episodses.
 
@@ -105,7 +105,7 @@ process_data(add_days = 1, start_year = start_year, end_year = end_year)
 source(here("scripts", "R", '2a_first_dates_set_diagnoses.R'), encoding = 'UTF-8')
 
 # Birthdays are needed for age calculation. 
-# Here, birthdays are synthesized in the syntetize_data() -function
+# Here, birthdays are synthesized in the @r_data() -function
 
 birthdays <- data.table(shnro = dat_synthetic[,unique(shnro)], 
                         birthday = sample(seq(as.IDate('1950/01/01'), as.IDate('2005/01/01'), by="day"), dat_synthetic[,uniqueN(shnro)]))
@@ -153,3 +153,18 @@ dat_first_dates <- list(
   ad1_on_f = fread(file.path(dirs$ad0$first_dates_mh, "1_full_data_overnight_false.csv")),
   ad1_on_t = fread(file.path(dirs$ad0$first_dates_mh, "1_full_data_overnight_true.csv"))
 )
+
+# Subsetting
+## Relevant psychiatric diagnoses:
+dat_processed$ad1[, dg_psy_all_relevet := paste(na.omit(dg_psy), dg_avo, sep = "_") %>% str_remove_all("_NA") ]
+
+# For example, using model 4, secondary outpatient and primary care appointments
+# each individuals' each visit: date and diagnoses:
+
+dat_processed$ad1[overnight_psy == FALSE & (psy == TRUE | primary_care == TRUE), .(shnro, date = tulopvm %>% as.IDate(), dg_psy_all_relevet)]
+
+# Same but the latest appointments only
+dat_processed$ad1[overnight_psy == FALSE & (psy == TRUE | primary_care == TRUE)][, date_max := max(lahtopvm), by = shnro][lahtopvm == date_max][
+  , .(shnro, date = tulopvm %>% as.IDate(), dg_psy_all_relevet)]
+
+
