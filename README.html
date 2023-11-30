@@ -454,7 +454,7 @@ inpatient episodes affects the number of outpatient events as well.</li>
 </ul>
 <p>See the paper for further information.</p>
 <div id="purposes-of-this-script" class="section level3">
-<h3>Purposes of this script:</h3>
+<h3>Purposes of this script</h3>
 <ol style="list-style-type: decimal">
 <li><p>To propose a method for aggregating Hilmo entries in order to
 identify admissions, discharges, discharge diagnoses, and outpatient
@@ -571,8 +571,8 @@ sections as well.</p>
 <div id="general-considerations" class="section level3">
 <h3>General considerations</h3>
 <div id="separation-of-the-four-models-add_days-and-overnight-stays" class="section level4">
-<h4><span style="color:firebrick">Separation of the four models:
-<code>add_days</code> and overnight stays</span></h4>
+<h4><strong><em>Separation of the four models: <code>add_days</code> and
+overnight stays</em></strong></h4>
 <p>The two characteristics that separate the four models are:</p>
 <p><br></p>
 <div id="add_days-the-mimimun-number-of-days-between-separate-inpatient-episodes" class="section level5">
@@ -682,18 +682,15 @@ using <code>append = TRUE</code> in <code>fwrite</code> function from
 <code>library(data.table)</code>.</p>
 <p><br></p>
 </div>
-<div id="synthetic-data-for-demonstration" class="section level4">
-<h4>Synthetic data for demonstration</h4>
+<div id="synthetize_data-synthetic-data-for-demonstration" class="section level4">
+<h4><code>synthetize_data()</code>: Synthetic data for
+demonstration</h4>
 <p>Synthetic data may be used for testing these scripts. Access to the
-real registers is limited.</p>
-<p><span style="color:blue"><strong>To create data, use function
-<code>syntetize_data()</code>.</strong></span> <br></p>
+real registers is limited. This function creates data for testing
+purposes.</p>
 <div id="usage" class="section level5">
 <h5>Usage</h5>
-<pre><code>syntetize_data(n_rows = 20000, n_individuals = 1000,
-  start_year = 2015, end_year = 2020, seed = 1,
-  outpatient_proportion = .35, primary_care_proportion = .4, ilaji2_proportion = .05,
-  save_data = TRUE, data_folder_name = &#39;data_main&#39;, longitudinal = TRUE)</code></pre>
+<p><code>synthetize_data(n_rows = 20000, n_individuals = 1000,   start_year = 2015, end_year = 2020, seed = 1,   outpatient_proportion = .35, primary_care_proportion = .4, ilaji2_proportion = .05,   save_data = TRUE, data_folder_name = &#39;data_main&#39;, longitudinal = TRUE)</code></p>
 <p><br></p>
 </div>
 <div id="arguments" class="section level5">
@@ -775,7 +772,7 @@ if FALSE, data will be saved in annual format</td>
 </div>
 </div>
 <div id="processing" class="section level3">
-<h3><span style="color:firebrick">1. Processing</span></h3>
+<h3>1. Processing</h3>
 <p>These are the main operations:</p>
 <p>First, the following lines are used for identifying inpatient
 episodes with possible overlapping dates:</p>
@@ -812,14 +809,13 @@ ignored.</p>
 <p>See <code>1a_processing_subfuns.R</code> for details regarding these
 behaviors.</p>
 <p><br></p>
-<p><span style="color:blue"><strong>The <code>process_data()</code>
-function controls the main processing.</strong></span></p>
+<div id="process_data-function-to-control-the-main-processing" class="section level4">
+<h4><code>process_data()</code>: function to control the main
+processing</h4>
 <p><br></p>
 <div id="usage-1" class="section level5">
 <h5>Usage</h5>
-<pre><code>process_data(add_days, start_year, end_year, longitudinal = TRUE, 
-                         process_secondary_outpatient = TRUE, process_primary_care = TRUE, 
-                         separate_files_for_old_registers = FALSE)</code></pre>
+<p><code>process_data(add_days, start_year, end_year, longitudinal = TRUE,  process_secondary_outpatient = TRUE, process_primary_care = TRUE, separate_files_for_old_registers = FALSE)</code></p>
 <p><br></p>
 </div>
 <div id="arguments-1" class="section level5">
@@ -835,43 +831,39 @@ function controls the main processing.</strong></span></p>
 <td align="left">add_days</td>
 <td align="left">Numeric</td>
 <td align="left">The minimum number of full calender days required
-between two hospital treatment</td>
+between two hospital treatment periods. See general considerations
+above.</td>
 </tr>
 <tr class="even">
-<td align="left">periods. See general considerations above</td>
-<td align="left"></td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
 <td align="left">start_year</td>
 <td align="left">Numeric</td>
 <td align="left">Start year of the data</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">end_year</td>
 <td align="left">Numeric</td>
 <td align="left">End Year of the data</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">longitudinal</td>
 <td align="left">Logical</td>
 <td align="left">If each individual’s all data is written into a single
 file set TRUE, if the data is in the annual format, set FALSE, see
 general considerations above</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">process_secondary_outpatient</td>
 <td align="left">Logical</td>
 <td align="left">If only inpatient care data is processed, set to FALSE,
 otherwise TRUE</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">process_primary_care</td>
 <td align="left">Logical</td>
 <td align="left">If only secondary care data is process, set to FALSE,
 otherwise TRUE</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">separate_files_for_old_registers</td>
 <td align="left">Logical</td>
 <td align="left">If years are before 1996 are saved to separate files in
@@ -888,8 +880,9 @@ FALSE</td>
 1_identified_episodes -&gt; add_days_[add_days] -&gt;
 longitudinal_[start_year]_[end_year]</p>
 <p>Files are named as follows:</p>
-<pre><code>[chunk]_1_inpatient_outpatient.csv
-[chunk]_primary_care.csv</code></pre>
+<p><code>[chunk]_1_inpatient_outpatient.csv</code></p>
+<p><code>[chunk]_primary_care.csv</code></p>
+<p><br></p>
 </div>
 <div id="variables-in-the-processed-data" class="section level5">
 <h5>Variables in the processed data</h5>
@@ -1095,18 +1088,19 @@ episode.</td>
 </div>
 </div>
 </div>
-<div id="postprocessing" class="section level2">
-<h2><em>Postprocessing</em></h2>
+<div id="postprocessing" class="section level3">
+<h3><em>Postprocessing</em></h3>
 </div>
-<div id="first-dates" class="section level2">
-<h2>2. First dates</h2>
+<div id="first-dates" class="section level3">
+<h3>2. First dates</h3>
 <p>Now the identification of inpatient episodes and outpatient and
 primary care appointments is done. Next, the data are ready for analysis
 of postprocessing procedures. Here, each individual’s first occurrence
 of diagnoses of interest is determined. This is useful for incidence
 studies.</p>
-<p><span style="color:blue"><strong>The <code>get_first_dates()</code>
-function controls this operation.</strong></span></p>
+<div id="get_first_dates-function-to-control-the-evaluation-of-the-date-of-incidence" class="section level4">
+<h4><code>get_first_dates()</code>: function to control the evaluation
+of the date of incidence</h4>
 <p><br></p>
 <div id="usage-2" class="section level5">
 <h5>Usage</h5>
@@ -1215,8 +1209,9 @@ minimum age considered. The diagnoses of interest are defined in the
 </div>
 </div>
 </div>
-<div id="look-at-the-data" class="section level2">
-<h2>3. Look at the data</h2>
+</div>
+<div id="look-at-the-data" class="section level3">
+<h3>3. Look at the data</h3>
 <p>The processed data are saved in chunks. In this section, all data are
 red to memory and organized into list for inspection.
 <code>read_files_from()</code>is a helper to read on combine the
@@ -1225,8 +1220,8 @@ chunks.</p>
 list.</p>
 <p><br></p>
 </div>
-<div id="subsetting" class="section level2">
-<h2>4. Subsetting</h2>
+<div id="subsetting" class="section level3">
+<h3>4. Subsetting</h3>
 <p>Recognizing inpatient episodes that last overnight (models 2 and 4)
 can be done simply by selecting those episodes with
 <code>tulopvm &lt; lahtopvm</code> (i.e. admission date &lt; discharge
@@ -1324,6 +1319,7 @@ with psychiatric secondary outpatient care</p></li>
 </ul>
 <p>All diagnos</p>
 <p><br></p>
+</div>
 </div>
 </div>
 <div id="version-history" class="section level2">

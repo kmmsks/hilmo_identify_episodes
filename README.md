@@ -74,7 +74,7 @@ Note:
 
 See the paper for further information.
 
-### Purposes of this script:
+### Purposes of this script
 
 1.  To propose a method for aggregating Hilmo entries in order to
     identify admissions, discharges, discharge diagnoses, and outpatient
@@ -129,7 +129,7 @@ The numbered headings referes to the numbered section in the `main.R`, which is 
 
 ### General considerations
 
-#### [Separation of the four models: `add_days` and overnight stays]{style="color:firebrick"}
+####  ***Separation of the four models: `add_days` and overnight stays***
 
 The two characteristics that separate the four models are:
 
@@ -230,22 +230,17 @@ using `append = TRUE` in `fwrite` function from `library(data.table)`.
 
 <br>
 
-#### Synthetic data for demonstration
+#### `synthetize_data()`: Synthetic data for demonstration
 
 Synthetic data may be used for testing these scripts. Access to the real
-registers is limited.
-
-[**To create data, use function
-`syntetize_data()`.**]{style="color:blue"} <br>
+registers is limited. This function creates data for testing purposes.
 
 ##### Usage
 
-```         
-syntetize_data(n_rows = 20000, n_individuals = 1000,
+`synthetize_data(n_rows = 20000, n_individuals = 1000,
   start_year = 2015, end_year = 2020, seed = 1,
   outpatient_proportion = .35, primary_care_proportion = .4, ilaji2_proportion = .05,
-  save_data = TRUE, data_folder_name = 'data_main', longitudinal = TRUE)
-```
+  save_data = TRUE, data_folder_name = 'data_main', longitudinal = TRUE)`
 
 <br>
 
@@ -267,14 +262,14 @@ syntetize_data(n_rows = 20000, n_individuals = 1000,
 
 <br>
 
-### [1. Processing]{style="color:firebrick"}
+### 1. Processing
 
 These are the main operations:
 
 First, the following lines are used for identifying inpatient episodes
 with possible overlapping dates:
 
-```         
+```
 # Order by  id, admission date, and discharge date
     setkey(inpat_0, shnro, tupva, lpvm)
   
@@ -310,18 +305,13 @@ See `1a_processing_subfuns.R` for details regarding these behaviors.
 
 <br>
 
-[**The `process_data()` function controls the main
-processing.**]{style="color:blue"}
+#### `process_data()`: function to control the main processing
 
 <br>
 
 ##### Usage
 
-```         
-process_data(add_days, start_year, end_year, longitudinal = TRUE, 
-                         process_secondary_outpatient = TRUE, process_primary_care = TRUE, 
-                         separate_files_for_old_registers = FALSE)
-```
+`process_data(add_days, start_year, end_year, longitudinal = TRUE,  process_secondary_outpatient = TRUE, process_primary_care = TRUE, separate_files_for_old_registers = FALSE)`
 
 <br>
 
@@ -329,8 +319,7 @@ process_data(add_days, start_year, end_year, longitudinal = TRUE,
 
 |                                           |         |                                                                                                                                                        |
 |:-----------------|:-----------------|:-----------------------------------|
-| add_days                                  | Numeric | The minimum number of full calender days required between two hospital treatment                                                                              |
-| periods. See general considerations above |         |                                                                                                                                                        |
+| add_days                                  | Numeric | The minimum number of full calender days required between two hospital treatment periods. See general considerations above. |
 | start_year                                | Numeric | Start year of the data                                                                                                                                 |
 | end_year                                  | Numeric | End Year of the data                                                                                                                                   |
 | longitudinal                              | Logical | If each individual's all data is written into a single file set TRUE, if the data is in the annual format, set FALSE, see general considerations above |
@@ -348,10 +337,11 @@ longitudinal\_[start_year]\_[end_year]
 
 Files are named as follows:
 
-```         
-[chunk]_1_inpatient_outpatient.csv
-[chunk]_primary_care.csv
-```
+`[chunk]_1_inpatient_outpatient.csv`
+
+`[chunk]_primary_care.csv`
+
+<br>
 
 ##### Variables in the  processed data
 
@@ -393,13 +383,13 @@ Files are named as follows:
 
 <br>
 
-## *Postprocessing*
+### *Postprocessing*
 
-## 2. First dates
+### 2. First dates
 
 Now the identification of inpatient episodes and outpatient and primary care appointments is done. Next, the data are ready for analysis of postprocessing procedures. Here, each individual's first occurrence of diagnoses of interest is determined. This is useful for incidence studies.
 
-[**The `get_first_dates()` function controls this operation.**]{style="color:blue"}
+#### `get_first_dates()`: function to control the evaluation of the date of incidence
 
 <br>
 
@@ -446,7 +436,7 @@ A data.table with the following columns
 
 <br>
 
-## 3. Look at the data
+### 3. Look at the data
 
 The processed data are saved in chunks. In this section, all data are red to memory and organized into list for inspection.
 `read_files_from()`is a helper to read on combine the chunks.
@@ -455,7 +445,7 @@ First dates are in single files. The four models are red to a list.
 
 <br>
 
-## 4. Subsetting
+### 4. Subsetting
 
 Recognizing inpatient episodes that last overnight (models 2 and 4) can be done simply by selecting those episodes with `tulopvm < lahtopvm` (i.e. admission date < discharge date) and considering inpatient episodes with `tulopvm == lahtopvm` (i.e. admission date == discharge date) as outpatient events.
 
