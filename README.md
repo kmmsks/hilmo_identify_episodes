@@ -486,9 +486,6 @@ Relevant psychiatric diagnoses, including those set at
 
 - `dat[, dg_psy_all_relevet := paste(na.omit(dg_psy), dg_avo, sep = "_") %>% str_remove_all("_NA")]`
 
-
-All diagnos
-
 <br>
 
 ## Version history
