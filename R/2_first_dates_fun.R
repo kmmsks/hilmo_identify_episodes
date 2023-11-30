@@ -23,13 +23,14 @@
 #' @param add_days  Numeric, defines how many full calendar days are required between inpatient episodes. Commonly 0 or 1.
 #' @param start_year Numeric, start year of the data to be processed. May be used for subsetting longitudinal data.
 #' @param end_year Numeric, end year of the data to be processed. May be used for subsetting longitudinal data.
+#' @param dg_age A data.table such as dg_groups_w_min_ages from 2a_first_dates_set_diagnoses.R or similar.
 #'
 #' @return Nothing. Data are processed in chunks and each chunk is saved as CSV file in the folder defined in 
 #'          the create_dirs_first_dates function in file R/_general_functions.R. Location of the data is printed as a message
 #' @export
 #'
 #' @examples
-get_first_dates <- function(add_days, start_year, end_year) {
+get_first_dates <- function(add_days, start_year, end_year, dg_age = dg_groups_w_min_ages) {
   # The sub-functions needed in this processt:
   source(here("scripts", "R", '2b_first_dates_subfuns.R'), encoding = 'UTF-8')
   

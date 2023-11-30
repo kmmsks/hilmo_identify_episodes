@@ -2,8 +2,8 @@
 #'
 #' @param dat_in A data.table to be processed. Needs the variables defined by _field, and birthday
 #' @param dg_field The name of the variable containing the diagnoses to be considered.
-#' @param tulopvm_field The name of the variable containing the admission dates to be considered. The date must be set to integer format. 
-#' @param lahtopvm_field The name of the variable containing the discharge dates to be considered. The date must be set to integer format.
+#' @param tulopvm_field The name of the variable containing the admission dates to be considered.  This is the incident date of the diagnoses present in an inpatient episode. The date must be set to integer format. 
+#' @param lahtopvm_field The name of the variable containing the discharge dates to be considered. This date is considered when substing the diagnoses that meet the requirement for minimun age. The date must be set to integer format.
 #' @param id_field The name of the ID variable, "shnro" throughout.
 #' @param dg_age A data.table such as dg_groups_w_min_ages from 2a_first_dates_set_diagnoses.R or similar.
 #'
@@ -60,7 +60,7 @@ find_first_date <- function(dat_in, dg_field, tulopvm_field = "tulopvm_inpat_psy
 #' @export
 #'
 #' @examples
-combine_first_dates <- function(dat_in,one_treatment_type_only = FALSE, dg_age = dg_groups_w_min_ages,id_field = "shnro"){
+combine_first_dates <- function(dat_in,one_treatment_type_only = FALSE, dg_age = dg_age){
   
   dg_maingroups <- paste0("f", seq(0,9))
   # get earliest dates by person and by diagnoses ------------------------

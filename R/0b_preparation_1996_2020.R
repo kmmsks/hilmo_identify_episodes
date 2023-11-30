@@ -1,9 +1,9 @@
 
-# This script pre-processes Hilmo secondary care registers after 1996. 
+# This script preprocesses Hilmo secondary care registers after 1996. 
 # 1996- 2017 is slightly different than 2018-2020.
 # Row data are in annual datasets. 
 
-# This script loops through desired years, read, pre-processes', and saves data in
+# This script loops through desired years, read, preprocesses, and saves data in
 # longitudinal format, meaning that each individual's 
 # all data are saved into a singe file (instead of having data saved in annual files).
 # Progress is reported for each year into report_-datasets, which are saved in
@@ -11,9 +11,9 @@
 
 # The process goes as follows:
 ## read secondary care data 
-## source pre-processing
+## source preprocessing
 ## save reports
-## source reading and pre-processing primary care data
+## source reading and preprocessing primary care data
 ## save reports
 ## Save to longitudinal
 ## Or save to annual format
@@ -37,7 +37,7 @@ for (y in seq(settings$hilmo_start_year , settings$end_year)){
   } else {
     stop('Year not implemented. Note, data structure change 2018, outpatient recognition 2019.')
   }
-  ## Source pre-processing ----
+  ## Source preprocessing ----
   source(here('R', '0c_preparation_source_FCRHC.R'), encoding = 'UTF-8')
   
   ### Save reports ----
@@ -46,7 +46,7 @@ for (y in seq(settings$hilmo_start_year , settings$end_year)){
   report_variable %>% 
     write_xlsx(file.path(dirs$report_pre, paste0('variables_',y, '.xlsx')))
   
-  ## source reading and pre-processing primary care data ----
+  ## source reading and preprocessing primary care data ----
   if(y >=2011){ 
     source(here('R', '0c_preparation_source_RPHC.R'), encoding = 'UTF-8', local = TRUE)
     ### Save report ----

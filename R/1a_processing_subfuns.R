@@ -32,7 +32,7 @@ identify_inpatient_episodes <- function(inpat_0, add_days, start_year, end_year,
   inpat_0[, episode_psy_continues := 0]
   inpat_0[lpvm == last_day_of(end_year) & ilaji == 2,
           episode_continues := 1]
-  inpat_0[psy == TRUE & last_day_of(end_year) & ilaji == 2,
+  inpat_0[psy == TRUE & lpvm == last_day_of(end_year) & ilaji == 2,
           episode_psy_continues := 1]
   
   
@@ -119,7 +119,7 @@ identify_inpatient_episodes <- function(inpat_0, add_days, start_year, end_year,
   inpat_1[overnight_psy %>% is.na(), overnight_psy := FALSE]
   
   ## mark inpatient rows, all in this dataset
-  inpat_1[, `:=`(inpat = 1, outpat = 0)]
+  inpat_1[, `:=`(inpat = 1, outpat = 0, primary_care = 0)]
   
   inpat_1[]
 }
@@ -188,13 +188,13 @@ process_outpatient_data <- function(outpat_0, inpat_1, start_year, end_year) {
       n_rows, 
       paltu, 
       #  koku, kiireellisyys, yhteystapa, pala, 
-      ea_list = ea, inpat, outpat,
+      ea_list = ea,
       dg_outpat,
       dg_all = dg_outpat
     )]
   
   # mark these event as follws:
-  lst$a[,`:=`(inpat_psy = FALSE, inpat = FALSE)]
+  lst$a[,`:=`(inpat_psy = FALSE, inpat = FALSE, outpat = TRUE)]
   
   
   # Event consist of more than one outpatient appointments. Do nothing except mark these events and select the variables of interest.
@@ -203,12 +203,12 @@ process_outpatient_data <- function(outpat_0, inpat_1, start_year, end_year) {
               .(shnro, event,tulopvm, lahtopvm , n_rows, psy, paltu,
                 #tulopvm_psy = NA, lahtopvm_psy = NA, 
                 # koku, kiireellisyys, yhteystapa, pala, 
-                ea_list = ea, inpat, outpat,
+                ea_list = ea,
                 #dg_inpat = NA, dg_inpat_psy = NA, 
                 dg_outpat, dg_all = dg_outpat)]
   
     # mark these event as follws:
-    lst$b[,`:=`(inpat_psy = FALSE, inpat = FALSE, outpat_same_day = TRUE)]
+    lst$b[,`:=`(inpat_psy = FALSE, inpat = FALSE, outpat = TRUE, outpat_same_day = TRUE)]
   
 
     # Inpatient care, event consists of only one row. Do nothing
@@ -216,11 +216,11 @@ process_outpatient_data <- function(outpat_0, inpat_1, start_year, end_year) {
               .(shnro, event,tulopvm, lahtopvm , tulopvm_psy, lahtopvm_psy, episode_continues,
                 episode_psy_continues, ilaji_2_n, n_rows, psy,  paltu, 
                 #paltu_psy, koku, kiireellisyys, yhteystapa, pala, 
-                ea_list = ea, inpat, outpat,
+                ea_list = ea,
                 dg_inpat, dg_inpat_psy, dg_outpat, dg_all)]
     
     # mark these event as follws:
-    lst$c[,`:=`(inpat_psy = psy, inpat = TRUE)]
+    lst$c[,`:=`(inpat_psy = psy, inpat = TRUE, outpat = FALSE)]
   
     # Event consists of inpatient care and outpatient appointments, no psychiatry included.
     # All diagnoses are collected
@@ -240,8 +240,6 @@ process_outpatient_data <- function(outpat_0, inpat_1, start_year, end_year) {
                 #    yhteystapa = paste0(na.omit(unique(yhteystapa)), collapse = '_'), 
                 #   pala = paste0(na.omit(unique(pala)), collapse = '_'), 
                 ea_list = paste0(na.omit(unique(ea_list)), na.omit(unique(ea)), collapse = '_'), 
-                #inpat  = sum(inpat), 
-                #outpat = sum(outpat),
                 dg_inpat = paste0(na.omit(unique(dg_inpat)), collapse = '_'), 
                 #    dg_inpat_psy = NA, 
                 dg_outpat = paste0(na.omit(unique(dg_outpat)), collapse = '_'),
@@ -250,7 +248,7 @@ process_outpatient_data <- function(outpat_0, inpat_1, start_year, end_year) {
               .(shnro, event)]
     
     # mark these event as follws:
-    lst$d[,`:=`(inpat_psy = FALSE, inpat = TRUE, psy = FALSE)]
+    lst$d[,`:=`(inpat_psy = FALSE, inpat = TRUE, outpat = TRUE, psy = FALSE)]
   
   
     # Event consists of inpatient care and outpatient appointments, PSYCHIATRY included.
@@ -261,7 +259,7 @@ process_outpatient_data <- function(outpat_0, inpat_1, start_year, end_year) {
                       episode_continues, episode_psy_continues, ilaji_2_n, n_rows,  
                       paltu, 
                       #paltu_psy, koku, kiireellisyys, yhteystapa, pala, 
-                      ea_list = ea, inpat, outpat,
+                      ea_list = ea, inpat,
                       inpat_psy = psy, dg_inpat, dg_inpat_psy, dg_outpat, dg_all)]
   
     # Outpatient data:
@@ -325,9 +323,9 @@ process_outpatient_data <- function(outpat_0, inpat_1, start_year, end_year) {
     lst$e_inpat[dg_outpat_psy =="", dg_outpat_psy := NA_character_]
     
     lst$e_inpat[inpat_psy==F,.N,psy]
-    lst$e_inpat[, psy := TRUE]
+    lst$e_inpat[, `:=`(psy =TRUE, outpat = TRUE)]
     
-    # bind aggrefgated events --------------------------------------------------
+    # bind aggregated events ---------------------------------------------------
     
     dat <- rbindlist(rev(lst), fill = TRUE)
     
@@ -345,7 +343,7 @@ process_outpatient_data <- function(outpat_0, inpat_1, start_year, end_year) {
     setnames(dat, old=c("tulopvm_psy", "lahtopvm_psy"), 
              new = c("tulopvm_inpat_psy", "lahtopvm_inpat_psy"))
     
-    dat[,outpat := NULL]
+    dat[,primary_care := FALSE]
     
     ## vuosi (year) ----
     
@@ -412,7 +410,8 @@ process_primary_care <- function(prim_care_0, inpat_outpat_1, start_year, end_ye
                            by = .(shnro, lahtopvm = lpvm)]
   
   # mark avohilmo (primary care register) rows
-  prim_care[, primary_care := 1]
+  prim_care[, `:=` (primary_care = 1, inpat = FALSE, outpat = FALSE, inpat_psy = FALSE, psy = FALSE, overnight = FALSE,
+                    overnight_psy = FALSE)]
   
   # create vuosi (year)
   prim_care[, vuosi := lahtopvm %>% as.IDate() %>% year()]
@@ -432,7 +431,7 @@ process_primary_care <- function(prim_care_0, inpat_outpat_1, start_year, end_ye
   
   gc()
   
-  # exclude basic health care appointments during psychiatric inpatient periods or
+  # exclude primary care appointments during psychiatric inpatient periods or
   # on the day of secondary outpatient 
   
   setorder(d1, shnro, lahtopvm, -inpat_psy, -psy, -primary_care)
@@ -441,7 +440,7 @@ process_primary_care <- function(prim_care_0, inpat_outpat_1, start_year, end_ye
   # find the latest discharge day and compare rows to this maximum value:
   
   d1[, highest_so_far := shift(cummax(lahtopvm), fill = NA), by = shnro] 
-  # now, fill is NA instead lahtopvm[1], to treat person first row correclty
+  # now, fill is NA instead lahtopvm[1], to treat person first row correctly
   
   # if appointment within an inpatient period, mark 
   d1[lahtopvm <= highest_so_far, remove_row := TRUE]

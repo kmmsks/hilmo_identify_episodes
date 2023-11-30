@@ -13,7 +13,7 @@
 # - Convert ICD: the conversion rules are defined 0a_preparation_settings_dgs.R
 #   Here is only the engine.
 # Outpatient report
-# - Reporting the pre-processingsteps of the secondary care outpatient data is in this
+# - Reporting the preprocessing steps of the secondary care outpatient data is in this
 #   function.
 
 # READ functions ---------------------------------------------------------------

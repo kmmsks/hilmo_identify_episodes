@@ -53,7 +53,7 @@ create_dirs_first_dates <- function(add_days, start_year, end_year, data_folder_
     p <- here(data_folder_name, '2_first_dates', "non_processed")
     if (!dir.exists(p)) {dir.create(p)}
     
-    first_dates_nonprocessed <- file.path(p, paste0('mental_healthcare_', start_year, "_", end_year)) 
+    first_dates_nonprocessed <- file.path(p, paste0('mental_health_services_', start_year, "_", end_year)) 
     if (!dir.exists(first_dates_nonprocessed)) {dir.create(first_dates_nonprocessed)}
 
     # named list:
@@ -63,7 +63,7 @@ create_dirs_first_dates <- function(add_days, start_year, end_year, data_folder_
     p <- here(data_folder_name, '2_first_dates', paste0("add_days_", add_days))
     if (!dir.exists(p)) {dir.create(p)}
   
-    first_dates_mh <- file.path(p, paste0('mental_healthcare_', start_year, "_", end_year)) 
+    first_dates_mh <- file.path(p, paste0('mental_health_services_', start_year, "_", end_year)) 
     if (!dir.exists(first_dates_mh)) {dir.create(first_dates_mh)}
     
     # named list:
@@ -71,7 +71,7 @@ create_dirs_first_dates <- function(add_days, start_year, end_year, data_folder_
   }
   }
 
-syntetize_data <- function(n_rows = 20000, n_individuals = 1000, 
+synthetize_data <- function(n_rows = 20000, n_individuals = 1000, 
                            start_year = 2015, end_year = 2020, seed = 1,
                            outpatient_proportion = .35, primary_care_proportion = .4, ilaji2_proportion = .05, 
                           save_data = TRUE, data_folder_name = 'data_main', longitudinal = TRUE){
@@ -147,7 +147,7 @@ syntetize_data <- function(n_rows = 20000, n_individuals = 1000,
   
   
 
-  # ilaji 2, lpvm is NA by definition. In the preprocessing, it has been set to the last dat of the year
+  # ilaji 2, lpvm is NA by definition. In the preprocessing, it has been set to the last day of the year
   dat[ilaji == 2, lpvm := last_day_of(vuosi)]
   
   #primary care rows: ----
@@ -157,7 +157,15 @@ syntetize_data <- function(n_rows = 20000, n_individuals = 1000,
   dat[type == "primary_care", `:=`(dg_avo = dg)]
 
   dat[type == "primary_care", `:=`(dg = NA_character_)]
-  
+
+  d <- dat[type == "primary_care" & shnro == shnro %>% head(1)]
+  d[, `:=`(tupva = tupva[1], lpvm = lpvm[1])]
+
+  dat <- rbindlist(list(
+    dat[type %in% c("inpatient","outpatient") | (type ==  "primary_care" & shnro != d[,shnro %>% head(1)])],
+    d
+  ),fill = T)  
+
   # group_id based on the first character of personal id (shnro)
   dat[, id_group := shnro %>% substr(start = 1, stop = 1)]
   
@@ -167,8 +175,8 @@ syntetize_data <- function(n_rows = 20000, n_individuals = 1000,
     
     if(longitudinal == TRUE){
       cols <- setdiff(names(dat), c("type", primary_care_cols))
-      dat[inpat == 1, ..cols][, fwrite(.SD, file.path(dirs$pre, paste0(id_group, '_inpatient.csv'))), by = id_group]
-      dat[inpat == 0, ..cols][, fwrite(.SD, file.path(dirs$pre, paste0(id_group, '_outpatient.csv'))), by = id_group]
+      dat[type == "inpatient", ..cols][, fwrite(.SD, file.path(dirs$pre, paste0(id_group, '_inpatient.csv'))), by = id_group]
+      dat[type == "outpatient", ..cols][, fwrite(.SD, file.path(dirs$pre, paste0(id_group, '_outpatient.csv'))), by = id_group]
       
       cols <- c("shnro", "vuosi", "tupva", "lpvm", primary_care_cols, "id_group")
       dat[type == "primary_care", ..cols][, fwrite(.SD, file.path(dirs$pre, paste0(id_group, '_primary_care.csv'))), by = id_group]
