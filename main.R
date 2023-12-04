@@ -1,38 +1,42 @@
 
 # Information -----------------------------------------------------------------
 # This script contains methods for preparing the Finnish Care Register for Health Care
-# and the Register of Primary Health Care visits for analysis by identifying partly
+# and the Register of Primary Health Care Visits for analysis by identifying partly
 # overlapping episodes from the registers.
 #
 # This script comes with synthetic data for experimenting the functioning of the scripts.
 #
-# This script supplements this paper: 
+# The script supplements this paper: 
+# Suokas K, Gutvilig M, Pirkola S, Lumme S, Hakulinen C.
+# Enhancing the accuracy of register-based metrics: Comparing methods for handling
+# overlapping psychiatric register entries in Finnish healthcare registries. Submitted.
 #
 # For general introduction, see https://github.com/kmmsks/hilmo_identify_episodes
 #
-# This process has the following steps:
+# This process contains the following steps:
 #
-# 0. preprocessing: 
+# 0. Pre-processing: 
 #     Real data: Preparation of the real data for the actual processing,
 #       including: 
 #           reading the data, controlling for changes over time in variable names,
 #           variable classifications, diagnostic classifications, excluding non-valid
-#           entries, selecting treatment types andmedical specialties of interest etc. 
+#           entries, selecting treatment types and medical specialties of interest etc. 
 #       At this stage, the data will be split into "longitudinal" chunks, 
 #           meaning that each individuals' all data is saved into a singe file 
 #           (instead of having data saved in annual files).
-#     Synthetic data: Alternatively, create synthetic fake data to experiment with.
+#     Synthetic data: Alternatively, use provided code to create synthetic fake
+#       data to experiment with.
 #     
 # 1. Processing: Identification of the partly overlapping treatment episodes and
-#     aggregation of the ovarlaping register entries into single rows with desired
-#     behaviours. Each chunk will be processed separately, and processed chunks 
+#     aggregation of the overlapping register entries into single rows with desired
+#     behaviors. Each chunk will be processed separately, and processed chunks 
 #     will be saved.
 #
-# 2. Post-processing: supplementary functionality to recognize each individuals'
+# 2. Post-processing: supplementary functionality to recognize each individual's
 #     first dates with certain diagnoses from the processed data and include 
 #     an optional minimum age for each diagnostic category of interest.
 #
-# 3. Look at the data. At this stage, the the processed chunks will be red and 
+# 3. Look at the data. At this stage, the the processed chunks will be read and 
 #     combined for inspection.
 #
 
@@ -47,27 +51,27 @@ library(haven)
 library(magrittr)
 
 ## General functions -----------------------------------------------------------
-# This file contains functions for creating directory tree for the processed data,
+# This file contains functions for creating a directory tree for the processed data,
 # to synthesize the example dataset and helper functions.
 
 source(here("R", "_general_funs.R"), encoding = "UTF-8")
 
-# A. Longitudinal analysis ----------------------------------------------------
+# A. Longitudinal analysis -----------------------------------------------------
 
-# 0. Preprocessing of the registers -------------------------------------------
+# 0. Pre-processing ------------------------------------------------------------
 
 # when using real data, go through the file R/0a_preparation_settings_dgs.R
-# After controlling for setting values, source the following:
+# After controlling the settings values, source the following:
 
 #source(here("R", '0_preparation.R'), encoding = 'UTF-8')
 
 
 ## Synthetic data --------------------------------------------------------------
 
-# To demonstrate the actual process of identifying treatment episodes form the
+# To demonstrate the actual process of identifying treatment episodes from the
 # partly overlapping data, synthetic data are created. 
 
-# See readme for optional arguments
+# See README for optional arguments
 
 start_year <- 2015
 end_year <- 2020
@@ -76,15 +80,17 @@ dat_synthetic <- synthetize_data(start_year = start_year, end_year = end_year)
 
 
 # 1. Processing ----------------------------------------------------------------
-# IDENTIFY episodes in longitudinal or annual preprocessed data
 
-# process_data function controls the actual identification of treatment episodses.
+# IDENTIFY episodes in longitudinal or annual pre-processed data
+
+# process_data function controls the actual identification of treatment episodes.
 
 # add_days controls the number of full calendar days that need to be spend
 #   outside the hospital before a new treatment period may start.
-#   The most common values are  0 and 1, and they are used in the this example.
+#   The most common values are  0 and 1, and here we use both
+#   (thus the function is run twice).
 
-# See the readme file for details and optional arguments.
+# See the README file for details and optional arguments.
 
 source(here("R", "1_processing_fun.R"), encoding = "UTF-8")
 
@@ -92,15 +98,15 @@ process_data(add_days = 0, start_year = start_year, end_year = end_year)
 process_data(add_days = 1, start_year = start_year, end_year = end_year)
 
 
-# 2. first dates ---------------------------------------------------------------
+# 2. Post-Processing - First Days ----------------------------------------------
 
 # For each individual in the data, the incident date of each diagnosis of interest is collected.
 
-# This process is done separately for each datasets, ie. for different values of the add_days
+# This process is done separately for each dataset, i.e., for different values of add_days
 
 # The script saves the results and returns two datasets:
-# - first_dates_on_f: first dates of different diagnoses when overnight stay is not required for an inpatent episode
-# - first_dates_on_t: first dates of different diagnoses when overnight stay is required for an inpatent episode
+# - first_dates_on_f: first dates of different diagnoses when overnight stay is not required for an inpatient episode
+# - first_dates_on_t: first dates of different diagnoses when overnight stay is required for an inpatient episode
 
 # Define diagnoses of interest and minimum age for each diagnosis
 source(here("R", '2a_first_dates_set_diagnoses.R'), encoding = 'UTF-8')
@@ -119,6 +125,7 @@ get_first_dates(add_days = 1, start_year = start_year, end_year = end_year)
 
 
 ## non-processed data ----------------------------------------------------------
+
 #Here the first dates are collected from data where treatment episodes are not identified. 
 # This is the comparison dataset.
 
@@ -141,14 +148,13 @@ dirs <-  list(pre = create_dirs_preprocess(start_year = start_year, end_year = e
 # the starting point:
 dat_synthetic
 
-# processed data:
-
+# processed data (list containing the 2 different models):
 dat_processed <- list(
   ad0 = read_files_from(dirs$ad0$post),
   ad1 = read_files_from(dirs$ad1$post)
 )
 
-# first dates
+# first dates (list containing first dates derived using the 4 different models)
 dat_first_dates <- list(
   ad0_on_f = fread(file.path(dirs$ad0$first_dates_mh, "1_full_data_overnight_false.csv")),
   ad0_on_t = fread(file.path(dirs$ad0$first_dates_mh, "1_full_data_overnight_true.csv")),
@@ -157,12 +163,12 @@ dat_first_dates <- list(
 )
 
 # 4. Subsetting ----------------------------------------------------------------
+
 ## Relevant psychiatric diagnoses:
 dat_processed$ad1[, dg_psy_all_relevet := paste(na.omit(dg_psy), dg_avo, sep = "_") %>% str_remove_all("_NA") ]
 
 # For example, using model 4, secondary outpatient and primary care appointments
 # each individuals' each visit: date and diagnoses:
-
 dat_processed$ad1[overnight_psy == FALSE & (psy == TRUE | primary_care == TRUE), .(shnro, date = tulopvm %>% as.IDate(), dg_psy_all_relevet)]
 
 # Same but the latest appointments only
@@ -170,6 +176,9 @@ dat_processed$ad1[overnight_psy == FALSE & (psy == TRUE | primary_care == TRUE)]
   , .(shnro, date = tulopvm %>% as.IDate(), dg_psy_all_relevet)]
 
 # B. Annual analysis -----------------------------------------------------------
+
+# Data processed in an annual format rather than the longitudinal format used above 
+# See README file for more details
 
 source(here("R", "_general_funs.R"), encoding = "UTF-8")
 
