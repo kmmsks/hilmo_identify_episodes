@@ -1,4 +1,7 @@
 
+# Creating functions to be used throughout the other scripts -------------------
+
+# Directories for pre-processing steps
 create_dirs_preprocess <- function(start_year, end_year, data_folder_name = "data_main", longitudinal = TRUE){
   
   if (!dir.exists(here(data_folder_name))) {dir.create(here(data_folder_name))}
@@ -22,7 +25,7 @@ create_dirs_preprocess <- function(start_year, end_year, data_folder_name = "dat
   tibble::lst(pre, raport_pre)
 }
 
-
+# Directories for post-processing steps
 create_dirs_postprocess <- function(add_days, start_year, end_year, data_folder_name = "data_main", longitudinal = TRUE){
 
   p <- here(data_folder_name, "1_identified_episodes")
@@ -44,6 +47,7 @@ create_dirs_postprocess <- function(add_days, start_year, end_year, data_folder_
   tibble::lst(post)#, raport_post)
 }
 
+# Directories for first dates
 create_dirs_first_dates <- function(add_days, start_year, end_year, data_folder_name = "data_main", longitudinal = TRUE){
   
   first_dates <- here(data_folder_name, '2_first_dates')
@@ -80,6 +84,7 @@ create_dirs_first_dates <- function(add_days, start_year, end_year, data_folder_
     }
   }
 
+# creating fake data for trying the scripts
 synthetize_data <- function(n_rows = 20000, n_individuals = 1000, 
                            start_year = 2015, end_year = 2020, seed = 1,
                            outpatient_proportion = .35, primary_care_proportion = .4, ilaji2_proportion = .05, 
@@ -90,7 +95,7 @@ synthetize_data <- function(n_rows = 20000, n_individuals = 1000,
   if(!(outpatient_proportion %between% c(0, 1)) | !(ilaji2_proportion %between% c(0, 1))) {stop("proportion must be between 0 and 1")}
   if(!(longitudinal %in% c("TRUE", "FALSE", 0, 1)) | !(save_data %in% c("TRUE", "FALSE", 0, 1))){stop("non-logical in logical argument")}
   
-  # formart dates
+  # format dates
   start_date <- as.IDate(paste0(start_year, "-01-01"))
   end_date <-   as.IDate(paste0(end_year, "-12-31"))
   
@@ -98,7 +103,7 @@ synthetize_data <- function(n_rows = 20000, n_individuals = 1000,
   set.seed(seed)
   lpvm <- sample(start_date:end_date, size = n_rows, replace = TRUE) %>% as.IDate()
   
-  # IDs: n_individuals entiries repated n_rows times:
+  # IDs: n_individuals entries repeated n_rows times:
   a  <- paste0(sample(c(letters[1:5], seq(1,10)), size = n_rows, replace = TRUE), sample(sprintf(paste0("%0", nchar(n_rows), "d"), 1:n_rows)))
   b  <- sample(a, size =n_individuals)
   id <- sample(b, size = n_rows, replace = T)
@@ -109,7 +114,7 @@ synthetize_data <- function(n_rows = 20000, n_individuals = 1000,
   probs <- c( 0.3, 0.2, 0.2, 0.15, .05, .05, .01)
   los <- sample(unlist(ranges), size = n_rows, replace = TRUE, prob = rep(probs / lens, times = lens))
   
-  # create data
+  # create datatable
   dat <- data.table(
     shnro = id %>% as.character(),
     ilaji = sample(c(1,2), size = n_rows, replace = TRUE, prob = c(1 - ilaji2_proportion, ilaji2_proportion)),
@@ -139,7 +144,7 @@ synthetize_data <- function(n_rows = 20000, n_individuals = 1000,
   
   dat[,dg := paste0(a, "_", b, "_", c)]
   
-  # change some rows to outpatient and primart care visits based on the outpatient_proportion and priamry_care_proportion
+  # change some rows to outpatient and primary care visits based on the outpatient_proportion and primary_care_proportion
   
   dat[, type := sample(c("inpatient","outpatient", "primary_care"), size = n_rows, replace = T, 
                        prob = c(1 - outpatient_proportion -primary_care_proportion, outpatient_proportion, primary_care_proportion ))]
@@ -147,16 +152,14 @@ synthetize_data <- function(n_rows = 20000, n_individuals = 1000,
   dat[type != "inpatient", inpat := FALSE]
   
   # outpatient rows: ----
-  # outpatient, ilaji 1 always
+  # outpatient, ilaji always 1
   dat[, outpat := 0]
   dat[, outpat := sample(c(1,2,3), size = n_rows, replace = T)]
   dat[inpat == 1, outpat := NA]
   
   dat[inpat == 0,`:=`(tupva = lpvm, ilaji = 1)]
-  
-  
 
-  # ilaji 2, lpvm is NA by definition. In the preprocessing, it has been set to the last day of the year
+  # ilaji 2, lpvm is NA by definition. In the pre-processing, it has been set to the last day of the year
   dat[ilaji == 2, lpvm := last_day_of(vuosi)]
   
   #primary care rows: ----
@@ -197,7 +200,7 @@ synthetize_data <- function(n_rows = 20000, n_individuals = 1000,
       cols <- c("shnro", "vuosi", "tupva", "lpvm", primary_care_cols, "id_group")
       dat[type == "primary_care", ..cols][, fwrite(.SD, file.path(dirs$pre, paste0(vuosi, '_primary_care.csv'))), by = vuosi]
     }
-    message(paste0('Message: Fake data created and saved on folder ', dirs$pre, "."))
+    message(paste0('Message: Fake data created and saved in folder ', dirs$pre, "."))
   } else {
     message(paste0("Message: Fake data created. Not saved"))
   }
@@ -205,10 +208,12 @@ synthetize_data <- function(n_rows = 20000, n_individuals = 1000,
   dat[]
 }
 
+# Date formatting 
 last_day_of <- function(y_in){
   as.IDate(paste0(y_in, '-12-31')) %>% as.integer()
 }
 
+# Function for reading files
 read_files_from <- function(location, longitudinal = TRUE){
   # read inpatient and outpatient data
   chunks_in <- location %>% list.files() %>%  word(sep = "_") %>% unique()

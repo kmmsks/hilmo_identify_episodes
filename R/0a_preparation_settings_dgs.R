@@ -1,6 +1,6 @@
 
 
-# Here are some important settings and definitions. Go everything through carefully.
+# Here are some important settings and definitions. Go through everything carefully.
 
 # settings  are collected into a list, see document outline.
 settings <- list()
@@ -19,18 +19,17 @@ settings$compress <- 100
 settings$end_year           <-2020
 
 # Start year for the current data type, 1996 at the earliest. Before that, data
-# are in different format
+# are in a different format
 settings$hilmo_start_year   <- 1996
 
 # Start year for secondary outpatient data. 
 ## Collected since 1998,  comparability across time and service providers achieved from 2006.
-
 settings$outpat_start_year  <- 1998
 
-# Start year for primary care data. Collected since 2011
+# Start year for primary care data. Collected since 2011.
 settings$avo_start_year     <- 2011
 
-# Start years for the dataset before 1996 
+# Start years for the datasets before 1996 
 settings$poisto_start_years <- c(1975, 1987, 1994)
 
 
@@ -46,9 +45,9 @@ dirs0 <- list(main =  here())
 dirs0$hilmo_root <-file.path('location', 'of', 'the', 'register', 'root')
 
 
-# Columns of interest to be red from raw data ----------------------------------
+# Columns of interest to be read from raw data ----------------------------------
 
-# here list the names of the columns you want to read from different data on different
+# here list the names of the columns you want to read from different data in different
 # periods. Later, all column names will be set to lowercase.
 
 # Years 2018 and later
@@ -57,7 +56,7 @@ settings$hilmo_iso_cols <- c('shnro', 'ISOID', 'VUOSI', 'ILAJI', 'TUPVA', 'LPVM'
 # Years 1996-2017
 settings$hilmo_iso_cols_1996_2017 <- c('shnro', 'isoid', 'vuosi', 'ILAJI', 'TUPVA', 'LPVM', 'KOKU', 'PALTU', 'PALA', 'EA', 
                                        'YHTEYSTAPA', 'KIIREELLISYYS')
-# Primary care, 2018 an later
+# Primary care, 2018 and later
 settings$hilmo_avo_cols_2018_2020 <-c("shnro", "TAPAHTUMA_TUNNUS", "KAYNTI_PALVELUMUOTO", "KAYNTI_YHTEYSTAPA", "KAYNTI_ALKOI", "KAYNTI_LOPPUI")
 
 # Primary care, 2011-2017
@@ -121,8 +120,8 @@ settings$yhteystapa_2 <- c("R50")
 settings$yhteystapa_3 <- c("R52")
 settings$yhteystapa_4 <- c("R56")
 
-# Which of the above mentioned helper-groups are considered as outpatient appointemts
-# Here, physical contacts and real-time onlie are selected
+# Which of the aforementioned helper-groups are considered outpatient appointments
+# Here, physical contacts and real-time online are selected
 settings$yhteystapa_outpat <- c(1, 3)
 settings$yhteystapa_avo <- c(settings$yhteystapa_1, settings$yhteystapa_3)
 
@@ -162,7 +161,7 @@ icd_conversions$icd8_icd10 <- list(
   f9 = "_3062|_3066|_3067|_3069|_3081|_3082|_3083'
 )
 
-### ICD-9 -> ICD-19, 1987-1993 and 1994-1995  ----
+### ICD-9 -> ICD-10, 1987-1993 and 1994-1995  ----
 icd_conversions$icd9_icd10 <- list(
   f0 = c('_290|_293|_294|_310'),
   f1 = c('_291|_292|_303|_304|_305'), 
@@ -173,12 +172,10 @@ icd_conversions$icd9_icd10 <- list(
   f5 = c('_3027|_3071|_3074|_3075|_316'),
   f7 = c('_317|_318|_319'),
   f8 = c('_299|_315'), 
-  f9 = c('_3080|_3072|_3073|_3076|_3077|_3079|_313|_314')#,
-  #  f30_f31 = c('_2962|_2964|_2963E'),
-  #  f20 = c('_2951|_2952|_2953|_2954A|_2956|_2959')
+  f9 = c('_3080|_3072|_3073|_3076|_3077|_3079|_313|_314')
 )
 
-## ICD-10 subchapter categoreis ----
+## ICD-10 subchapter categories ----
 
 dg_maingroups <-  c('f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9') %>% as.list()
 names(dg_maingroups) <- dg_maingroups
