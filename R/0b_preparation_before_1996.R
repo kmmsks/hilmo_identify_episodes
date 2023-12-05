@@ -1,12 +1,12 @@
 
 # This script pre-processes Hilmo registers before 1996. The data are in three
-# different formats based on period. Periods are pre-processed separately and 
-# then combined and saved in longitudinal format. Meaning that each individuals' 
+# different formats depending on the time period. Time periods are pre-processed separately and 
+# then combined and saved in longitudinal format meaning that each individuals' 
 # all data is saved into a singe file (instead of having data saved in annual files).
 
 # The process goes as follows:
 ## set year range 
-## read data. define variables of interest
+## read data, define variables of interest
 ## harmonize column names
 ## convert dates 
 ## define psychiatric treatments
@@ -14,7 +14,7 @@
 ## set ilaji 
 ## convert diagnoses 
 
-# Data harmonization and aggrataion
+# Data harmonization and aggregation
 convert_cols_old <- function(){
   setnames(inpat_1, old=c("tulopvm_psy", "lahtopvm_psy", "dg_os_psy"), 
            new = c("tulopvm_psy_os", "lahtopvm_psy_os", "dg_psy"))
@@ -100,13 +100,13 @@ d0[, lpvm := as.IDate(lahtopv,  format = frmt) %>% as.integer()]
 d0 <- process_before_1996(d0)
 
 
-#define psychiatric treatments
+# define psychiatric treatments
 d0[,psy := FALSE]
 d0[ea %in% c(70, 74, 75), psy := TRUE]
 
 d0[, dg_old := paste(dg1, dg2, dg3, dg4, sep = '_') %>% gsub("__", "", .) %>% gsub("___", "", .) %>% gsub("_$", "", .)]
 
-# aloitetaan _-merkilla dg-kentta, jotta jokainen yksittainen koodi alkaa _:lla
+# all codes start with "_"
 d0[, dg_old := paste0("_", dg_old)]
 
 
@@ -140,7 +140,7 @@ frmt <- '%d/%m/%y'
 d0[, tupva  := as.IDate(tupva, format = frmt) %>% as.integer()]
 d0[, lpvm :=   as.IDate(lpvm,  format = frmt) %>% as.integer()]
 
-# vuosi and DG4 missing, add
+# vuosi and DG4 missing, add to harmonize columns
 d0[, `:=`(vuosi = lpvm %>% as.IDate() %>% year(), dg4 = '')]
 
 
@@ -152,7 +152,7 @@ d0 <- process_before_1996(d0)
 
 d0[, dg_old := paste(dg1, dg2, dg3, dg4, sep = '_') %>% gsub("__", "", .) %>% gsub("___", "", .) %>% gsub("_$", "", .)]
 
-# aloitetaan _-merkilla dg-kentta, jotta jokainen yksittainen koodi alkaa _:lla
+# all codes start with "_"
 d0[, dg_old := paste0("_", dg_old)]
 
 d0[, ilaji := 1]
@@ -176,4 +176,5 @@ if (settings$old_to_longitudinal == TRUE) {
 
 
 gc()
+
 #rm(hilmo_1975, hilmo_1987,hilmo_1994, d0, dat)

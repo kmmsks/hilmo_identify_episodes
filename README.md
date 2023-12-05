@@ -4,7 +4,7 @@
 An R script to identify hospital admissions, discharges, discharge
 diagnoses, and outpatient visits during inpatient episodes in the
 Finnish [Care Register for Health
-Care](https://thl.fi/en/web/thlfi-en/statistics/information-on-statistics/register-descriptions/care-register-for-health-care)
+Care](https://thl.fi/en/web/thlfi-en/statistics-and-data/data-and-services/register-descriptions/care-register-for-health-care)
 (FCRHC, commonly known as Hilmo register) and [The Register of Primary
 Health Care
 visits](https://thl.fi/en/web/thlfi-en/statistics-and-data/data-and-services/register-descriptions/register-of-primary-health-care-visits)
