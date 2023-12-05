@@ -1,6 +1,6 @@
 
 # These are helper functions for holding code. The idea is to make the preparation scripts
-# more readable by having part of the stuff here.
+# more readable by having some of the stuff here.
 
 # This file contains:
 #
@@ -8,13 +8,12 @@
 # - Reading the registers can be tricky if you cannot rename the files or folder structure.
 #    Hence, several functions are needed.
 # PREPARATION functions
-# - The preparation function contain simple but highly important steps.
+# - The preparation functions contain simple but highly important steps.
 # CONVERT ICD
-# - Convert ICD: the conversion rules are defined 0a_preparation_settings_dgs.R
-#   Here is only the engine.
+# - Convert ICD: the conversion rules are defined in 0a_preparation_settings_dgs.R
+#   This is only the engine.
 # Outpatient report
-# - Reporting the preprocessing steps of the secondary care outpatient data is in this
-#   function.
+# - Reporting the preprocessing steps of the secondary care outpatient data.
 
 # READ functions ---------------------------------------------------------------
 
@@ -53,6 +52,8 @@ read_hilmo_1996_2017_iso <- function(y, max_in = Inf, cols_in = NULL){
   setDT(d)
   d
 }
+
+
 read_hilmo_1996_2017_dg <- function(y, cols_in = NULL){
   
   p1 <- file.path(dirs$hilmo_root, "thuolto_iso_dg",
@@ -60,11 +61,9 @@ read_hilmo_1996_2017_dg <- function(y, cols_in = NULL){
   p2 <- file.path(dirs$hilmo_root, "HILMO_kokonais", "thl_2044_hilmo_iso_1996_2017",
                   "terveydenhuolto_iso_taptyyp", 
                   paste0("thuolto_iso_taptyyp_", y, ".sas7bdat"))
-  #p2: lahinna Y, yksittaisia muita
   p3 <- file.path(dirs$hilmo_root, "HILMO_kokonais", "thl_2044_hilmo_iso_1996_2017",
                   "terveydenhuolto_iso_ulksyy", 
                   paste0("thuolto_iso_ulksyy_", y, ".sas7bdat"))
-  # p3: X, W, Y, V
   
   if(is.null(cols_in)){
     lst <- list(
@@ -97,7 +96,7 @@ read_avohilmo <- function(y, max_in = Inf, cols_in = NULL){
   } else if(y %between% c(2018, 2020)){
     paste0('avohilmo_', y, '_palvelutapahtuma.sas7bdat')
   } else {
-    stop (paste('Year', y, 'not implemented. AvoHIlmo read.'))
+    stop (paste('Year', y, 'not implemented. AvoHilmo read.'))
   }
   
   p <- if(y %between% c(2011, 2017)){
@@ -105,7 +104,7 @@ read_avohilmo <- function(y, max_in = Inf, cols_in = NULL){
   } else if(y %between% c(2018, 2020)){
     file.path(dirs$hilmo_root, paste0("AvoHilmo_", y), f)
   } else {
-    stop (paste('Year', y, 'not implemented. AvoHIlmo read.'))
+    stop (paste('Year', y, 'not implemented. AvoHilmo read.'))
   }
   
   if(is.null(cols_in)){
@@ -124,7 +123,7 @@ read_avohilmo_dg <- function(y, dg_type = 'kayntisyy_icd10', max_in = Inf, cols_
   } else if(y %between% c(2018, 2020)){
     paste0('avohilmo_', y, '_', dg_type, '.sas7bdat')
   } else {
-    stop (paste('Year', y, 'not implemented. AvoHIlmo read.'))
+    stop (paste('Year', y, 'not implemented. AvoHilmo read.'))
   }
   
   p <- if(y %between% c(2011, 2017)){
@@ -132,7 +131,7 @@ read_avohilmo_dg <- function(y, dg_type = 'kayntisyy_icd10', max_in = Inf, cols_
   } else if(y %between% c(2018, 2020)){
     file.path(dirs$hilmo_root, paste0("AvoHilmo_", y), f)
   } else {
-    stop (paste('Year', y, 'not implemented. AvoHIlmo read.'))
+    stop (paste('Year', y, 'not implemented. AvoHilmo read.'))
   }
   
   if(dg_type == "palvelutapahtuma" & y %between% c(2011, 2017)){
@@ -167,16 +166,8 @@ process_dgs_2018_ <- function(){
   dg_0 %>% setnames(., tolower(names(.)))
   
   # Set dates and isoid to bit64
-  
   dg_0[, `:=`(isoid = as.integer64(isoid))]
   
-  # monenlaista tassa taulussa
-  #dg_0[,.N,kentta]
-  
-  # valitaan diagnoosien kentat jos halutaan
-  #  dg <-  dg_0[kentta %in% settings$dg_fields, .(dg = paste(koodi, collapse = '_')), by = isoid]
-  
-  # mutta otetaan kaikki kentat
   dg <-  dg_0[, .(dg = paste(koodi, collapse = '_')), by = isoid]
   
   dg
@@ -212,8 +203,7 @@ process_before_1996 <- function(d0){
   # exclude if discharge before admission
   d0 <- d0[lpvm >= tupva]
   
-  # exclude dates that are after the last register yaer
-  
+  # exclude dates that are after the last register year
   d0 <- d0[tupva <= as.IDate(paste(old_end_year, '12', '31', sep = '-')) & lpvm <= as.IDate(paste(old_end_year, '12', '31', sep = '-'))]  
   
   d0
@@ -247,7 +237,6 @@ process_avohilmo <- function(dat, report = TRUE, set_tupva_to_lpvm_if_duration_o
   
   # missing vals and errors -----------------------------------------------------
   
-  
   ## exclude entries with no identification to any person ----
   dat <- dat[!shnro=='']
   
@@ -270,21 +259,21 @@ process_avohilmo <- function(dat, report = TRUE, set_tupva_to_lpvm_if_duration_o
   if(report == TRUE){
     report_avo$notna_tupva <<- dat[, .N]
   }
-  ## lpvm
   
+  ## lpvm
   dat <- dat[!is.na(lpvm)]
   
   if(report == TRUE){
     report_avo$notna_lpvm <<- dat[,.N]
   }
   ## lpvm before tupva
-  
   dat <- dat[tupva <= lpvm]
   if(report == TRUE){
     report_avo$tupva_lesser_lpvm <<- dat[,.N]
     report_avo$valid_nrow <<- dat[,.N]
     report_avo$valid_n_indiv <<- dat[,uniqueN(shnro)]
   }
+  
   ## overnight
   if(report == TRUE){
     report_avo$n_duration_overnight <<- dat[tupva < lpvm, .N]
@@ -299,7 +288,7 @@ process_avohilmo <- function(dat, report = TRUE, set_tupva_to_lpvm_if_duration_o
 # (ICPC-2 diagnoses are converted into ICD-10 within 0c_preparation_source_RPHC.R)
 
 convert_to_icd_10 <- function(dat, from='icd-8', raw_hilmo = FALSE){
-  # raw_hilmo TRUE: talloin uudelleenkoodataan raaka-hilmoa, jote ei ole ketjutettu
+  # raw_hilmo TRUE would recode raw data without episode aggregation
   
   if(from == 'icd-8'){
     conversion_key <-  icd_conversions$icd8_icd10
@@ -350,28 +339,28 @@ get_outpat_report <- function(dat_in){
   setorderv(dat, c('shnro', 'tulopvm', 'lahtopvm', 'episode'))
   
   nums <- list(
-    ## episode alkaa pkl-kaynnilla
+    ## episode starts with secondary care psychiatric outpatient contact
     na = nrow(dat[shnro == shift(shnro) & episode > 0 & shift(episode) == 0 & tulopvm == shift(tulopvm)]),
-    # psy osastoepisode alkaa psy pkl-kaynnilla
+    # psychiatric inpatient episode starts with secondary care psychiatric outpatient contact
     naP = nrow(dat[shnro == shift(shnro) & episode > 0 & 
                      shift(episode) == 0 & tulopvm == shift(tulopvm) & shift(psy) == T & psy == T]),
-    #pkl-kaynti admissiota edeltavana paivana
+    #secondary care outpatient contact on the day before admission
     nb = nrow(dat[shnro == shift(shnro) & episode > 0 & shift(episode) == 0 & tulopvm == shift(tulopvm) + 1]),
-    #psy pkl-kaynti psy admissiota edeltavana paivana
+    #psychiatric secondary care outpatient contact on the day before psychiatric admission
     nbP = nrow(dat[shnro == shift(shnro) & episode > 0 & shift(episode) == 0 & tulopvm == shift(tulopvm) + 1 & 
                      shift(psy) == T & psy == T]),
-    # mika tahansa pkl-kaynti psy osastoepisoden edella
+    # any secondary care outpatient contact preceding psychiatric inpatient episode
     ncP = nrow(dat[psy == T & shnro == shift(shnro) & episode > 0 & shift(episode) == 0 & tulopvm == shift(tulopvm) + 1]),
-    #episoden sisalla pkl-kaynti
+    # secondary outpatient contact within inpatient episode
     nd = nrow(dat[shnro == shift(shnro, type = 'lead') & episode > 0 & shift(episode, type = 'lead') == 0 & 
                     lahtopvm > shift(tulopvm, type = 'lead')]),
-    # psy episoden sisalla psy pkl kaynti
+    # psychiatric secondary care outpatient contact within psychiatric inpatient episode
     ndP = nrow(dat[shnro == shift(shnro, type = 'lead') & episode > 0 & shift(episode, type = 'lead') == 0 & 
                      lahtopvm > shift(tulopvm, type = 'lead')  & psy == T & shift(psy) == T]),
-    #episoden paatospaivana pkl-kanyti
+    # secondary care outpatient contact on the last day of episode
     ne = nrow(dat[shnro == shift(shnro, type = 'lead') & episode > 0 & shift(episode, type = 'lead') == 0 & 
                     shift(tulopvm, type = 'lead') == lahtopvm]),
-    #psy episoden paatospaivana psy pkl-kanyti
+    #psychiatric care outatient contact on the last day of psychiatric inpatient episode
     neP = nrow(dat[shnro == shift(shnro, type = 'lead') & episode > 0 & shift(episode, type = 'lead') == 0 & 
                      shift(tulopvm, type = 'lead') == lahtopvm & psy == T & shift(psy) == T]),
     nf = dat[inpat!=1, .N],
@@ -380,12 +369,12 @@ get_outpat_report <- function(dat_in){
   
   labs <- list(
     na = 'inpatient period starts with outpatient appointment', 
-    nb = 'outpatient appointment the previous day of the start of an inpatient period',
+    nb = 'outpatient appointment the day before the start of an inpatient period',
     nd = 'outpatient appointment within an inpatient period', 
     ne = 'outpatient appointment on the last day of an inpatient period',
     naP = 'psychiatric inpatient period starts with psychiatric outpatient appointment', 
-    nbP = 'psychiatric outpatient appointment the previous day of the start of a psychiatric inpatient period', 
-    ncP = 'whatever outpatient appointment the previous day of the start of a psychiatric inpatient period',   
+    nbP = 'psychiatric outpatient appointment the day before the start of a psychiatric inpatient period', 
+    ncP = 'any outpatient appointment the day before the start of a psychiatric inpatient period',   
     ndP = 'psychiatric outpatient appointment within a psychiatric inpatient period', 
     neP = 'psychiatric opoutpatient appointment on the last day of a psychiatric inpatient period',
     nf  = 'N all outpatient rows before aggregation',
