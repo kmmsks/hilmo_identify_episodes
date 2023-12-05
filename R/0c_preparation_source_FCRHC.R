@@ -1,6 +1,6 @@
 
 # Pre-processing secondary care data
-# Data are red already, this script can be run for years 1996-2020 (not tested for 2021 ->)
+# Data are read already, this script can be run for years 1996-2020 (not tested for 2021 ->)
 
 # The process goes as follows:
 # Set col names to lower
@@ -13,13 +13,13 @@
 #   Inpatient recognition
 #   Outpatient recognition
 #   outpatient episodes with length over 1 day
-# Daignoses
+# Diagnoses
 #   read
 #   join dgs
 
-# the preprocessed data are saved in the upper level script that sourced this script. 
+# the pre-processed data are saved in the upper level script that sourced this script. 
 
-# Note. Diagnoses may be split into several sub-files which all need to be red and combined.
+# Note. Diagnoses may be split into several sub-files which all need to be read and combined.
 
 
 # Set col names to lower ----
@@ -49,15 +49,15 @@ report_flow$notna_tupva <- iso[, .N]
 
 ## process variable ILAJI ----
 
-# 2019 iljai 1 tai 2
+# 2019 ilaji 1 or 2
 report_variable$ilaji <-  iso[,.N, ilaji]
 
 # there are some errors in ilaji2 rows
 report_variable$ilaji_2_lpvm_na <- iso[ilaji == 2, .N, is.na(lpvm)]
 
-### set lpvm in ilaji 2 to the last day of  the year ----
+### set lpvm in ilaji 2 to the last day of the year ----
 
-# because the entry in the next year shoud have tpvm before or at the last day 
+# because the entry in the next year should have tpvm before or at the last day 
 # of the year
 
 iso[ilaji == 2, lpvm := last_day_of(y)]
@@ -75,7 +75,7 @@ iso <- iso[!is.na(lpvm)]
 
 report_flow$notna_lpvm <- iso[,.N]
 
-### lpvm before tupva, ie. admission after discharge
+### lpvm before tupva, i.e., admission after discharge
 
 report_variable$tupva_greater_lpvm <-  iso[, .N, tupva > lpvm]
 
@@ -121,13 +121,13 @@ report_variable$psy_yt_r80_pala <- iso[psy == T & yhteystapa == "R80",.N, keyby 
 
 report_variable$psy_pala_1_yt <- iso[psy == T & pala == 1, .N, keyby = yhteystapa]
 
-# more in other specialities
+# more in other specialties
 
 report_variable$yt_r80_pala <- iso[(yhteystapa == "R80"),.N, keyby = pala]
 
 ### inpatient recognition ------------------------------------------------------
 iso[, inpat := 0]
-iso[(pala ==1 & yhteystapa =='R80') | 
+iso[(pala == 1 & yhteystapa == 'R80') | 
       (pala == 1 & yhteystapa == "") | 
       (is.na(pala) & yhteystapa == "R80"), inpat := 1]
 
@@ -157,7 +157,7 @@ if(y >= 2019){
 ##  outpatient episodes with length over 1 day ----
 report_variable$outpat_lpvm_minu_tupva <- iso[outpat>0,.N, keyby = .(lpvm_minus_tupva = lpvm-tupva)]
 
-# over night outpaient allowed, longer considered as inpatient care
+# over night outpatient allowed, longer considered as inpatient care
 iso[outpat>0 & tupva<lpvm-1, `:=`(inpat = 1, outpat = 0)]
 
 report_variable$outpat <- iso[,.N, outpat]

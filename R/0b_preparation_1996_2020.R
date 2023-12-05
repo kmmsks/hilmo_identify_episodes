@@ -1,9 +1,9 @@
 
-# This script preprocesses Hilmo secondary care registers after 1996. 
-# 1996- 2017 is slightly different than 2018-2020.
-# Row data are in annual datasets. 
+# This script pre-processes Hilmo secondary care registers after 1996. 
+# 1996-2017 is slightly different than 2018-2020.
+# Raw data are in annual datasets. 
 
-# This script loops through desired years, read, preprocesses, and saves data in
+# This script loops through desired years, reads, pre-processes, and saves data in
 # longitudinal format, meaning that each individual's 
 # all data are saved into a singe file (instead of having data saved in annual files).
 # Progress is reported for each year into report_-datasets, which are saved in
@@ -11,19 +11,19 @@
 
 # The process goes as follows:
 ## read secondary care data 
-## source preprocessing
+## source pre-processing
 ## save reports
-## source reading and preprocessing primary care data
+## source reading and pre-processing primary care data
 ## save reports
 ## Save to longitudinal
 ## Or save to annual format
 
 
-# building these files to report the prepartion process:
+# building these files to report the pre-processing process:
 report_flow <- list()
 report_variable <- list()
 report_avo <- list()
-# report_outpatient will come on the eay
+# report_outpatient will be formed along the way
 
 
 # The loop ---------------------------------------------------------------------
@@ -37,7 +37,7 @@ for (y in seq(settings$hilmo_start_year , settings$end_year)){
   } else {
     stop('Year not implemented. Note, data structure change 2018, outpatient recognition 2019.')
   }
-  ## Source preprocessing ----
+  ## Source pre-processing ----
   source(here('R', '0c_preparation_source_FCRHC.R'), encoding = 'UTF-8')
   
   ### Save reports ----
@@ -46,7 +46,7 @@ for (y in seq(settings$hilmo_start_year , settings$end_year)){
   report_variable %>% 
     write_xlsx(file.path(dirs$report_pre, paste0('variables_',y, '.xlsx')))
   
-  ## source reading and preprocessing primary care data ----
+  ## source reading and pre-processing primary care data ----
   if(y >=2011){ 
     source(here('R', '0c_preparation_source_RPHC.R'), encoding = 'UTF-8', local = TRUE)
     ### Save report ----
@@ -55,7 +55,7 @@ for (y in seq(settings$hilmo_start_year , settings$end_year)){
   }
   
   # Save longitudinal ----
-  #create longitudinal data (data grouped be person, each individuals all years in a single file)
+  #create longitudinal data (data grouped by person, each individual's all years in a single file)
   if (settings$to_longitudinal == TRUE){
     inpat_0[, id_group := shnro %>% substr(start = 1, stop = 1)][
       , fwrite(.SD, file.path(dirs$pre, paste0(id_group, '_inpat.csv')), append = TRUE), 

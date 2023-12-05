@@ -17,7 +17,7 @@
 # Join diagnoses and filter
 # Excluded if no ID (variable shnro missing)
 
-# Note, primary care data comes with numerous variables. Here we 
+# Note, primary care data comes with numerous variables. Here, only a few have been used.
 
 # Read data --------------------------------------------------------------------
 if(y %between% c(2011, 2017)){

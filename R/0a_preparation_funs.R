@@ -344,9 +344,9 @@ get_outpat_report <- function(dat_in){
     # psychiatric inpatient episode starts with secondary care psychiatric outpatient contact
     naP = nrow(dat[shnro == shift(shnro) & episode > 0 & 
                      shift(episode) == 0 & tulopvm == shift(tulopvm) & shift(psy) == T & psy == T]),
-    #secondary care outpatient contact on the day before admission
+    # secondary care outpatient contact on the day before admission
     nb = nrow(dat[shnro == shift(shnro) & episode > 0 & shift(episode) == 0 & tulopvm == shift(tulopvm) + 1]),
-    #psychiatric secondary care outpatient contact on the day before psychiatric admission
+    # psychiatric secondary care outpatient contact on the day before psychiatric admission
     nbP = nrow(dat[shnro == shift(shnro) & episode > 0 & shift(episode) == 0 & tulopvm == shift(tulopvm) + 1 & 
                      shift(psy) == T & psy == T]),
     # any secondary care outpatient contact preceding psychiatric inpatient episode
@@ -360,7 +360,7 @@ get_outpat_report <- function(dat_in){
     # secondary care outpatient contact on the last day of episode
     ne = nrow(dat[shnro == shift(shnro, type = 'lead') & episode > 0 & shift(episode, type = 'lead') == 0 & 
                     shift(tulopvm, type = 'lead') == lahtopvm]),
-    #psychiatric care outatient contact on the last day of psychiatric inpatient episode
+    # psychiatric care outatient contact on the last day of psychiatric inpatient episode
     neP = nrow(dat[shnro == shift(shnro, type = 'lead') & episode > 0 & shift(episode, type = 'lead') == 0 & 
                      shift(tulopvm, type = 'lead') == lahtopvm & psy == T & shift(psy) == T]),
     nf = dat[inpat!=1, .N],
