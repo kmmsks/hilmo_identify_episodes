@@ -31,7 +31,7 @@ registries. Submitted.
 Author: Kimmo Suokas,
 [kimmo.suokas\@helsinki.fi](mailto:kimmo.suokas@helsinki.fi)
 
-Acknowledgments: 
+Acknowledgments: I would like to express my gratitude to Mai Gutvilig for proofreading the materials.
 
 ## Background
 
