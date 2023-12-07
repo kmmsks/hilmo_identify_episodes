@@ -24,12 +24,9 @@ accuracy of register-based metrics: Comparing methods for handling
 overlapping psychiatric register entries in Finnish healthcare
 registries. Submitted.
 
-2023-12-05
+2023-12-05 [![DOI](https://zenodo.org/badge/299097747.svg)](https://zenodo.org/badge/latestdoi/299097747)
 
-[![DOI](https://zenodo.org/badge/299097747.svg)](https://zenodo.org/badge/latestdoi/299097747)
-
-Author: Kimmo Suokas,
-[kimmo.suokas\@helsinki.fi](mailto:kimmo.suokas@helsinki.fi)
+Author: Kimmo Suokas, firstname.lastname@helsinki.fi
 
 Acknowledgments: I would like to express my gratitude to Mai Gutvilig for proofreading the materials.
 
