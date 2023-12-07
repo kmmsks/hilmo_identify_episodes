@@ -1,23 +1,23 @@
 
 
-#' Find first date of seleceted diagnoses
+#' Find first date of selected diagnoses
 #'
 #' This function finds the first date of selected diagnoses for each individual in
-#' the data. Optionally, minimum age for each diagnosis can be specified in 2a_first_dates_set_diagnoses.R
+#' the data. The minimum age for each diagnosis can be specified in 2a_first_dates_set_diagnoses.R
 #' 
 #' This function controls a set of sub-functions from 2b_first_dates_subfuns.R
 #' - These functions do the job.
 #'
 #' This function does the following:
-#' 1. create dirs to refer to the right data and to create location for the results
-#' 2. Read chunk identifiers. The processed data with identified episodes are in chunks. 
-#' 3. Loop throug chunks and do the following:
-#'   3.1 inpatient and outpatient data
+#' 1. Creates dirs to refer to the right data and to create the location for the results.
+#' 2. Reads chunk identifiers. The processed data with identified episodes are in chunks. 
+#' 3. Loops through chunks and does the following:
+#'   3.1 Inpatient and outpatient data
 #'   3.2 Primary care appointments, read, find first dates
-#'  3.3 bind results
-#'  3.4  save results, each treatment type separately
-#'  3.5 combine treatment types to get the first dates in any setting
-#'  3.6 save final results
+#'   3.3 Binds results
+#'   3.4 Saves results, each treatment type separately
+#'   3.5 Combines treatment types to get the first dates in any setting
+#'   3.6 Saves final results
 #'  
 #'  
 #' @param add_days  Numeric, defines how many full calendar days are required between inpatient episodes. Commonly 0 or 1.
@@ -31,7 +31,7 @@
 #'
 #' @examples
 get_first_dates <- function(add_days, start_year, end_year, dg_age_in = dg_groups_w_min_ages, longitudinal = TRUE) {
-  # The sub-functions needed in this processt:
+  # The sub-functions needed in this process:
   source(here("R", "2b_first_dates_subfuns.R"), encoding = "UTF-8")
   
   # 1. create dirs ----
@@ -40,13 +40,13 @@ get_first_dates <- function(add_days, start_year, end_year, dg_age_in = dg_group
             create_dirs_first_dates(add_days = add_days, start_year = start_year, end_year = end_year, longitudinal = longitudinal))
   
   # 2. Read chunk identifiers ----
-  # - These are the pre-processed files that contains all identified treatment episodes that 
-  #   are used here. Take the first character of the file name that serves as identifier for chunks.
+  # - These are the pre-processed files that contain all identified treatment episodes that 
+  #   are used here. Take the first character of the file name that serves as the identifier for chunks.
   chunks_in <- dirs$post %>% list.files() %>% word(sep = "_") %>% unique()
   
   # 3. Loop through chunks ---- 
-  # - These list are appended when the cunks are processed
-  # - on refers to OverNight, whether an inpatient episode is defined to last atleast over one night or not.
+  # - These list are appended when the chunks are processed
+  # - on refers to OverNight, whether an inpatient episode is defined to last at least over one night or not.
   
   inpatient_on_true <- list()
   inpatient_on_false <- list()
@@ -141,7 +141,7 @@ get_first_dates <- function(add_days, start_year, end_year, dg_age_in = dg_group
       # save final results -annual
       first_dates_on_f %>% fwrite(file.path(dirs$out, "1_full_data_overnight_false.csv"))
       
-      # settings. Here the diagnoses and min ages are written into a xlsx.
+      # settings. Here the diagnoses and min ages are written into an xlsx.
       list(
         dg_info = dg_groups_w_min_ages
       ) %>% write_xlsx(file.path(dirs$out, paste0("settings_", Sys.time() %>% as.character() %>% gsub("\\:","-",.), ".xlsx")))
@@ -195,7 +195,7 @@ get_first_dates <- function(add_days, start_year, end_year, dg_age_in = dg_group
   # save final results
   first_dates_on_f %>% fwrite(file.path(dirs$out, "1_full_data_overnight_false.csv"))
   
-  # settings. Here the diagnoses and min ages are written into a xlsx.
+  # settings. Here the diagnoses and min ages are written into an xlsx.
   list(
     dg_info = dg_groups_w_min_ages
   ) %>% write_xlsx(file.path(dirs$out, paste0("settings_", Sys.time() %>% as.character() %>% gsub("\\:","-",.), ".xlsx")))

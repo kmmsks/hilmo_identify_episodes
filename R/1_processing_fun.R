@@ -2,14 +2,14 @@
 #' Identify treatment episodes from partly overlapping data
 #' 
 #' This function does the following:
-#' 1. creates directory tree if not present already, based on the create_dirs_preprocess-function in file R/_general_functions.R
-#' 2. identify chunk files in the folder with pre-processed data. This pre-processed data may be real data after running
+#' 1. Creates directory tree if not present already, based on the create_dirs_preprocess-function in file R/_general_functions.R
+#' 2. Identifies chunk files in the folder with pre-processed data. This pre-processed data may be real data after running
 #'    0_preparation.R or synthetic data produced with syntetize_data()-function. The chunks may be longitudinal or annual.
 #' 3. Loops through the chunks and does the actual processing
-#'    - Defines admission and discharge dates for each inpatient episode with possible overlapping register entires.
-#'      Recognizes dischgarge diagnoses at the end of the inpatien episodes and if treamtent in psychiatric unit ends before
-#'      the end of the episode, recognizes psychiatric discharge diagnoses. Preliminary diagnoses durign the hospital stay are
-#'      collected. PSychiatric diagnoses from other medical specialities during psychiatric inpatient treatment are ignored.
+#'    - Defines admission and discharge dates for each inpatient episode with possible overlapping register entries.
+#'      Recognizes discharge diagnoses at the end of the inpatient episodes and if treatment in psychiatric unit ends before
+#'      the end of the episode, recognizes psychiatric discharge diagnoses. Preliminary diagnoses during the hospital stay are
+#'      collected. Psychiatric diagnoses from other medical specialties during psychiatric inpatient treatment are ignored.
 #'    - Identifies records of outpatient appointments that take place during inpatient care. Psychiatric outpatient diagnoses 
 #'      during psychiatric inpatient care before discharge date are considered preliminary.
 #'    - Identifies records of primary care (general practice) appointments that take place during inpatient care. Again, psychiatric
@@ -19,13 +19,13 @@
 #' @param add_days Numeric, defines how many full calendar days are required between inpatient episodes. Commonly 0 or 1.
 #' @param start_year Numeric, start year of the data to be processed. May be used for subsetting longitudinal data.
 #' @param end_year Numeric, end year of the data to be processed. May be used for subsetting longitudinal data.
-#' @param longitudinal Logistic, TRUE if each individual's all data are in single dataset. FALSE if annual data are in separate datasets.
-#' @param process_secondary_outpatient Logistic, TRUE if secondary outpatient care is processed, this is default behaviour. 
-#'                                      FALSE if no outpatient data exists, ie. data end before 1998.
-#' @param process_primary_care Logistic, TRUE if primary care data is included, FALSE if no.
-#' @param separate_files_for_old_registers Logistic, TRUE if prepared data before the year 1996 are in separate files. 
+#' @param longitudinal Logical, TRUE if each individual's all data are in a single dataset. FALSE if annual data are in separate datasets.
+#' @param process_secondary_outpatient Logical, TRUE if secondary outpatient care is processed, this is default behavior. 
+#'                                      FALSE if no outpatient data exists, i.e., data end before 1998.
+#' @param process_primary_care Logical, TRUE if primary care data is included, FALSE if not.
+#' @param separate_files_for_old_registers Logical, TRUE if prepared data before the year 1996 are in separate files. 
 #'
-#' @return Nothing. Data are processed in chunks and each chunk is saved as CSV file in the folder defined in 
+#' @return Nothing. Data are processed in chunks and each chunk is saved as a CSV file in the folder defined in 
 #'          the create_dirs_postprocess-function in file R/_general_functions.R. Location of the data is printed as a message
 #' @export
 #'

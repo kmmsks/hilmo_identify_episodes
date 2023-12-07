@@ -1,6 +1,6 @@
-#' Find first date of seleceted diagnoses - nonprocessed data
+#' Find first date of selected diagnoses - non-processed data
 #'
-#' Very similar to 2b function, but here preprocessed data (without the actual processing of identifying treatment episodes) is used instead.
+#' Very similar to 2b function, but here pre-processed data (without the actual processing of identifying treatment episodes) is used instead.
 #'
 #' This function finds the first date of selected diagnoses for each individual in
 #' the data. Optionally, minimum age for each diagnosis can be specified in 2a_first_dates_set_diagnoses.R
@@ -9,15 +9,15 @@
 #' - These functions do the job.
 #'
 #' This function does the following:
-#' 1. create dirs to refer to the right data and to create location for the results
-#' 2. Read chunk identifiers. The processed data with identified episodes are in chunks. 
-#' 3. Loop throug chunks and do the following:
-#'   3.1 inpatient and outpatient data
-#'   3.2 Primary care appointments, read, find first dates
-#'  3.3 bind results
-#'  3.4  save results, each treatment type separately
-#'  3.5 combine treatment types to get the first dates in any setting
-#'  3.6 save final results
+#' 1. Creates dirs to refer to the right data and to create the location for the results
+#' 2. Reads chunk identifiers. The pre-processed data is in chunks. 
+#' 3. Loops through chunks and does the following:
+#'   3.1 Inpatient and outpatient data
+#'   3.2 Primary care appointments, reads, finds first dates
+#'   3.3 Binds results
+#'   3.4 Saves results, each treatment type separately
+#'   3.5 Combines treatment types to get the first dates in any setting
+#'   3.6 Saves final results
 #'  
 #'  
 #' @param start_year Numeric, start year of the data to be processed. May be used for subsetting longitudinal data.
@@ -64,7 +64,7 @@ get_first_dates_nonprocessed_data <- function(start_year, end_year, separate_fil
     outpat_0[birthdays, on =  'shnro', c('birthday'):= .(i.birthday)]
     prim_care_0[birthdays, on =  'shnro', c('birthday'):= .(i.birthday)]
     
-    # variable dg contains all diagnoses, combined in pre processing
+    # variable dg contains all diagnoses, combined in pre-processing
     inpat[[i]]  <- inpat_0[psy == T] %>%  find_first_date(dg_field = 'dg', tulopvm_field = 'tupva', lahtopvm_field = 'lpvm', dg_age = dg_age_in)
     
     outpat[[i]] <- outpat_0[psy == T] %>% find_first_date(dg_field = 'dg', tulopvm_field = 'tupva', lahtopvm_field = 'lpvm', dg_age = dg_age_in)
@@ -94,7 +94,6 @@ get_first_dates_nonprocessed_data <- function(start_year, end_year, separate_fil
   first_dates_raw <- combine_first_dates(dat_in = d1, dg_age = dg_age_in)
   
   first_dates_raw %>% fwrite(file.path(dirs$first_dates_nonprocessed, '1_full_data.csv'))
-  
   
   # settings
   list(
