@@ -450,7 +450,7 @@ process_primary_care <- function(prim_care_0, inpat_outpat_1, start_year, end_ye
   d2[primary_care == 1]
 }
 
-raport_inpatient_processing <- function(){
+report_inpatient_processing <- function(){
   lst <- list()
   inpat_0[, overnight := ifelse(tupva < lpvm, TRUE, FALSE)]
   inpat_0[, overnight_psy := ifelse(tupva < lpvm & psy == T, TRUE, FALSE)]
@@ -484,7 +484,7 @@ raport_inpatient_processing <- function(){
 }
 
 
-get_outpat_raport <- function(dat_in){
+get_outpat_report <- function(dat_in){
   
   dat <- copy(dat_in)
   
