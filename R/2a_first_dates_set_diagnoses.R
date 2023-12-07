@@ -1,13 +1,13 @@
 
-# Here define ICD-10 diagnoses of interest. First dates of these diagnoses for each
-# individual will be recognized. Minimun age for each diangostic group can be set.
+# Here we define ICD-10 diagnoses of interest. First dates of these diagnoses for each
+# individual will be identified. Minimum age for each diagnostic group can be set.
 
 # ICD-10 sub-chapter categories ----
 
 dg_maingroups <-  c("f0", "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9") %>% as.list()
 names(dg_maingroups) <- dg_maingroups
 
-# Diagnositc groups of interest ----
+# Diagnostic groups of interest ----
 # For detecting first dates with diagnosis
 
 dg_groups_of_interest <- append(dg_maingroups, list(

@@ -14,10 +14,10 @@
 #' 3. Loops through chunks and does the following:
 #'   3.1 Inpatient and outpatient data
 #'   3.2 Primary care appointments, read, find first dates
-#'  3.3 Binds results
-#'  3.4 Saves results, each treatment type separately
-#'  3.5 Combines treatment types to get the first dates in any setting
-#'  3.6 Saves final results
+#'   3.3 Binds results
+#'   3.4 Saves results, each treatment type separately
+#'   3.5 Combines treatment types to get the first dates in any setting
+#'   3.6 Saves final results
 #'  
 #'  
 #' @param add_days  Numeric, defines how many full calendar days are required between inpatient episodes. Commonly 0 or 1.
