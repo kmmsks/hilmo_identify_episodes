@@ -1,5 +1,5 @@
 
-# hilmo_identify_episodes v 2.0.0-beta
+# hilmo_identify_episodes v 2.0.0
 
 An R script to identify hospital admissions, discharges, discharge
 diagnoses, and outpatient visits during inpatient episodes in the
@@ -490,13 +490,13 @@ Relevant psychiatric diagnoses, including those set at
 
 ## Version history
 
--   2.0.0 (DATE): New functional format for the scripts. The coding of
+-   2.0.0 (2023-12-07): New functional format for the scripts. The coding of
     treatment types in the Hilmo rgisters changed in 2019 and is now
     included in this method. The current behaviour is tested with data
     up to the year 2020. ICD-8 and ICD-9 conversion are included in more
     datail. This version supplements this paper: LINK TO PAPER.
 
--   1.1.1 (2022-05-23): Info on primary care included.Typos.
+-   [1.1.1](https://github.com/kmmsks/hilmo_identify_episodes/tree/1.1.1-old_version) (2022-05-23): Info on primary care included.Typos.
 
 -   1.1.0-beta (2021-05-18): Inference of discharge dates fixed. Fake
     data supplemented. Typos.
@@ -511,8 +511,6 @@ Relevant psychiatric diagnoses, including those set at
 
 ## Citation
 
-Suokas, K (2021). hilmo_identify_episodes (v1.1.0) [Source code].
-<https://github.com/kmmsks/hilmo_identify_episodes>. doi:
-10.5281/zenodo.5381082.
+To the paper
 
 <br><br><br>
