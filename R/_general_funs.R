@@ -126,7 +126,7 @@ synthetize_data <- function(n_rows = 20000, n_individuals = 1000,
   )
   
   # create vuosi (year) based on admission
-  dat[, vuosi := year(lpvm)]
+  dat[, vuosi := year(lpvm %>% as.IDate())]
   
   # create specialty codes, psychiatry is 70, 75, 76, 10:25 are internal medicine, surgery etc.
   dat[psy == 1, ea := sample(c(70,75,76), size = dat[psy == 1, .N], replace = T)][psy == 0, ea := sample(c(10:25), size = dat[psy == 0, .N], replace = TRUE)]
