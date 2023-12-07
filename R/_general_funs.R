@@ -16,8 +16,8 @@ create_dirs_preprocess <- function(start_year, end_year, data_folder_name = "dat
     if (!dir.exists(pre)) {dir.create(pre)}
   }
   
-  if (!dir.exists(here(data_folder_name, 'raports'))) {dir.create(here(data_folder_name, 'raports'))}
-  raport_pre <- here(data_folder_name, 'raports', '0_preprocessing')
+  if (!dir.exists(here(data_folder_name, 'reports'))) {dir.create(here(data_folder_name, 'reports'))}
+  raport_pre <- here(data_folder_name, 'reports', '0_preprocessing')
 
   if (!dir.exists(raport_pre)) {dir.create(raport_pre)}
 
@@ -40,7 +40,7 @@ create_dirs_postprocess <- function(add_days, start_year, end_year, data_folder_
 
   if (!dir.exists(post)) {dir.create(post)}
   
-#  raport_post <- here(data_folder_name, 'raports', '1_raport_identification')
+#  raport_post <- here(data_folder_name, 'reports', '1_raport_identification')
 #  dir.create(raport_post)
   
     # named list:
