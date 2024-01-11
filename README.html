@@ -371,7 +371,7 @@ other than psychiatry as well.</p>
 <p>Suokas K, Gutvilig M, Pirkola S, Lumme S, Hakulinen C. Enhancing the
 accuracy of register-based metrics: Comparing methods for handling
 overlapping psychiatric register entries in Finnish healthcare
-registries. Submitted.</p>
+registries. Submitted. <a href="https://www.medrxiv.org/content/10.1101/2023.12.07.23299655v1">preprint</a></p>
 <p>2023-12-05 <a href="https://zenodo.org/badge/latestdoi/299097747"><img src="data:image/svg+xml; charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgICAgd2lkdGg9IjE5MC44NTkzNzUiIGhlaWdodD0iMjAiPgogICAgICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iYiIgeDI9IjAiIHkyPSIxMDAlIj4KICAgICAgICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYmJiIiBzdG9wLW9wYWNpdHk9Ii4xIi8+CiAgICAgICAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1vcGFjaXR5PSIuMSIvPgogICAgICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICAgICAgPG1hc2sgaWQ9ImEiIHdpZHRoPSIxOTAuODU5Mzc1IiBoZWlnaHQ9IjIwIj4KICAgICAgICAgICAgPHJlY3Qgd2lkdGg9IjE5MC44NTkzNzUiIGhlaWdodD0iMjAiIHJ4PSIzIgogICAgICAgICAgICBmaWxsPSIjZmZmIi8+CiAgICAgICAgPC9tYXNrPgogICAgICAgIDxnIG1hc2s9InVybCgjYSkiPgogICAgICAgICAgICA8cGF0aCBmaWxsPSIjNTU1IiBkPSJNMCAwaDMxLjM3NXYyMEgweiIgLz4KICAgICAgICAgICAgPHBhdGggZmlsbD0iIzAwN2VjNiIKICAgICAgICAgICAgZD0iTTMxLjM3NSAwaDE1OS40ODQzNzV2MjBIMzEuMzc1eiIKICAgICAgICAgICAgLz4KICAgICAgICAgICAgPHBhdGggZmlsbD0idXJsKCNiKSIgZD0iTTAgMGgxOTAuODU5Mzc1djIwSDB6IiAvPgogICAgICAgIDwvZz4KICAgICAgICA8ZyBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iRGVqYVZ1IFNhbnMsCiAgICAgICAgVmVyZGFuYSxHZW5ldmEsc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMSI+CiAgICAgICAgICAgIDx0ZXh0IHg9IjE2LjE4NzUiIHk9IjE1IiBmaWxsPSIjMDEwMTAxIgogICAgICAgICAgICBmaWxsLW9wYWNpdHk9Ii4zIj4KICAgICAgICAgICAgICAgIERPSQogICAgICAgICAgICA8L3RleHQ+CiAgICAgICAgICAgIDx0ZXh0IHg9IjE2LjE4NzUiIHk9IjE0Ij4KICAgICAgICAgICAgICAgIERPSQogICAgICAgICAgICA8L3RleHQ+CiAgICAgICAgICAgIDx0ZXh0IHg9IjExMC42MTcxODc1IgogICAgICAgICAgICB5PSIxNSIgZmlsbD0iIzAxMDEwMSIgZmlsbC1vcGFjaXR5PSIuMyI+CiAgICAgICAgICAgICAgICAxMC41MjgxL3plbm9kby4xMDE3MTA4OAogICAgICAgICAgICA8L3RleHQ+CiAgICAgICAgICAgIDx0ZXh0IHg9IjExMC42MTcxODc1IiB5PSIxNCI+CiAgICAgICAgICAgICAgICAxMC41MjgxL3plbm9kby4xMDE3MTA4OAogICAgICAgICAgICA8L3RleHQ+CiAgICAgICAgPC9nPgogICAgPC9zdmc+" alt="DOI" /></a></p>
 <p>Author: Kimmo Suokas, <a href="mailto:firstname.lastname@helsinki.fi" class="email">firstname.lastname@helsinki.fi</a></p>
 <p>Acknowledgments: I would like to express my gratitude to Mai Gutvilig
@@ -676,6 +676,88 @@ varying classifications.</p>
 meaning that each individual’s all data is written into a single file,
 using <code>append = TRUE</code> in the <code>fwrite</code> function
 from <code>library(data.table)</code>.</p>
+<p>If your data are in different format, you have subset of the
+registers that are easy to process at once, or you can reorganize the
+datasets your self, it is likely that there are easier ways to prepare
+the data for processing.</p>
+<div id="the-mimimum-requrements-for-the-data-to-be-processed" class="section level5">
+<h5>The mimimum requrements for the data to be processed</h5>
+<p>What needs to be achieved, is to have minimum of the following
+content in the data:</p>
+<table style="width:100%;">
+<colgroup>
+<col width="27%" />
+<col width="33%" />
+<col width="39%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">Data type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>shnro</code></td>
+<td align="left">character</td>
+<td align="left">person id. The name shnro is used by the Statistic
+Finland, it refers to a person, not ID number, which may change (in
+relative rare occasions).</td>
+</tr>
+<tr class="even">
+<td align="left"><code>vuosi</code></td>
+<td align="left">integer</td>
+<td align="left">Year of the entry</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>ilaji</code></td>
+<td align="left">integer</td>
+<td align="left">Type of entry*; 1: discharge, 2: count of patients in
+the last day of the year.v</td>
+</tr>
+<tr class="even">
+<td align="left"><code>tupva</code></td>
+<td align="left">integer</td>
+<td align="left">Starting date of the entry, data format:
+<code>as.integer(as.IDate(x))</code></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>lpvm</code></td>
+<td align="left">integer</td>
+<td align="left">End date of the entry, data format:
+<code>as.integer(as.IDate(x))</code></td>
+</tr>
+<tr class="even">
+<td align="left"><code>paltu</code></td>
+<td align="left">integer</td>
+<td align="left">A kind of service provider ID.* Not necessary for
+identification of episodes but serves here as an example of carrying an
+additional variable through the process.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>ea</code></td>
+<td align="left">character</td>
+<td align="left">Medical specialty.*</td>
+</tr>
+<tr class="even">
+<td align="left"><code>psy</code></td>
+<td align="left">logical</td>
+<td align="left">A composite variable that recognizes the entries with
+the specialty of interest, here psychiatry.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>dg</code></td>
+<td align="left">character</td>
+<td align="left">A composite variable of all (relevant) diagnoses
+related to the current register entry.</td>
+</tr>
+</tbody>
+</table>
+<p>* See Hilmo manuals for details. Note possible changes in the
+classifications between years.</p>
+<p><br></p>
+</div>
 </div>
 <div id="synthetize_data-synthetic-data-for-demonstration" class="section level4">
 <h4><code>synthetize_data()</code>: Synthetic data for
@@ -1302,7 +1384,7 @@ covered.</p>
 care, or</p></li>
 <li><p>primary care but not during inpatient care or on the same day
 with psychiatric secondary outpatient care</p></li>
-<li><p><code>dat[, dg_psy_all_relevet := paste(na.omit(dg_psy), dg_avo, sep = &quot;_&quot;) %&gt;% str_remove_all(&quot;_NA&quot;)]</code></p></li>
+<li><p><code>dat[, dg_psy_all_relevant := paste(na.omit(dg_psy), dg_avo, sep = &quot;_&quot;) %&gt;% str_remove_all(&quot;_NA&quot;)]</code></p></li>
 </ul>
 <p><br></p>
 </div>
@@ -1311,11 +1393,14 @@ with psychiatric secondary outpatient care</p></li>
 <div id="version-history" class="section level2">
 <h2>Version history</h2>
 <ul>
+<li><p>2.0.1 (2024-01-11): Readme updated, section “The mimimum
+requrements for the data to be processed” included to further clarify
+the preparation of the data. No changes to the code.</p></li>
 <li><p>2.0.0 (2023-12-07): New functional format for the scripts. The
 coding of treatment types in the Hilmo rgisters changed in 2019 and is
 now included in this method. The current behaviour is tested with data
 up to the year 2020. ICD-8 and ICD-9 conversion are included in more
-datail. This version supplements this paper: LINK TO PAPER.</p></li>
+datail. This version supplements this paper: <a href="https://www.medrxiv.org/content/10.1101/2023.12.07.23299655v1">preprint</a>.</p></li>
 <li><p><a href="https://github.com/kmmsks/hilmo_identify_episodes/tree/1.1.1-old_version">1.1.1</a>
 (2022-05-23): Info on primary care included.Typos.</p></li>
 <li><p>1.1.0-beta (2021-05-18): Inference of discharge dates fixed. Fake
@@ -1330,7 +1415,10 @@ correctly calculated.</p></li>
 </div>
 <div id="citation" class="section level2">
 <h2>Citation</h2>
-<p>To the paper</p>
+<p>To the paper: Suokas K, Gutvilig M, Lumme S, Pirkola S, Hakulinen C.
+Enhancing the accuracy of register-based metrics: Comparing methods for
+handling overlapping psychiatric register entries in Finnish healthcare
+registries. Published online December 9, 2023. <a href="doi:10.1101/2023.12.07.23299655" class="uri">doi:10.1101/2023.12.07.23299655</a></p>
 <p><br><br><br></p>
 </div>
 </div>
