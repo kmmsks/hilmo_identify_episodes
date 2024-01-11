@@ -1,5 +1,5 @@
 
-# hilmo_identify_episodes v 2.0.0
+# hilmo_identify_episodes v 2.0.1
 
 An R script to identify hospital admissions, discharges, discharge
 diagnoses, and outpatient visits during inpatient episodes in the
@@ -17,18 +17,21 @@ handle secondary care inpatient and outpatient data and primary care
 data. These behaviors can be generalized to specialties other than
 psychiatry as well.
 
-This scripts supplement this paper:
-
-Suokas K, Gutvilig M, Pirkola S, Lumme S, Hakulinen C. Enhancing the
-accuracy of register-based metrics: Comparing methods for handling
-overlapping psychiatric register entries in Finnish healthcare
-registries. Submitted. [medRxiv](https://www.medrxiv.org/content/10.1101/2023.12.07.23299655v1)
-
 2023-12-05 [![DOI](https://zenodo.org/badge/299097747.svg)](https://zenodo.org/badge/latestdoi/299097747)
 
 Author: Kimmo Suokas, firstname.lastname@helsinki.fi
 
 Acknowledgments: I would like to express my gratitude to Mai Gutvilig for proofreading the materials.
+
+<br>
+
+This scripts supplement this paper:
+
+Suokas K, Gutvilig M, Pirkola S, Lumme S, Hakulinen C. Enhancing the
+accuracy of register-based metrics: Comparing methods for handling
+overlapping psychiatric register entries in Finnish healthcare
+registries. Submitted. [preprint](https://www.medrxiv.org/content/10.1101/2023.12.07.23299655v1)
+
 
 ## Background
 
@@ -211,6 +214,30 @@ varying classifications.
 In this step, the pre-processed data will be saved longitudinally,
 meaning that each individual's all data is written into a single file,
 using `append = TRUE` in the `fwrite` function from `library(data.table)`.
+
+If your data are in different format, you have subset of the registers that 
+are easy to process at once, or you can reorganize the datasets your self,
+it is likely that there are easier ways to prepare the data for processing.
+
+##### The mimimum requrements for the data to be processed
+
+What needs to be achieved, is to have minimum of the following content in the data:
+
+Variable | Data type | Description
+:--------|:----------|:------------|
+```shnro``` | character | person id. The name shnro is used by the Statistic Finland, it refers to a person, not ID number, which may change (in relative rare occasions).|
+```vuosi``` | integer   | Year of the entry|
+```ilaji``` | integer   | Type of entry*; 1: discharge, 2: count of patients in the last day of the year.v
+```tupva``` | integer   | Starting date of the entry, data format: ```as.integer(as.IDate(x))```|
+```lpvm```  | integer   | End date of the entry, data format: ```as.integer(as.IDate(x))```|
+```paltu``` | integer   | A kind of service provider ID.* Not necessary for identification of episodes but serves here as an example of carrying an additional variable through the process.|
+```ea```    | character | Medical specialty.*|
+```psy```   | logical   | A composite variable that recognizes the entries with the specialty of interest, here psychiatry.|
+```dg```    | character | A composite variable of all (relevant) diagnoses related to the current register entry.|
+
+\* See Hilmo manuals for details. Note possible changes in the classifications between years.
+
+<br>
 
 #### `synthetize_data()`: Synthetic data for demonstration
 
@@ -481,17 +508,21 @@ Relevant psychiatric diagnoses, including those set at
 - psychiatric secondary outpatient care but not during inpatient care, or 
 - primary care but not during inpatient care or on the same day with psychiatric secondary outpatient care
 
-- `dat[, dg_psy_all_relevet := paste(na.omit(dg_psy), dg_avo, sep = "_") %>% str_remove_all("_NA")]`
+- `dat[, dg_psy_all_relevant := paste(na.omit(dg_psy), dg_avo, sep = "_") %>% str_remove_all("_NA")]`
 
 <br>
 
 ## Version history
 
+-   2.0.1 (2024-01-11): Readme updated, section "The mimimum requrements for 
+    the data to be processed" included to further clarify the preparation of 
+    the data. No changes to the code.
+
 -   2.0.0 (2023-12-07): New functional format for the scripts. The coding of
     treatment types in the Hilmo rgisters changed in 2019 and is now
     included in this method. The current behaviour is tested with data
     up to the year 2020. ICD-8 and ICD-9 conversion are included in more
-    datail. This version supplements this paper: LINK TO PAPER.
+    datail. This version supplements this paper: [preprint](https://www.medrxiv.org/content/10.1101/2023.12.07.23299655v1).
 
 -   [1.1.1](https://github.com/kmmsks/hilmo_identify_episodes/tree/1.1.1-old_version) (2022-05-23): Info on primary care included.Typos.
 
@@ -508,6 +539,6 @@ Relevant psychiatric diagnoses, including those set at
 
 ## Citation
 
-To the paper
+Suokas K, Gutvilig M, Lumme S, Pirkola S, Hakulinen C. Enhancing the accuracy of register-based metrics: Comparing methods for handling overlapping psychiatric register entries in Finnish healthcare registries. Published online December 9, 2023. doi:10.1101/2023.12.07.23299655
 
 <br><br><br>
