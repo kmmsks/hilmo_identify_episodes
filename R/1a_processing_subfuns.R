@@ -53,7 +53,8 @@ identify_inpatient_episodes <- function(inpat_0, add_days, start_year, end_year,
   # Start and end date of psychiatric inpatient care 
   # (may or may not be the same dates as the start and end of the whole episode)
   
-  inpat_1[inpat_0[psy == T], on =.(shnro, episode), c("tulopvm_psy", "lahtopvm_psy") := .(tupva, lpvm) ]
+  inpat_1[inpat_0[psy == T, .(tupva = min(tupva), lpvm = max(lpvm)), .(shnro, episode)],
+          on =.(shnro, episode), c("tulopvm_psy", "lahtopvm_psy") := .(tupva, lpvm) ]
   
   
   # Diagnoses at the last day of the inpatient episodes == discharge diagnoses

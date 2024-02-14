@@ -1,5 +1,5 @@
 
-# hilmo_identify_episodes v 2.0.1
+# hilmo_identify_episodes v 2.0.2
 
 An R script to identify hospital admissions, discharges, discharge
 diagnoses, and outpatient visits during inpatient episodes in the
@@ -17,7 +17,7 @@ handle secondary care inpatient and outpatient data and primary care
 data. These behaviors can be generalized to specialties other than
 psychiatry as well.
 
-2023-12-05 [![DOI](https://zenodo.org/badge/299097747.svg)](https://zenodo.org/badge/latestdoi/299097747)
+2024-02-14 [![DOI](https://zenodo.org/badge/299097747.svg)](https://zenodo.org/badge/latestdoi/299097747)
 
 Author: Kimmo Suokas, firstname.lastname@helsinki.fi
 
@@ -513,6 +513,11 @@ Relevant psychiatric diagnoses, including those set at
 <br>
 
 ## Version history
+
+-   2.0.2 (2024-02-14): An error in the file `1a_processing_subfuns.R`, selction
+    "# Start and end date of psychiatric inpatient care", was detected and corrected.
+    This error was not present in the version 1.1.1 and affected only the starting date of
+    psychiatric inpatient episodes.
 
 -   2.0.1 (2024-01-11): Readme updated, section "The mimimum requrements for 
     the data to be processed" included to further clarify the preparation of 
