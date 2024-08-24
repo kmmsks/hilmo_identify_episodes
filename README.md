@@ -27,11 +27,7 @@ Acknowledgments: I would like to express my gratitude to Mai Gutvilig for proofr
 
 This scripts supplement this paper:
 
-Suokas K, Gutvilig M, Pirkola S, Lumme S, Hakulinen C. Enhancing the
-accuracy of register-based metrics: Comparing methods for handling
-overlapping psychiatric register entries in Finnish healthcare
-registries. Submitted. [preprint](https://www.medrxiv.org/content/10.1101/2023.12.07.23299655v1)
-
+Suokas, K., Gutvilig, M., Lumme, S., Pirkola, S., & Hakulinen, C. (2024). Enhancing the accuracy of register-based metrics: Comparing methods for handling overlapping psychiatric register entries in Finnish healthcare registers. International Journal of Methods in Psychiatric Research, e2029. <https://doi.org/10.1002/mpr.2029>
 
 ## Background
 
