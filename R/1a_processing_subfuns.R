@@ -231,7 +231,7 @@ process_outpatient_data <- function(outpat_0, inpat_1, start_year, end_year) {
               .(tulopvm = min(tulopvm), 
                 lahtopvm = max(lahtopvm), 
                 #psy = sum(psy),
-                episode_continues, episode_psy_continues,
+                episode_continues = sum(episode_continues), episode_psy_continues = sum(episode_psy_continues),
                 ilaji_2_n = sum(ilaji_2_n, na.rm = T) >= 1,
                 n_rows = sum(n_rows), 
                 tulopvm_psy = min(tulopvm_psy), 
